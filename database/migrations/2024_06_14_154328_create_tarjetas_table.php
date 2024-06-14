@@ -11,24 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('tarjetas', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->unsignedBigInteger('userable_id')->nullable();
-            $table->string('userable_type')->nullable();
+            $table->unsignedBigInteger('tipoID');
+            $table->integer('status');
+            // 0 ocupada, 1 disponible, 3 deshabilitada
 
-            $table->rememberToken();
+            $table->foreign('tipoID')->references('id')->on('tipo_tarjeta');
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     */
+     */ 
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('tarjetas');
     }
 };
