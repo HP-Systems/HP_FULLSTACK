@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedBigInteger('userable_id')->nullable();
             $table->string('userable_type')->nullable();
+            $table->string('codigo')->nullable();
+            $table->boolean('status')->default(1);
 
             $table->rememberToken();
             $table->timestamps();

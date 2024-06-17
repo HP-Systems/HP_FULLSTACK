@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('numero');
             $table->unsignedBigInteger('tipoID');
+            $table->string('imagen');
 
             $table->foreign('tipoID')->references('id')->on('tipo_habitacion');
 
