@@ -95,25 +95,6 @@ class DeskController extends Controller
                 return response()->json(['error' => $validation->errors()], 400);
             }
 
-            if ($request-> userable_type == 1) {
-                $user = Personal::create([
-                    //"nombre" => $request->nombre,
-                    "apellido" => $request->apellido,
-                    "telefono" => $request->telefono,
-                    "rolID" => $request->rolID,
-                ]); 
-
-                $user = User::create([
-                    "email" => $request->email,
-                    "password" => Hash::make($request->password),
-                    "userable_id" => $user->id,
-                    "userable_type" => $request->userable_type,
-                ]);
-                return response()->json([
-                    'message' => 'Usuario creado con exito.',
-                ], 200);
-            }
-
             $user = Huesped::create([
                 "nombre" => $request->nombre,
                 "apellido" => $request->apellido,
@@ -124,7 +105,7 @@ class DeskController extends Controller
                 "email" => $request->email,
                 "password" => Hash::make($request->password),
                 "userable_id" => $user->id,
-                "userable_type" => $request->userable_type,
+                "userable_type" => 2,
             ]);
 
             return response()->json([
