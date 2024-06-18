@@ -44,7 +44,7 @@ class MovilController extends Controller
                 "email" => $request->email,
                 "password" => Hash::make($request->password),
                 "userable_id" => $huesped->id,
-                "userable_type" => $request->userable_type,
+                "userable_type" => 2,
             ]);
 
 
@@ -74,7 +74,7 @@ class MovilController extends Controller
             }
 
             $user = User::where('email', $request->email)
-                       // ->where('userable_type', 2)
+                       ->where('userable_type', 2)
                         ->first();
 
             if (!is_null($user) && Hash::check($request->password, $user->password)) {

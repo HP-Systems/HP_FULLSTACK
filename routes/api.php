@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\DESKTOP\DeskController;
 use App\Http\Controllers\MOVIL\MovilController;
 
 /*
@@ -24,6 +25,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('movil')->group(function () {
     Route::post('/register', [MovilController::class, 'register']); 
     Route::post('/login', [MovilController::class, 'login']); 
+});
+
+//DESKTOP ROUTES
+Route::prefix('desk')->group(function () {
+    Route::post('/login', [DeskController::class, 'login']); 
+    Route::post('/register', [DeskController::class, 'register']);
 });
 
 
