@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MOVIL;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Rules\UniqueEmailForUserableType;
@@ -11,8 +12,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Huesped;
 
-
-class AppController extends Controller
+class MovilController extends Controller
 {
     public function register(Request $request){
         try{
@@ -74,7 +74,7 @@ class AppController extends Controller
             }
 
             $user = User::where('email', $request->email)
-                        ->where('userable_type', 2)
+                       // ->where('userable_type', 2)
                         ->first();
 
             if (!is_null($user) && Hash::check($request->password, $user->password)) {
@@ -92,7 +92,7 @@ class AppController extends Controller
                     return response()->json(['error' => 'Cuenta desactivada.'], 400);
                 }
             } else{
-                return response()->json(['error' => 'Los datos son incorrectos. Inténtalo de nuevo.'], 200);
+                return response()->json(['error' => 'Los datos son incorrectos. Inténtalo de nuevo.'], 400);
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -101,5 +101,4 @@ class AppController extends Controller
             ], 500);
         }
     }
-
 }
