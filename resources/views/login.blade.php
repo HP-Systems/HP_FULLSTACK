@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="icon" href="{{ asset('images/logo.jpg') }}" type="image/jpg">
 </head>
+
 <body class="d-flex justify-content-center align-items-center vh-100 custom-bg">
     <div class="card shadow" style="width: 24rem;">
         <div class="card-body">
@@ -28,6 +30,18 @@
                 </div>
                 <button type="submit" class="btn btn-custom w-100">INICIAR SESIÓN</button>
             </form>
+            @if ($errors->any())
+            <div class="alert alert-danger mt-3" role="alert">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </div>
+            @endif
+
+
+
+
+
         </div>
     </div>
     @vite('resources/js/app.js')
@@ -41,4 +55,5 @@
         </script>
     @endif
 </body>
+
 </html>

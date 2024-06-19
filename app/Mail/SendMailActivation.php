@@ -13,13 +13,20 @@ class SendMailActivation extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $url;
+    protected $id;
+    protected $random;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct( $url, $id, $random)
     {
         //
+        $this->url = $url;
+        $this->id = $id;
+        $this->random = $random;
     }
+   
 
     /**
      * Get the message envelope.
@@ -27,7 +34,7 @@ class SendMailActivation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Send Mail Activation',
+            subject: 'Confirmacion de Correo Electronico - Hotel',
         );
     }
 
@@ -37,7 +44,15 @@ class SendMailActivation extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'email',
+            with: [
+               
+                'url'  => $this->url,
+                'random' => $this->random,
+                'id' => $this->id->id,
+                
+                
+            ],
         );
     }
 

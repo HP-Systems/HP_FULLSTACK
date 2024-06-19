@@ -9,6 +9,7 @@ use App\Models\Personal;
 use App\Models\User;
 use App\Rules\UniqueEmailForUserableType;
 use Faker\Provider\ar_EG\Person;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -17,9 +18,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use PDOException;
 
 class WebController extends Controller
 {
+    public function loginForm()
+    {
+        return view('login');
+    }
 
     public function login(Request $request)
     {
@@ -80,8 +87,9 @@ class WebController extends Controller
 
             // Guardar el código encriptado en el usuario u otra ubicación si es necesario
             $user->codigo = $hashed_admin_code;
+            $user->codigo = $hashed_admin_code;
             $user->save();
-            // Despachar el trabajo para enviar el correo electrónico
+            // Enviar al el correo electrónico
             SendActivationURL::dispatch($url, $user, $admin_code);
 
             return redirect($url)->with('message', 'Por favor, revise su correo para confirmar su cuenta.');
@@ -96,6 +104,7 @@ class WebController extends Controller
             Log::error('Exception during login: ' . $e->getMessage());
             return redirect()->route('login')->withErrors(['error' => 'Error de servidor.']);
         }
+        
     }
 
 
