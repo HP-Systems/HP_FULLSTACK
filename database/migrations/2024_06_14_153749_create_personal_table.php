@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('personal', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre', 50);
             $table->string('apellido', 50);
             $table->string('telefono', 20);
             $table->unsignedBigInteger('rolID');
