@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WEB\WebController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,3 +22,9 @@ Route::get('/', function () {
 Route::get('/login', function () {
     return view('login');
 });
+
+
+Route::get('/confirm/{id}', [WebController::class, 'confirmEmail'])->name('confirm')->where('id', '[0-9]+');
+Route::get('/login', [WebController::class, 'loginForm'])->name('login.form');
+Route::post('/login', [WebController::class, 'login'])->name('login');
+

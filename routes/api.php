@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\DESKTOP\DeskController;
 use App\Http\Controllers\MOVIL\MovilController;
+use App\Http\Controllers\WEB\WebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,12 @@ Route::prefix('movil')->group(function () {
 Route::prefix('desk')->group(function () {
     Route::post('/login', [DeskController::class, 'login']); 
     Route::post('/register', [DeskController::class, 'register']);
+});
+
+//WEB ROUTES
+Route::prefix('web')->group(function () {
+    Route::post('/login', [WebController::class, 'login']); 
+    Route::post('/register', [WebController::class, 'register']);
 });
 
 

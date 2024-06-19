@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->unsignedBigInteger('userable_id')->nullable();
-            $table->string('userable_type')->nullable();
+            $table->unsignedBigInteger('userable_type')->nullable();
             $table->string('codigo')->nullable();
             $table->boolean('status')->default(1);
 
