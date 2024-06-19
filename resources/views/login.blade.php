@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Project</title>
     @vite('resources/css/app.css')
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="icon" href="{{ asset('images/logo.jpg') }}" type="image/jpg">
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100 custom-bg">
@@ -15,7 +16,7 @@
                     <img src="{{ asset('images/logo.jpg') }}" alt="Logo">
                 </div>
             </div>
-            <form method="POST" action="">
+            <form method="POST" action="{{ url('/login') }}">
                 @csrf
                 <div class="mb-3">
                     <label for="email" class="form-label"><strong>Correo</strong></label>
@@ -30,5 +31,14 @@
         </div>
     </div>
     @vite('resources/js/app.js')
+    @if ($errors->has('error'))
+        <script>
+            swal({
+                title: "Error!",
+                text: "{{ $errors->first() }}",
+                icon: "error",
+            });
+        </script>
+    @endif
 </body>
 </html>
