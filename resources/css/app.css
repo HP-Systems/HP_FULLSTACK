@@ -17,8 +17,8 @@
 }
 
 .btn-custom:active {
-    background-color: #65999C;
-    color: white; 
+    background-color: #65999C !important;
+    color: white !important; 
     font-weight: bold;
     border: none; 
 }
