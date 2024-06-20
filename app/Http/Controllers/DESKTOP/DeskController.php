@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DESKTOP;
 
 use App\Http\Controllers\Controller;
+use App\Mail\passwordMail;
 use App\Models\Huesped;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +14,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Personal;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class DeskController extends Controller
 {
@@ -85,9 +87,8 @@ class DeskController extends Controller
                     "nombre" => "required",
                     "apellido" => "required",
                     "telefono" => "required",
-                    "rolID" => "required",
-                    "email" => ["required", "email", new UniqueEmailForUserableType($request->userable_type)],
-                    "password" => "required",
+                    "email" => "required|email|unique:users,email",
+                    
                 ]
             );
 
@@ -100,21 +101,23 @@ class DeskController extends Controller
                 "apellido" => $request->apellido,
                 "telefono" => $request->telefono,
             ]);
-           
+            $password = Str::random(15);
+
             $user = User::create([
                 "email" => $request->email,
-                "password" => Hash::make($request->password),
+                "password" => Hash::make($password),
                 "userable_id" => $user->id,
                 "userable_type" => 2,
             ]);
-
+            //enviar correo con la contraseña
+            Mail::to($request->email)->send(new passwordMail($user, $password));
             return response()->json([
                 'message' => 'Usuario creado con exito.',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Hubo un error al crear el usuario.'
-                
+                'message' => 'Hubo un error al crear el usuario.',
+                'error' => $e->getMessage(),
             ], 500);
             Log::error($e->getMessage());
             
