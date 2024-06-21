@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Project</title>
     @vite('resources/css/app.css')
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="icon" href="{{ asset('images/logo.jpg') }}" type="image/jpg">
 </head>
 
@@ -17,12 +18,7 @@
                     <img src="{{ asset('images/logo.jpg') }}" alt="Logo">
                 </div>
             </div>
-            @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-            @endif
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ url('/login') }}">
                 @csrf
                 <div class="mb-3">
                     <label for="email" class="form-label"><strong>Correo</strong></label>
@@ -34,21 +30,18 @@
                 </div>
                 <button type="submit" class="btn btn-custom w-100">INICIAR SESIÓN</button>
             </form>
-            @if ($errors->any())
-            <div class="alert alert-danger mt-3" role="alert">
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </div>
-            @endif
-
-
-
-
-
         </div>
     </div>
     @vite('resources/js/app.js')
+    @if ($errors->has('error'))
+        <script>
+            swal({
+                title: "Error!",
+                text: "{{ $errors->first() }}",
+                icon: "error",
+            });
+        </script>
+    @endif
 </body>
 
 </html>

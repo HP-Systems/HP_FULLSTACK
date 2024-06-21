@@ -13,9 +13,11 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use PDOException;
 
@@ -31,113 +33,79 @@ class WebController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email',
-                'password' => 'required|string|min:8'
+                'password' => 'required'
             ]);
 
             if ($validator->fails()) {
-                // return response()->json([
-                //     'message' => 'Credenciales requeridas.',
-                // ], 401);
-                return redirect()->route('login')->withErrors(['error' => 'Credenciales requeridas.']);
-            }
-            //busca el usuario en la base de datos mediante el email
-            $user = User::where('email', $request->email)->first();
-            if (!$user || !Hash::check($request->password, $user->password)) {
-                // return response()->json([
-                //     'message' => 'Credenciales incorrectas.',
-                // ], 401);
                 return redirect()->route('login')->withErrors(['error' => 'Credenciales incorrectas.']);
             }
-            // si el role no es 1 ,no tiene permisos para acceder
-            if ($user->userable_type == 2) {
-                // return response()->json([
-                //     'message' => 'No tiene permisos para acceder.',
-                // ], 401);
-                return redirect()->route('login')->withErrors(['error' => 'No tiene permisos para acceder.']);
+
+            $maxAttempts = 3;
+            $decayMinutes = 1;
+
+            //si se intenta logear muchas veces, se bloquea el login por un tiempo
+            if (RateLimiter::tooManyAttempts('login_attempts', $maxAttempts)) {
+                return redirect()->back()->withErrors(['error' => 'Demasiados intentos. Por favor, intente de nuevo.' ]);
             }
-            $personal = Personal::where('id',$user->id)->first();
+
+            //busca el usuario en la base de datos mediante el email
+            $user = User::where('email', $request->email)->where('userable_type', 1)
+            ->first();
+
+            
+            // si el role no es 1 ,no tiene permisos para acceder
+            if (!$user->userable_type == 1) {
+                return redirect()->back()->withErrors(['error' => 'No tiene permisos para acceder.']);
+            }
+
+            $personal = Personal::where('id', $user->id)->first();
+
             // si el usuario no es admin, no tiene permisos para acceder
-            if ($personal->rolID == 2 || $personal->rolID == 3) {
-                // return response()->json([
-                //     'message' => 'No tiene permisos para acceder..',
-                // ], 401);
-                return redirect()->route('login')->withErrors(['error' => 'No tiene permisos para acceder.']);
+            if (!$personal->rolID == 1) {
+                return redirect()->back()->withErrors(['error' => 'No tiene permisos para acceder.']);
+            }
+
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                RateLimiter::hit('login_attempts', $decayMinutes * 60);
+                return redirect()->back()->withErrors(['error' => 'Credenciales incorrectas.']);
             }
 
             //si el usuario y la contraseña son correctos, se manda una ruta temporal para confirmar el correo
-
-            $url = URL::temporarySignedRoute('confirm',now()->addMinute(5),['id' => $user->id]);
+            RateLimiter::clear('login_attempts');
+            $url = URL::temporarySignedRoute('verify', now()->addMinute(5),['id' => $user->id]);
+            session(['userId' => optional($user)->id]);
+            
             // Generar el código de verificación
-            
-            $user->codigo = rand(1000, 9999);
-            
+            $user->codigo = Str::upper(Str::random(6));
             $admin_code = $user->codigo;
+
+            Log::info('Código de verificación: ' . $admin_code);
+
+
             // Encriptar el código de verificación usando Hash::make()
-           
             $hashed_admin_code = Hash::make($admin_code);
+
             // Guardar el código encriptado en el usuario u otra ubicación si es necesario
+            $user->codigo = $hashed_admin_code;
             $user->codigo = $hashed_admin_code;
             $user->save();
             // Enviar al el correo electrónico
             SendActivationURL::dispatch($url, $user, $admin_code);
 
-            // return response()->json([
-            //     'message' => 'Por favor, revise su correo para confirmar su cuenta.',
-            // ], 200);
-            return redirect()->route('login')->with('success', 'Por favor, revise su correo para confirmar su cuenta.');
+            return redirect($url)->with('message', 'Por favor, revise su correo para confirmar su cuenta.');
 
         } catch (\PDOException $e) {
             Log::error('PDOException during login: ' . $e->getMessage());
-            //return view('error', ['message' => 'Database error: ' . $e->getMessage()]);
+            return redirect()->route('login')->withErrors(['error' => 'Error de servidor.']);
         } catch (\Illuminate\Database\QueryException $e) {
             Log::error('QueryException during login: ' . $e->getMessage());
-            //return view('error', ['message' => 'Database query error: ' . $e->getMessage()]);
+            return redirect()->route('login')->withErrors(['error' => 'Error de servidor.']);
         } catch (\Exception $e) {
             Log::error('Exception during login: ' . $e->getMessage());
-           // return view('error', ['message' => 'Unexpected error: ' . $e->getMessage()]);
+            return redirect()->route('login')->withErrors(['error' => 'Error de servidor.']);
         }
         
     }
-
-    public function confirmEmail(Request $request, $id)
-    {
-        try {
-            //si la ruta no está firmada, redirige al formulario de login con un error
-            if (!$request->hasValidSignature()) {
-                return redirect()->route('login.form')->withErrors(['error' => 'Invalid']);
-            }
-            //busca el usuario en la base de datos mediante el id
-            $user = User::find($id);
-            //si no encuentra el usuario, redirige al formulario de login con un error
-            if (!$user) {
-                return redirect()->route('login')->withErrors(['error' => 'User not found']);
-            }
-            //se verifica el usuario y se guarda en la base de datos
-            //se direcciona a la vista de 2FA para la introducir el código
-            $user->status = true;
-            $user->save();
-
-            //return view('2FA', ["id" => $id]);
-            return response()->json([
-                'message' => 'Usuario verificado con exito.',
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Exception during email confirmation: ' . $e->getMessage());
-            return redirect()->route('error');
-        } catch (QueryException $e) {
-            Log::error('QueryException during email confirmation: ' . $e->getMessage());
-            return redirect()->route('error');
-        } catch (PDOException $e) {
-            Log::error('PDOException during email confirmation: ' . $e->getMessage());
-            return redirect()->route('error');
-        }
-        catch (ValidationException $e) {
-            Log::error('ValidationException during email confirmation: ' . $e->getMessage());
-            return redirect()->route('error');
-        }
-
-    }
-
 
 
     public function register(Request $request)
@@ -210,7 +178,74 @@ class WebController extends Controller
             //el error se puede ver en el log de laravel
             Log::error($e->getMessage());
         }
-        
+    }
 
+
+    public function verifyNumber(Request $request){
+        try{
+            $validation = Validator::make($request->all(), [
+                'verification_code' => 'required|size:6'
+            ]);
+
+            if ($validation->fails()) {
+                // Agrega un mensaje de error al validador solo si hay un error de código
+                if ($validation->errors()->has('verification_code')) {
+                    $validation->errors()->add('error', 'Código incorrecto. Inténtalo de nuevo.');
+                }
+                return redirect()->back()->withInput()->withErrors($validation);
+            }
+
+            //obtenermos el id de la session
+            $userId = session('userId');
+            $user = User::where('id', $userId)->first();
+            Log::info('User ID: ' . $userId);
+
+            $maxAttempts = 3;
+            $decayMinutes = 1;
+
+            //si intenta poner codigo varias veces, se bloquea por un tiempo
+            if (RateLimiter::tooManyAttempts('login_attempts', $maxAttempts)) {
+                return redirect()->route('login')->withErrors(['error' => 'Demasiados intentos. Por favor, intente de nuevo más tarde.' ]);
+            }
+
+            Log::info('Código: ' . $request->verification_code);
+            $codigoVerificado = Hash::check($request->verification_code, $user->codigo);
+            
+
+            //si no coincide el codigo
+            if (!$user || !$codigoVerificado) {
+                RateLimiter::hit('login_attempts', $decayMinutes * 30);
+                return redirect()->back()->withInput()->withErrors(['error' => 'Código incorrecto.']);
+            }
+
+            RateLimiter::clear('login_attempts');
+            Auth::login($user);
+            $token = $user->createToken("token")->plainTextToken;
+            $user->save();
+
+            return redirect()->route('home')->with(['token' => $token]);     
+        } catch (\Exception $e) {
+            Log::error('Error en el inicio de sesión: ' . $e->getMessage());
+            return redirect()->back()->withInput()->withErrors(['error' => 'Error de servidor.']);
+        }
+    }
+
+    public function logout(Request $request){
+        try {
+            $user = $request->user();
+            Log::info("El usuario con ID {$user->id} ha cerrado sesión exitosamente.");
+
+            $request->user()->tokens()->delete();
+
+            Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+
+            return redirect()->route('login');
+        } catch (\Exception $e) {
+            // Manejo de excepciones
+            Log::error('Error en el cierre de sesión: ' . $e->getMessage());
+            return redirect()->route('login')->withErrors(['error' => 'Error de servidor']);
+        }
     }
 }

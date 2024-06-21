@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\WEB\WebController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WEB\WebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,17 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('login');
+
+Route::get('/', function () {return view('login');})->name("login");
+Route::post('/login', [WebController::class, 'login']);
+
+
+Route::get('/verify', function () {return view('verify');})->middleware('signed')->name("verify");
+Route::post('/verifyNumber', [WebController::class, 'verifyNumber']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/home', function () {return view('home');})->name("home");
 });
 
+Route::post('/logout', [WebController::class, 'logout'])->name('logout');
 
-Route::get('/login', function () {
-    return view('login');
-});
-
-
-Route::get('/confirm/{id}', [WebController::class, 'confirmEmail'])->name('confirm')->where('id', '[0-9]+');
-Route::get('/login', [WebController::class, 'loginForm'])->name('login.form');
-Route::post('/login', [WebController::class, 'login'])->name('login');
-
+Route::get('/email', function () {return view('email');})->name("email");
