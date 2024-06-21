@@ -30,18 +30,6 @@
                 </div>
                 <button type="submit" class="btn btn-custom w-100">INICIAR SESIÓN</button>
             </form>
-            @if ($errors->any())
-            <div class="alert alert-danger mt-3" role="alert">
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </div>
-            @endif
-
-
-
-
-
         </div>
     </div>
     @vite('resources/js/app.js')

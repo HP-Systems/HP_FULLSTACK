@@ -46,13 +46,11 @@ class SendMailActivation extends Mailable
         return new Content(
             view: 'email',
             with: [
-               
                 'url'  => $this->url,
                 'random' => $this->random,
                 'id' => $this->id->id,
-                
-                
             ],
+            
         );
     }
 

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\WEB\WebController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WEB\WebController;
 
@@ -29,3 +28,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/logout', [WebController::class, 'logout'])->name('logout');
 
+Route::get('/email', function () {return view('email');})->name("email");

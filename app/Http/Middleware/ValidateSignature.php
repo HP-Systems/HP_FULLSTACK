@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Routing\Middleware\ValidateSignature as Middleware;
+use Illuminate\Http\Request;
 
 class ValidateSignature extends Middleware
 {
@@ -19,4 +20,5 @@ class ValidateSignature extends Middleware
         // 'utm_source',
         // 'utm_term',
     ];
+
 }

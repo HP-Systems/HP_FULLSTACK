@@ -37,7 +37,7 @@ class WebController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return redirect()->back()->withErrors(['error' => 'Credenciales incorrectas.']);
+                return redirect()->route('login')->withErrors(['error' => 'Credenciales incorrectas.']);
             }
 
             $maxAttempts = 3;
