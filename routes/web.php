@@ -15,11 +15,11 @@ use App\Http\Controllers\WEB\WebController;
 */
 
 
-Route::get('/', function () {return view('login');})->name("login");
+Route::get('/', function () {return view('login.login');})->name("login");
 Route::post('/login', [WebController::class, 'login']);
 
 
-Route::get('/verify', function () {return view('verify');})->middleware('signed')->name("verify");
+Route::get('/verify', function () {return view('login.verify');})->middleware('signed')->name("verify");
 Route::post('/verifyNumber', [WebController::class, 'verifyNumber']);
 
 Route::middleware('auth:sanctum')->group(function () {
