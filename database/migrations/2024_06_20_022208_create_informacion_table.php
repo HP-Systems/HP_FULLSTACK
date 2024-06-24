@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('direccion');
             $table->string('email');
             $table->string('telefono');
-            $table->string('checkin');
-            $table->string('checkout');
+            $table->time('checkin');
+            $table->time('checkout');
             $table->string('descripcion');
             $table->timestamps();
         });

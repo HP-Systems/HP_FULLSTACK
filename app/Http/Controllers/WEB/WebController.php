@@ -118,6 +118,7 @@ class WebController extends Controller
                     "nombre" => "required",
                     "apellido" => "required",
                     "telefono" => "required",
+                    "userable_type" => "required",
                     "email" => ["required", "email", new UniqueEmailForUserableType($request->userable_type)],
                     "password" => "required",
                 ]

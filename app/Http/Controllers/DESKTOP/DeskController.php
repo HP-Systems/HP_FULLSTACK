@@ -38,7 +38,7 @@ class DeskController extends Controller
             ->first();
             if (!$user) {
                 return response()->json([
-                    'message' => 'Credenciales incorrectas.',
+                    'message' => 'Credenciales incorrectas..',
                 ], 400);
             }
             
