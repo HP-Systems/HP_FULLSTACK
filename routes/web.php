@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WEB\WebController;
+use App\Http\Controllers\WEB\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +25,11 @@ Route::post('/verifyNumber', [WebController::class, 'verifyNumber']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/home', function () {return view('home');})->name("home");
+
+    Route::get('/users', [UsersController::class, 'index'])->name('users');
 });
 
 Route::post('/logout', [WebController::class, 'logout'])->name('logout');
 
 Route::get('/email', function () {return view('email');})->name("email");
+

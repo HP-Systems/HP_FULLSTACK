@@ -1,181 +1,86 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sidebar Bootstrap</title>
-    <!-- bootstrap 5 css -->
+    <title>@yield('title', 'Hotel Project')</title>
+    <link rel="icon" href="{{ asset('images/logo.jpg') }}" type="image/jpg">
     @vite('resources/css/app.css')
+    @vite('resources/css/sidebar.css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
-
-    <style>
-        li {
-            list-style: none;
-            margin: 5px 0;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        .logo-admin-container {
-            display: flex; 
-            align-items: center;
-            white-space: nowrap; 
-            overflow: hidden; 
-            padding-left: 5px;
-            padding-top: 5px;
-            padding-bottom: 5px;
-        }
-
-        #main-content {
-            margin-left: 250px;
-        }
-
-        #main-content.collapsed {
-            margin-left: 70px;
-        }
-
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            width: 250px;
-            height: 100vh;
-            position: fixed;
-            background-color: #76abae;
-            overflow: hidden;
-        }
-
-        .sidebar .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 8px 15px;
-            color: #333;
-        }
-
-        .sidebar .admin-text {
-            opacity: 1;
-            color: white;
-            font-weight: 500;
-            font-size: 20px;
-        }
-
-
-        .sidebar .nav-link i {
-            margin-right: 10px;
-        }
-
-        .sidebar .logo-img {
-            width: 30%;
-            height: 100%;
-        }
-
-        .sidebar .nav-link span,
-        .sidebar .admin-text {
-            opacity: 1; 
-            visibility: visible; 
-        }
-
-        .sidebar.collapsed {
-            width: 70px;
-        }
-
-        .sidebar.collapsed .nav-link {
-            justify-content: center;
-            padding: 10px 5px;
-        }
-
-        .sidebar.collapsed .nav-link i {
-            margin-right: 0; 
-        }
-
-        .sidebar.collapsed .nav-link span {
-            display: none;
-        }
-
-        .sidebar.collapsed .logo-img {
-            width: 100%; 
-            height: 100%;
-        }
-
-
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
+    
 </head>
-<body style="background-color: #EEEEEE">
-    <div>
-        <div class="sidebar" id="sidebar">
-            <div class="logo-admin-container">
-                <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="logo-img">
-                <span class="admin-text">Administrador</span>
-            </div>
-            <hr style="border-top: 2px solid white; margin: 0 10px;">
-            <div style="padding-left: 15px; padding-top: 15px; padding-right: 15px">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" style="font-size: 16px; color: white" href="#">
-                            <i class="fas fa-home" style="font-size: 18px; color: white"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" style="font-size: 16px; color: white" href="#">
-                            <i class="fas fa-users" style="font-size: 18px; color: white"></i>
-                            <span>Usuarios</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" style="font-size: 16px; color: white" href="#">
-                            <i class="fas fa-clipboard-list" style="font-size: 18px; color: white"></i>
-                            <span>Reportes</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" style="font-size: 16px; color: white" href="#">
-                            <i class="fas fa-bed" style="font-size: 18px; color: white"></i>
-                            <span>Habitaciones</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" style="font-size: 16px; color: white" href="#">
-                            <i class="fas fa-cog" style="font-size: 18px; color: white"></i>
-                            <span>Configuración</span>
-                        </a>
-                    </li>
-                </ul> 
-            </div>
-            <div class="mt-auto text-center" style="background-color: #31363F">
-                <a href="#" class="nav-link" style="font-size: 18px; color: white">
-                    <i class="bi bi-person-circle" style="font-size: 20px; color: white"></i>
-                    <span>Perfil</span>
+<body id="body-pd">
+    <header class="header" id="header">
+        <div class="header_toggle"> 
+            <i class='bx bx-menu' id="header-toggle"></i> 
+        </div>
+    </header>
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div>
+                <a href="#" class="nav_logo"> 
+                    <i class='fas fa-user-tie nav_logo-icon'></i> 
+                    <span class="nav_logo-name">Administrador</span>
                 </a>
-            </div>
+                <hr class="sidebar-hr" style="border-top: 2px solid white;">
+                <div class="nav_list"> 
+                    <a href="#" class="nav_link"> 
+                        <i class='fas fa-home nav_icon'></i> 
+                        <span class="nav_name">Dashboard</span> 
+                    </a> 
+                    <a href="{{ route('users') }}" class="nav_link {{ request()->routeIs('users') ? 'active' : '' }}"> 
+                        <i class='fas fa-users nav_icon'></i> 
+                        <span class="nav_name">Usuarios</span> 
+                    </a>  
+                    <a href="#" class="nav_link report-toggle"> 
+                        <i class='fas fa-chart-pie nav_icon'></i> 
+                        <span class="nav_name">Reportes</span>
+                        <i class='fas fa-chevron-right nav_icon arrow'></i> 
+                    </a>
+                    <div class="report-submenu">
+                        <a href="#" class="nav_link sub">
+                            <i class='fas fa-clipboard nav_icon'></i> 
+                            <span class="nav_name">Reporte 1</span> 
+                        </a>
+                        <a href="#" class="nav_link sub"> 
+                            <i class='fas fa-clipboard nav_icon'></i> 
+                            <span class="nav_name">Reporte 2</span> 
+                        </a>
+                        <a href="#" class="nav_link sub"> 
+                            <i class='fas fa-clipboard nav_icon'></i> 
+                            <span class="nav_name">Reporte 3</span> 
+                        </a>
+                        <a href="#" class="nav_link sub"> 
+                            <i class='fas fa-clipboard nav_icon'></i> 
+                            <span class="nav_name">Reporte 4</span> 
+                        </a>
+                    </div>
+                    <a href="#" class="nav_link"> 
+                        <i class='fas fa-bed nav_icon'></i> 
+                        <span class="nav_name">Habitaciones</span> 
+                    </a> 
+                    <a href="#" class="nav_link"> 
+                        <i class='fas fa-cog nav_icon'></i> 
+                        <span class="nav_name">Configuración</span> 
+                    </a> 
+                </div>
+            </div> 
+        </nav>
+        <div class="nav_logout_container">
+            <a href="#" class="nav_logo">
+                <i class='bi bi-person-circle nav_logo-icon-abajo'></i>
+                <span class="nav_logo-abajo">Perfil</span>
+            </a>
         </div>
     </div>
-    <section id="main-content">
-        <div style="border-bottom: 1px solid white; background-color: white; height: 50px; display: flex; align-items: center; justify-content: center;" class="align-items-center">
-            <div class="d-flex justify-content-between align-items-center" style="width: 100%;">
-                <button class="btn" id="button-toggle" style="border: white">
-                    <i class="bi bi-list" style="color: #222831; font-size: 20px;"></i>
-                </button>
-            </div>
-        </div>
-        <div class="card mt-5">
-            <div class="card-body">
-                <h4>Lorem Ipsum</h4>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque animi maxime at minima. Totam vero omnis ducimus commodi placeat accusamus, repudiandae nemo, harum magni aperiam esse voluptates. Non, sapiente vero?
-                </p>
-            </div>
-        </div>
-    </section>
+    <div class="height-100" style="background-color: #EEEEEE">
+        @yield('content')
+    </div>
 
-    @vite('resources/js/app.js')
-    <script>
-        document.getElementById("button-toggle").addEventListener("click", () => {
-            document.getElementById("sidebar").classList.toggle("collapsed");
-            document.getElementById("main-content").classList.toggle("collapsed");
-        });
-    </script>
+    @vite('resources/js/sidebar.js')
+
 </body>
 </html>
