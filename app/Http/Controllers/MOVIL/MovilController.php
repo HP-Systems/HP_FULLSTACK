@@ -22,7 +22,7 @@ class MovilController extends Controller
                     "nombre" => "required",
                     "apellido" => "required",
                     "telefono" => "required|max:10",
-                    "email" => ["required", "email", new UniqueEmailForUserableType($request->userable_type)],
+                    "email" =>"required|email|unique:users,email",
                     "password" => "required|min:8",
 
                     "email.email" => "El campo :attribute es incorrecto",

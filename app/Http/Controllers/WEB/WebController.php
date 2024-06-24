@@ -52,6 +52,11 @@ class WebController extends Controller
             $user = User::where('email', $request->email)->where('userable_type', 1)
             ->first();
 
+            if (!$user) {
+                RateLimiter::hit('login_attempts', $decayMinutes * 60);
+                return redirect()->back()->withErrors(['error' => 'Credenciales incorrectas.']);
+            }
+
             
             // si el role no es 1 ,no tiene permisos para acceder
             if (!$user->userable_type == 1) {
@@ -118,6 +123,7 @@ class WebController extends Controller
                     "nombre" => "required",
                     "apellido" => "required",
                     "telefono" => "required",
+                    "userable_type" => "required",
                     "email" => ["required", "email", new UniqueEmailForUserableType($request->userable_type)],
                     "password" => "required",
                 ]

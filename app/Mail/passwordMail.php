@@ -9,22 +9,22 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendMailActivation extends Mailable
+class passwordMail extends Mailable
 {
     use Queueable, SerializesModels;
+    protected $user;
+    protected $password;
+   
 
-    protected $url;
-    protected $id;
-    protected $random;
+
     /**
      * Create a new message instance.
      */
-    public function __construct( $url, $id, $random)
+    public function __construct( $user, $password)
     {
         //
-        $this->url = $url;
-        $this->id = $id;
-        $this->random = $random;
+        $this->user = $user;
+        $this->password = $password;
     }
    
 
@@ -34,7 +34,7 @@ class SendMailActivation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Hotel- Confirmacion de Correo Electronico ',
+            subject: 'Hotel - Recuperacion de Contraseña',
         );
     }
 
@@ -44,13 +44,12 @@ class SendMailActivation extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email',
+            view: 'passwordMail',
             with: [
-                'url'  => $this->url,
-                'random' => $this->random,
-                'id' => $this->id->id,
+               
+                'user'  => $this->user,
+                'password' => $this->password
             ],
-            
         );
     }
 
