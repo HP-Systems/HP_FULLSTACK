@@ -21,6 +21,27 @@
     border: none; 
 }
 
+.btn-negro {
+    background-color: #31363F; 
+    color: white; 
+    font-weight: bold;
+    border: none; 
+}
+
+.btn-negro:hover {
+    background-color: #222831;
+    color: white; 
+    font-weight: bold;
+    border: none; 
+}
+
+.btn-negro:active {
+    background-color: #222831 !important;
+    color: white !important; 
+    font-weight: bold;
+    border: none; 
+}
+
 .circle-image {
     width: 55%;
     height: 55%;
