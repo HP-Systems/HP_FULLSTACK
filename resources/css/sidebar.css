@@ -134,14 +134,15 @@ a{
 }
 
 .nav_logo-icon-abajo{
-    font-size: 1.4rem;
+    font-size: 1.0rem;
     color: var(--white-color);
-    padding-right: 0.5rem;
+    padding-right: 0.6rem;
+    padding-left: 0.2rem;
 }
 
 .nav_logo-abajo{
     color: var(--white-color);
-    font-size: 17px;
+    font-size: 18px;
 }
 
 .nav_link{
@@ -229,6 +230,14 @@ a{
     padding-left: 2rem;
     float: right;
     font-size: 0.8rem;
+}
+
+.btn-logout{
+    background: none; 
+    border: none; 
+    display: flex; 
+    align-items: center; 
+    cursor: pointer;
 }
 
 @media screen and (min-width: 768px){

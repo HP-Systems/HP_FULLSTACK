@@ -27,8 +27,8 @@
                 </a>
                 <hr class="sidebar-hr" style="border-top: 2px solid white;">
                 <div class="nav_list"> 
-                    <a href="#" class="nav_link"> 
-                        <i class='fas fa-home nav_icon'></i> 
+                    <a href="{{ route('dashboard') }}" class="nav_link {{ request()->routeIs('dashboard') ? 'active' : '' }}"> 
+                        <i class="fas fa-home nav_icon"></i> 
                         <span class="nav_name">Dashboard</span> 
                     </a> 
                     <a href="{{ route('users') }}" class="nav_link {{ request()->routeIs('users') ? 'active' : '' }}"> 
@@ -41,11 +41,11 @@
                         <i class='fas fa-chevron-right nav_icon arrow'></i> 
                     </a>
                     <div class="report-submenu">
-                        <a href="#" class="nav_link sub">
+                        <a href="{{ route('reporte1') }}" class="nav_link sub {{ request()->routeIs('reporte1') ? 'active' : '' }}"> 
                             <i class='fas fa-clipboard nav_icon'></i> 
                             <span class="nav_name">Reporte 1</span> 
                         </a>
-                        <a href="#" class="nav_link sub"> 
+                        <a href="{{ route('reporte2') }}" class="nav_link sub {{ request()->routeIs('reporte2') ? 'active' : '' }}"> 
                             <i class='fas fa-clipboard nav_icon'></i> 
                             <span class="nav_name">Reporte 2</span> 
                         </a>
@@ -58,11 +58,11 @@
                             <span class="nav_name">Reporte 4</span> 
                         </a>
                     </div>
-                    <a href="#" class="nav_link"> 
+                    <a href="{{ route('habitaciones') }}" class="nav_link {{ request()->routeIs('habitaciones') ? 'active' : '' }}"> 
                         <i class='fas fa-bed nav_icon'></i> 
                         <span class="nav_name">Habitaciones</span> 
                     </a> 
-                    <a href="#" class="nav_link"> 
+                    <a href="{{ route('configuracion') }}" class="nav_link {{ request()->routeIs('configuracion') ? 'active' : '' }}"> 
                         <i class='fas fa-cog nav_icon'></i> 
                         <span class="nav_name">Configuración</span> 
                     </a> 
@@ -70,10 +70,13 @@
             </div> 
         </nav>
         <div class="nav_logout_container">
-            <a href="#" class="nav_logo">
-                <i class='bi bi-person-circle nav_logo-icon-abajo'></i>
-                <span class="nav_logo-abajo">Perfil</span>
-            </a>
+            <form action="{{ url('/logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="nav_logo btn-logout">
+                    <i class='fas fa-sign-out nav_logo-icon-abajo'></i>
+                    <span class="nav_logo-abajo">Logout</span>
+                </button>
+            </form>
         </div>
     </div>
     <div class="height-100" style="background-color: #EEEEEE">
