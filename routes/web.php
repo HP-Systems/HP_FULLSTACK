@@ -27,7 +27,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/home', function () {return view('home');})->name("home");
 
     Route::get('/dashboard', function () {return view('dashboard.dashboard');})->name("dashboard");
-    Route::get('/users', function () {return view('users.users');})->name("users");
+    Route::get('/users', [UsersController::class, 'index'])->name('users');
+
+
+    //Route::get('/users', function () {return view('users.users');})->name("users");
     Route::get('/reporte1', function () {return view('reportes.reporte1');})->name("reporte1");
     Route::get('/reporte2', function () {return view('reportes.reporte2');})->name("reporte2");
     Route::get('/habitaciones', function () {return view('habitaciones.habitaciones');})->name("habitaciones");

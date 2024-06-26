@@ -10,33 +10,41 @@
     </div>
     <div class="p-4 m-3" style="background-color: white;">
         <table class="table table-hover">
-        <thead>
-            <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            </tr>
-            <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            </tr>
-            <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-            </tr>
-        </tbody>
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Tipo de usuario</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($usuarios as $usuario)
+                    <tr>
+                        <td>{{ $usuario->nombre_completo }}</td> 
+                        <td>{{ $usuario->email }}</td>
+                        <td>{{ $usuario->rol }}</td> 
+                        <td>
+                            @if ($usuario->status == 1)
+                                <button disabled type="button" class="btn btn-success">ACTIVO</button>
+                            @else
+                                <button disabled type="button" class="btn btn-danger">INACTIVO</button>
+                            @endif
+                        </td> 
+                        <td>
+                            <button type="button" class="btn btn-outline-dark">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                        </td>
+                        
+                    </tr>
+                @endforeach
+                
+            </tbody>
         </table>
     </div>
 </div>
