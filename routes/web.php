@@ -16,7 +16,10 @@ use App\Http\Controllers\WEB\UsersController;
 */
 
 
-Route::get('/', function () {return view('login.login');})->name("login");
+Route::get('/', function () {
+    return auth()->check() ? redirect()->route('home') : view('login.login');
+})->name("login");
+
 Route::post('/login', [WebController::class, 'login']);
 
 
@@ -28,6 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/dashboard', function () {return view('dashboard.dashboard');})->name("dashboard");
     Route::get('/users', [UsersController::class, 'index'])->name('users');
+    Route::post('/insertPersonal', [UsersController::class, 'insertPersonal'])->name('insertPersonal');
+   
 
 
     //Route::get('/users', function () {return view('users.users');})->name("users");
@@ -40,4 +45,10 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/logout', [WebController::class, 'logout'])->name('logout');
 
 Route::get('/email', function () {return view('email');})->name("email");
+
+
+
+Route::get('/csrf-token', function () {
+    return csrf_token();
+});
 

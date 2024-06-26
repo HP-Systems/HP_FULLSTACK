@@ -22,24 +22,22 @@
 }
 
 .btn-negro {
-    background-color: #31363F; 
-    color: white; 
-    font-weight: bold;
-    border: none; 
+    background-color: #31363F !important; 
+    color: white !important; 
+    font-weight: bold !important;
+    border: none ; 
 }
 
 .btn-negro:hover {
-    background-color: #222831;
+    background-color: #222831 !important;
     color: white; 
     font-weight: bold;
-    border: none; 
 }
 
 .btn-negro:active {
     background-color: #222831 !important;
     color: white !important; 
     font-weight: bold;
-    border: none; 
 }
 
 .circle-image {
@@ -61,4 +59,8 @@
     
 }
 
+.border-thick {
+    border-width: 1px !important; 
+    border-color: #31363f48;
+}
 
