@@ -47,11 +47,12 @@
                                     <i class="fas fa-edit"></i>
                                 </button>
 
-                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal"
-                                    data-id="{{ $pers->id }}"
-                                    data-status="{{ $pers->status }}">
-                                    <i class="fas fa-sync"></i>
-                                </button>
+                                @if ($pers->id != $currentUserId) <!-- Condición para ocultar el botón del usuario logueado -->
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal"
+                                            data-id="{{ $pers->id }}" data-status="{{ $pers->status }}">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                @endif
                             </td>
 
                         </tr>
@@ -59,30 +60,6 @@
 
                 </tbody>
             </table>
-        </div>
-    </div>
-
-    <!-- Modal de Confirmación -->
-    <div class="modal fade" id="confirmStatusChangeModal" tabindex="-1" aria-labelledby="changeStatusModal" aria-hidden="true">
-        <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="changeStatusModal">CAMBIAR STATUS</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="changeStatusForm" action="{{ route('cambiarStatus') }}" method="POST">
-                    @csrf
-                    <p>¿Estás seguro de que quieres cambiar el estado de este usuario?</p>
-                    <input type="hidden" id="personalId" name="id">
-                    <input type="hidden" id="status" name="status">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-negro" id="confirmChange" onclick="changeStatus()">CONFIRMAR</button>
-            </div>
-        </div>
         </div>
     </div>
 
@@ -143,6 +120,25 @@
         </div>
     </div>
 
+    <!-- Modal de cambio de status -->
+    <div class="modal fade" id="confirmStatusChangeModal" tabindex="-1" aria-labelledby="confirmStatusChangeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmStatusChangeModalLabel">CAMBIO DE ESTADO</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="font-size: 17px">
+                    ¿Estás seguro de que quieres cambiar el estado de este personal?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmChangeStatusButton">ACEPTAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var addUserModal = document.getElementById('addUserModal');
@@ -169,29 +165,92 @@
                 addUserModal.querySelector('#addUserForm').action = id ? '{{ route('editPersonal') }}' : '{{ route('insertPersonal') }}';
             });
 
-            var changeStatus2 = document.getElementById('confirmStatusChangeModal');
-            changeStatus2.addEventListener('show.bs.modal', function (event) {
+            var confirmStatusChangeModal = document.getElementById('confirmStatusChangeModal');
+            confirmStatusChangeModal.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget;
+                var userId = button.getAttribute('data-id');
+                var userStatus = button.getAttribute('data-status');
+                
+                // Update modal content
+                var modalTitle = confirmStatusChangeModal.querySelector('.modal-title');
+                var modalBody = confirmStatusChangeModal.querySelector('.modal-body');
+                modalTitle.textContent = userStatus == '1' ? 'DAR DE BAJA' : 'DAR DE ALTA';
+                modalBody.textContent = userStatus == '1' 
+                    ? '¿Seguro que deseas desactivar a este miembro del personal? Una vez desactivado, no podrá acceder al sistema.' 
+                    : '¿Deseas dar de alta a este miembro del personal? Esto lo marcará como activo y podrá usar el sistema.';
 
-                var id = button.getAttribute('data-id');
-                var status = button.getAttribute('data-status');
+                // Handle confirm button click
+                var confirmButton = document.getElementById('confirmChangeStatusButton');
+                confirmButton.onclick = function () {
+                    changeUserStatus(userId, userStatus == '1' ? 0 : 1);
+                };
+            });
+        });
 
-                var modalTitle = changeStatus2.querySelector('.modal-title');
-                modalTitle.textContent = status == '1' ? 'DAR DE BAJA PERSONAL' : 'DAR DE ALTA PERSONAL';
-
-                var modalBody = changeStatus2.querySelector('#confirmStatusChangeModal .modal-body');
-                modalBody.textContent = status == '1' ? '¿Estás seguro de que quieres desactivar este usuario?' : '¿Estás seguro de que quieres activar este usuario?';
-
-                var formAction = changeStatus2.querySelector('#changeStatusForm').action;
-                changeStatus2.querySelector('#personalId').value = id ? id : '';
-                changeStatus2.querySelector('#statusAntes').value = status == 1 ? 0 : 1;
-
-                changeStatus2.querySelector('#changeStatusForm').action = '{{ route('cambiarStatus') }}';
-            
+        function changeUserStatus(userId, newStatus) {
+            // Mostrar pantalla de carga
+            swal({
+                text: "Cargando...",
+                button: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
             });
 
+            console.log('buscando user');
+            console.log(userId);
+            console.log(newStatus);
 
-        });
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '{{ route('cambiarStatus') }}',  
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: userId,
+                    status: newStatus
+                },
+                success: function(response) {
+                    // Ocultar pantalla de carga
+                    swal.close();
+
+                    if (response['msg']) {
+                        if(newStatus == 0){
+                            swal({
+                                title: "¡Éxito!",
+                                text: "El estado del usuario ha sido desactivado correctamente.",
+                                icon: "success",
+                            }).then((value) => {
+                                location.reload();
+                            });
+                        } else{
+                            swal({
+                                title: "¡Éxito!",
+                                text: "El estado del usuario ha sido activado correctamente.",
+                                icon: "success",
+                            }).then((value) => {
+                                location.reload();
+                            });
+                        }
+                        
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: response.message,
+                            icon: "error",
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Ocultar pantalla de carga y mostrar mensaje de error
+                    swal.close();
+                    swal({
+                        title: "Error!",
+                        text: "Error al procesar la solicitud.",
+                        icon: "error",
+                    });
+                }
+            });
+        }
 
 
         function setFieldError(fieldId, value, errorMessage) {
@@ -290,65 +349,7 @@
             });
         }
 
-        function changeStatus() {
-            swal({
-                text: "Cargando...",
-                button: false,
-                closeOnClickOutside: false,
-                closeOnEsc: false,
-            });
-    
-            // Deshabilitar botón de guardar
-            $('#saveButton').prop('disabled', true);
-    
-            jQuery.ajax({
-                type: 'POST',
-                url: '{{ route('cambiarStatus') }}',
-                data: jQuery('#changeStatusForm').serialize(),
-                success: function(response) {
-                    console.log(response);
-                    // Ocultar pantalla de carga
-                    swal.close();
-    
-                    if (response['msg']) {
-                        swal({
-                            title: "¡Éxito!",
-                            text: "El personal ha sido actualizado correctamente.",
-                            icon: "success",
-                        }).then((value) => {
-                            location.reload();
-                        });
-                    } else if (response.errors) {
-                        swal({
-                            title: "Error!",
-                            text: response.errors.join("\n"),
-                            icon: "error",
-                        });
-                    } else {
-                        swal({
-                            title: "Error!",
-                            text: "Error al procesar la solicitud.",
-                            icon: "error",
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // Ocultar pantalla de carga y mostrar mensaje de error
-                    swal.close();
-                    swal({
-                        title: "Error!",
-                        text: "Error al procesar la solicitud.",
-                        icon: "error",
-                    });
-                },
-                complete: function() {
-                    // Habilitar botón de guardar
-                    $('#saveButton').prop('disabled', false);
-                }
-            });
-
-        }
-
+       
 
 
     </script>

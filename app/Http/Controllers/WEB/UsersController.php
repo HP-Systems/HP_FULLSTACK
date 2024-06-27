@@ -36,12 +36,13 @@ class UsersController extends Controller
                 CONCAT(p.nombre, " ", p.apellido) as nombre_completo, 
                 p.telefono, 
                 r.id as rolID,
-                r.nombre as rol')
+                r.nombre as rol') 
             ->get();
 
         $roles = Rol::all();
+        $currentUserId = auth()->user()->id;
 
-        return view('users.users', compact('personal', 'roles'));
+        return view('users.users', compact('personal', 'roles', 'currentUserId'));
     }
 
     public function insertPersonal(Request $request){
@@ -153,7 +154,6 @@ class UsersController extends Controller
             $user->save();
 
             return response()->json(['msg' => 'Usuario actualizado con éxito'], 200);
-
         } catch (\Exception $e) {
             Log::error('Exception during login: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Error al actualizar el usuario.']);

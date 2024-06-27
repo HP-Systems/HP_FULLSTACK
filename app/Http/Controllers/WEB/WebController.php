@@ -66,7 +66,7 @@ class WebController extends Controller
             $personal = Personal::where('id', $user->id)->first();
 
             // si el usuario no es admin, no tiene permisos para acceder
-            if (!$personal->rolID == 1) {
+            if ($personal->rolID != 1) {
                 return redirect()->back()->withErrors(['error' => 'No tiene permisos para acceder.']);
             }
 
