@@ -10,8 +10,4 @@ $(document).ready(function() {
         });
         $('#verification_code').val(verificationCode);
     });
-
-    
 });
-
-

@@ -16,7 +16,10 @@ use App\Http\Controllers\WEB\UsersController;
 */
 
 
-Route::get('/', function () {return view('login.login');})->name("login");
+Route::get('/', function () {
+    return auth()->check() ? redirect()->route('home') : view('login.login');
+})->name("login");
+
 Route::post('/login', [WebController::class, 'login']);
 
 
@@ -27,7 +30,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/home', function () {return view('home');})->name("home");
 
     Route::get('/dashboard', function () {return view('dashboard.dashboard');})->name("dashboard");
-    Route::get('/users', function () {return view('users.users');})->name("users");
+    Route::get('/users', [UsersController::class, 'index'])->name('users');
+    Route::post('/insertPersonal', [UsersController::class, 'insertPersonal'])->name('insertPersonal');
+   
+
+
+    //Route::get('/users', function () {return view('users.users');})->name("users");
     Route::get('/reporte1', function () {return view('reportes.reporte1');})->name("reporte1");
     Route::get('/reporte2', function () {return view('reportes.reporte2');})->name("reporte2");
     Route::get('/habitaciones', function () {return view('habitaciones.habitaciones');})->name("habitaciones");
@@ -37,4 +45,10 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/logout', [WebController::class, 'logout'])->name('logout');
 
 Route::get('/email', function () {return view('email');})->name("email");
+
+
+
+Route::get('/csrf-token', function () {
+    return csrf_token();
+});
 

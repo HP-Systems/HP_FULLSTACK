@@ -21,6 +21,25 @@
     border: none; 
 }
 
+.btn-negro {
+    background-color: #31363F !important; 
+    color: white !important; 
+    font-weight: bold !important;
+    border: none ; 
+}
+
+.btn-negro:hover {
+    background-color: #222831 !important;
+    color: white; 
+    font-weight: bold;
+}
+
+.btn-negro:active {
+    background-color: #222831 !important;
+    color: white !important; 
+    font-weight: bold;
+}
+
 .circle-image {
     width: 55%;
     height: 55%;
@@ -40,4 +59,8 @@
     
 }
 
+.border-thick {
+    border-width: 1px !important; 
+    border-color: #31363f48;
+}
 

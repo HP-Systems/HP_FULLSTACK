@@ -6,6 +6,7 @@ use App\Http\Controllers\AppController;
 use App\Http\Controllers\DESKTOP\DeskController;
 use App\Http\Controllers\MOVIL\MovilController;
 use App\Http\Controllers\WEB\WebController;
+use App\Http\Controllers\WEB\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,4 +41,6 @@ Route::prefix('web')->group(function () {
     Route::post('/register', [WebController::class, 'register']);
 });
 
+
+Route::post('/users/insert', [UsersController::class, 'insertPersonal'])->name('personal.crear');
 

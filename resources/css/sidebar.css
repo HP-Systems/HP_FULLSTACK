@@ -126,12 +126,21 @@ a{
     padding-top: 1.5rem;
 }
 
-.nav_logo-name{
+.nav_logo-name {
     color: var(--white-color);
     font-weight: 700;
     font-size: 20px;
     padding-top: 1.6rem;
+    text-decoration: none !important;
 }
+
+.nav_name {
+    color: var(--white-color) !important;
+    font-weight: 400 !important;
+    font-size: 15px !important;
+    text-decoration: none !important;
+}
+
 
 .nav_logo-icon-abajo{
     font-size: 1.0rem;
@@ -280,3 +289,5 @@ a{
         padding-left: calc(var(--nav-width) + 188px);
     }
 }
+
+
