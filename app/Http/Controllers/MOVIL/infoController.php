@@ -7,7 +7,7 @@ use App\Models\Hotel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class infoController extends Controller
+class InfoController extends Controller
 {
     public function hotelIndex(Request $request)
     {
