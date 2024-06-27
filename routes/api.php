@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\DESKTOP\DeskController;
-use App\Http\Controllers\Movil\infoController as MovilInfoController;
+use App\Http\Controllers\Movil\infoController;
 use App\Http\Controllers\MOVIL\MovilController;
 use App\Http\Controllers\WEB\InfoHotelController;
 use App\Http\Controllers\WEB\RoomController;
@@ -34,7 +34,7 @@ Route::prefix('movil')->group(function () {
 
 //Version 1 movil
 Route::prefix('v1/movil')->group(function () {
-    Route::get('/inforamaionInicio', [MovilInfoController::class, 'hotelIndex']);
+    Route::get('/inforamaionInicio', [infoController::class, 'hotelIndex']);
 });
 
 //DESKTOP ROUTES
