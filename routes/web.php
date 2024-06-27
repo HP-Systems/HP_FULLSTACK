@@ -31,7 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/dashboard', function () {return view('dashboard.dashboard');})->name("dashboard");
     Route::get('/users', [UsersController::class, 'index'])->name('users');
-    Route::post('/insertPersonal', [UsersController::class, 'insertPersonal'])->name('insertPersonal');
+    Route::post('/users/insert', [UsersController::class, 'insertPersonal'])->name('insertPersonal');
+    Route::post('/users/edit', [UsersController::class, 'editPersonal'])->name('editPersonal');
+    Route::post('/users/status', [UsersController::class, 'cambiarStatus'])->name('cambiarStatus');
    
 
 

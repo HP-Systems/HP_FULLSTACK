@@ -24,20 +24,20 @@
 .btn-negro {
     background-color: #31363F !important; 
     color: white !important; 
-    font-weight: bold !important;
+    font-weight: 500 !important;
     border: none ; 
 }
 
 .btn-negro:hover {
     background-color: #222831 !important;
     color: white; 
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .btn-negro:active {
     background-color: #222831 !important;
     color: white !important; 
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .circle-image {

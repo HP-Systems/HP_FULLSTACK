@@ -8,7 +8,6 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
     @vite('resources/css/app.css')
     @vite('resources/css/sidebar.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
@@ -24,7 +23,7 @@
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
             <div>
-                <a href="#" class="nav_logo"> 
+                <a href="#" class="nav_logo" style="text-decoration: none;"> 
                     <i class='fas fa-user-tie nav_logo-icon'></i> 
                     <span class="nav_logo-name">Administrador</span>
                 </a>
