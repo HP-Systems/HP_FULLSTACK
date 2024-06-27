@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Movil;
+namespace App\Http\Controllers\MOVIL;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
