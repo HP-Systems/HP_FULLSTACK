@@ -15,7 +15,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             HotelSeeder::class,
-            AdminSeeder::class
+            AdminSeeder::class,
+            tipo_habitacion::class,
+            habitacion::class,
         ]);
     }
 }

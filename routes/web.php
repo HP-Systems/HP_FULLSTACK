@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WEB\InfoHotelController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WEB\WebController;
 use App\Http\Controllers\WEB\UsersController;
@@ -41,7 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reporte1', function () {return view('reportes.reporte1');})->name("reporte1");
     Route::get('/reporte2', function () {return view('reportes.reporte2');})->name("reporte2");
     Route::get('/habitaciones', function () {return view('habitaciones.habitaciones');})->name("habitaciones");
-    Route::get('/configuracion', function () {return view('configuracion.configuracion');})->name("configuracion");
+    Route::get('/configuracion', [InfoHotelController::class, 'index'])->name("configuracion");
+    Route::put('/configuracion/{id}', [InfoHotelController::class, 'update'])->name('updateHotel');
 });
 
 Route::post('/logout', [WebController::class, 'logout'])->name('logout');

@@ -25,7 +25,7 @@ class DeskController extends Controller
                 $request->all(),
                 [
                     "email" => "required|email",
-                    "password" => "required",
+                    "password" => "required|min:8",
                 ]
             );
 
@@ -38,7 +38,7 @@ class DeskController extends Controller
 
             if (!$user) {
                 return response()->json([
-                    'message' => 'Credenciales incorrectas..',
+                    'message' => 'Sin autorización.',
                 ], 400);
             }
             $role =Personal::where('id',$user->userable_id)->first();
@@ -113,7 +113,9 @@ class DeskController extends Controller
             //enviar correo con la contraseña
             Mail::to($request->email)->send(new passwordMail($user, $password));
             return response()->json([
-                'message' => 'Usuario creado con exito.',
+                'data'=>$user,
+                'msg' => 'Usuario creado con exito',
+                'status' => 200,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -134,4 +136,5 @@ class DeskController extends Controller
         
 
     }
+   
 }
