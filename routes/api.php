@@ -7,10 +7,13 @@ use App\Http\Controllers\DESKTOP\DeskController;
 use App\Http\Controllers\DESKTOP\HuespedController;
 use App\Http\Controllers\MOVIL\HotelController;
 use App\Http\Controllers\MOVIL\MovilController;
+use App\Http\Controllers\MOVIL\ReservasController;
 use App\Http\Controllers\WEB\InfoHotelController;
 use App\Http\Controllers\WEB\RoomController;
 use App\Http\Controllers\WEB\WebController;
 use App\Http\Controllers\WEB\UsersController;
+use App\Http\Controllers\GLOBAL\HabitacionesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,11 +36,17 @@ Route::prefix('movil')->group(function () {
     Route::post('/login', [MovilController::class, 'login']); 
 });
 
+//Version 1 global
+Route::prefix('v1')->group(function () {
+    Route::post('habitaciones/disponibles', [HabitacionesController::class, 'habitacionesDisponibles']);
+});
+
 //Version 1 movil
 Route::prefix('v1/movil')->group(function () {
     Route::get('inforamaionInicio', [HotelController::class, 'hotelIndex']);
     Route::get('habitaciones', [HotelController::class, 'habitaciones']);
     Route::get('tipoHabitaciones', [HotelController::class, 'tipoHabitaciones']);
+    Route::post('reservas/create', [ReservasController::class, 'createReserva']);
 });
 
 //DESKTOP ROUTES
