@@ -36,6 +36,7 @@ Route::prefix('movil')->group(function () {
 //Version 1 movil
 Route::prefix('v1/movil')->group(function () {
     Route::get('inforamaionInicio', [HotelController::class, 'hotelIndex']);
+    Route::get('habitaciones', [HotelController::class, 'habitaciones']);
 });
 
 //DESKTOP ROUTES
