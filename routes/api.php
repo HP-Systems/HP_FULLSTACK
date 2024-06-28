@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\DESKTOP\DeskController;
 use App\Http\Controllers\DESKTOP\HuespedController;
+use App\Http\Controllers\DESKTOP\ReservasController as DesktopReservasController;
 use App\Http\Controllers\MOVIL\HotelController;
 use App\Http\Controllers\MOVIL\MovilController;
 use App\Http\Controllers\MOVIL\ReservasController;
@@ -54,6 +55,7 @@ Route::prefix('desk')->group(function () {
     Route::post('/login', [DeskController::class, 'login']); 
     Route::post('/register', [DeskController::class, 'register']);
     Route::get('/users', [HuespedController::class, 'huespedes']);
+    Route::get('/reservas', [DesktopReservasController::class, 'traerReservas']);
 });
 
 //WEB ROUTES
