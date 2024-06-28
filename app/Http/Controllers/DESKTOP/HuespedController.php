@@ -24,7 +24,13 @@ class HuespedController extends Controller
                 ], 404);
             }
 
-            return response()->json($huesped, 200);
+            return response()->json(
+                [
+                    'data'=>$huesped,
+                    'message' => 'Huespedes obtenidos con éxito',
+                    'status' => 200,
+                ]
+            );
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Hubo un error al obtener los huespedes..',
@@ -35,8 +41,6 @@ class HuespedController extends Controller
         catch (\PDOException $e) {
             return response()->json([
                 'message' => 'Hubo um problema al obtener los huespedes',
-
-        
             ], 500);
             //el error se puede ver en el log de laravel
             Log::error($e->getMessage());
