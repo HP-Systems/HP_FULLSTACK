@@ -61,6 +61,7 @@ Route::prefix('desk')->group(function () {
     Route::post('/register', [DeskController::class, 'register']);
     Route::get('/users', [HuespedController::class, 'huespedes']);
     Route::get('/reservas', [DesktopReservasController::class, 'traerReservas']);
+    Route::post('/reservas/create', [DesktopReservasController::class, 'createReserva']);
 });
 
 //WEB ROUTES
