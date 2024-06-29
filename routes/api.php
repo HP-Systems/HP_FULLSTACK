@@ -47,9 +47,10 @@ Route::prefix('v1/movil')->group(function () {
     Route::get('/inforamaionInicio', [HotelController::class, 'hotelIndex']);
     Route::get('/habitaciones', [HotelController::class, 'habitaciones']);
     Route::get('/tipoHabitaciones', [HotelController::class, 'tipoHabitaciones']);
-    Route::post('/reservas/create', [ReservasController::class, 'createReserva']);
 
+    Route::post('/reservas/create', [ReservasController::class, 'createReserva']);
     Route::get('/reservas/{iduser}', [ReservasController::class, 'obtenerReservasHuesped']);
+    Route::get('/reservas/historial/{iduser}', [ReservasController::class, 'obtenerReservasPasadasHuesped']);
 });
 
 //DESKTOP ROUTES

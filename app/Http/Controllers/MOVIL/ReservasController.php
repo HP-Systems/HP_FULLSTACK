@@ -100,4 +100,47 @@ class ReservasController extends Controller
             );
         }
     }
+
+    public function obtenerReservasPasadasHuesped($idUser){
+        try{
+            if (!is_numeric($idUser) || (int)$idUser <= 0) {
+                return response()->json(
+                    [
+                        'status' => 400,
+                        'data' => [],
+                        'msg' => 'El ID proporcionado no es válido.',
+                        'error' => ['El ID debe ser un número entero positivo.']
+                    ], 400
+                );
+            }
+
+            $hoy = Carbon::today()->toDateString();
+
+            $reservas = Reserva::with('habitaciones')
+                    ->where('id', $idUser)
+                    // Reservas pasadas
+                    ->where(function($query) use ($hoy) {
+                        $query->where('fecha_salida', '<', $hoy);
+                    })
+                    ->get();
+
+            return response()->json(
+                [
+                    'status' => 200,
+                    'data' => $reservas,
+                    'msg' => 'Reservas pasadas obtenidas con éxito.',
+                    'error' => []
+                ], 200
+            );
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor.',
+                    'error' => $e->getMessage(),
+                ], 500
+            );
+        }
+    }
 }
