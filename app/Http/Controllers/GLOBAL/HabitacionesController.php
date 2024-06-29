@@ -37,16 +37,17 @@ class HabitacionesController extends Controller
             $fechaSalida = $request->fecha_salida;
     
             // Reservas que se encuentran en las fechas dadas
-            $reservasSolapadas = DB::table('reservas')
+            $reservasFecha = DB::table('reservas')
                 ->where(function ($query) use ($fechaEntrada, $fechaSalida) {
                     $query->whereBetween('fecha_entrada', [$fechaEntrada, $fechaSalida])
                         ->orWhereBetween('fecha_salida', [$fechaEntrada, $fechaSalida]);
                 })
+                ->where('status', 1)
                 ->pluck('id');
     
             // Habitaciones reservadas en esas fechas
             $habitacionesOcupadas = DB::table('habitaciones_reservas')
-                ->whereIn('reservaID', $reservasSolapadas)
+                ->whereIn('reservaID', $reservasFecha)
                 ->pluck('habitacionID');
     
             // Tipos de habitaciones junto con las habitaciones disponibles
@@ -87,7 +88,7 @@ class HabitacionesController extends Controller
                 [
                     'status' => 200,
                     'data' => $result,
-                    'msg' => 'Habitaciones disponibles agrupadas por tipo obtenidas con éxito.',
+                    'msg' => 'Habitaciones obtenidas con éxito.',
                     'error' => []
                 ], 200
             );

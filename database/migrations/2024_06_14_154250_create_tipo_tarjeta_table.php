@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tipo_tarjeta', function (Blueprint $table) {
             $table->id();
             $table->string('tipo', 50);
+            $table->boolean('status')->default(1);
             $table->timestamps(); 
         });
     }

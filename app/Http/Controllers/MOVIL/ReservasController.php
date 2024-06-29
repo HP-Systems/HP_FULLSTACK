@@ -4,7 +4,9 @@ namespace App\Http\Controllers\MOVIL;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon; 
 use Illuminate\Support\Facades\Validator;
+use App\Models\Reserva;
 
 class ReservasController extends Controller
 {
@@ -36,6 +38,54 @@ class ReservasController extends Controller
                     'status' => 200,
                     'data' => ["Data de la reserva"],
                     'msg' => 'Reserva creada con éxito.',
+                    'error' => []
+                ], 200
+            );
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor.',
+                    'error' => $e->getMessage(),
+                ], 500
+            );
+        }
+    }
+
+    public function obtenerReservasHuesped($idUser){
+        try{
+            if (!is_numeric($idUser) || (int)$idUser <= 0) {
+                return response()->json(
+                    [
+                        'status' => 400,
+                        'data' => [],
+                        'msg' => 'El ID proporcionado no es válido.',
+                        'error' => ['El ID debe ser un número entero positivo.']
+                    ], 400
+                );
+            }
+
+            $hoy = Carbon::today()->toDateString();
+
+            $reservas = Reserva::with('habitaciones')
+                    ->where('id', $idUser)
+                    // Reservas en proceso
+                    ->where(function($query) use ($hoy) {
+                        $query->where('fecha_entrada', '<=', $hoy)
+                              ->where('fecha_salida', '>=', $hoy);
+                    })
+                    // Reservas futuras
+                    ->orWhere(function($query) use ($hoy) {
+                        $query->where('fecha_entrada', '>=', $hoy);
+                    })
+                    ->get();
+
+            return response()->json(
+                [
+                    'status' => 200,
+                    'data' => $reservas,
+                    'msg' => 'Reservas obtenidas con éxito.',
                     'error' => []
                 ], 200
             );

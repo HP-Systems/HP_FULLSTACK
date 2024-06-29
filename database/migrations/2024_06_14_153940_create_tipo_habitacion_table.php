@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('capacidad');
             $table->decimal('precio_noche', 10, 2);
             $table->text('descripcion');
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

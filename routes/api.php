@@ -39,15 +39,17 @@ Route::prefix('movil')->group(function () {
 
 //Version 1 global
 Route::prefix('v1')->group(function () {
-    Route::post('habitaciones/disponibles', [HabitacionesController::class, 'habitacionesDisponibles']);
+    Route::post('/habitaciones/disponibles', [HabitacionesController::class, 'habitacionesDisponibles']);
 });
 
 //Version 1 movil
 Route::prefix('v1/movil')->group(function () {
-    Route::get('inforamaionInicio', [HotelController::class, 'hotelIndex']);
-    Route::get('habitaciones', [HotelController::class, 'habitaciones']);
-    Route::get('tipoHabitaciones', [HotelController::class, 'tipoHabitaciones']);
-    Route::post('reservas/create', [ReservasController::class, 'createReserva']);
+    Route::get('/inforamaionInicio', [HotelController::class, 'hotelIndex']);
+    Route::get('/habitaciones', [HotelController::class, 'habitaciones']);
+    Route::get('/tipoHabitaciones', [HotelController::class, 'tipoHabitaciones']);
+    Route::post('/reservas/create', [ReservasController::class, 'createReserva']);
+
+    Route::get('/reservas/{iduser}', [ReservasController::class, 'obtenerReservasHuesped']);
 });
 
 //DESKTOP ROUTES

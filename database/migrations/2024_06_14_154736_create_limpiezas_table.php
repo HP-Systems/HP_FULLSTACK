@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('fecha'); 
             $table->time('hora_inicio');
             $table->time('hora_fin')->nullable();
-            $table->integer('status');
+            $table->boolean('status')->default(1);
 
             $table->foreign('personalID')->references('id')->on('personal');
             $table->foreign('habitacionID')->references('id')->on('habitaciones');

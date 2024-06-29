@@ -16,6 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('servicioID');
             $table->unsignedBigInteger('reservaID');
             $table->integer('cantidad')->default(1);
+            $table->int('status');
+            // 0 cancelado, 1 entregado, 2 en proceso de entrega
+            
 
             $table->foreign('servicioID')->references('id')->on('servicios');
             $table->foreign('reservaID')->references('id')->on('reservas');

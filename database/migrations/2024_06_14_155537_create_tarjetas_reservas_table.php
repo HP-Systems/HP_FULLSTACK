@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('reservaID');
             $table->unsignedBigInteger('tarjetaID');
-            $table->boolean('status');
+            $table->boolean('status')->default(1);
 
             $table->foreign('reservaID')->references('id')->on('reservas');
             $table->foreign('tarjetaID')->references('id')->on('tarjetas');
