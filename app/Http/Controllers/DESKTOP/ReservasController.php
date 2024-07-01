@@ -156,12 +156,15 @@ class ReservasController extends Controller
                 'status' => 1
             ]);
 
+            $now = now();
             if (is_array($request->habitaciones) && count($request->habitaciones) > 0) {
                 foreach ($request->habitaciones as $habitacion) {
                     if (isset($habitacion['id'])) {
                         DB::table('habitaciones_reservas')->insert([
                             'reservaID' => $reserva->id,
                             'habitacionID' => $habitacion['id'],
+                            'created_at' => $now,
+                            'updated_at' => $now
                         ]);
                     }
                 }

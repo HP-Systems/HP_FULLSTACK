@@ -53,6 +53,7 @@ Route::prefix('v1/movil')->group(function () {
     Route::post('/reservas/create', [ReservasController::class, 'createReserva']);
     Route::get('/reservas/{iduser}', [ReservasController::class, 'obtenerReservasHuesped']);
     Route::get('/reservas/historial/{iduser}', [ReservasController::class, 'obtenerReservasPasadasHuesped']);
+    Route::put('/reservas/editHabitaciones/{idreserva}', [ReservasController::class, 'editarReservaHabitaciones']);
 });
 
 //DESKTOP ROUTES
