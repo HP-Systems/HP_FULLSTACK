@@ -87,7 +87,7 @@ class DeskController extends Controller
                 [
                     "nombre" => "required",
                     "apellido" => "required",
-                    "telefono" => "required",
+                    "telefono" => "required|numeric|min:10",
                     "email" => "required|email|unique:users,email",
                     
                 ]
