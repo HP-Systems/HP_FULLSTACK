@@ -155,7 +155,10 @@ class DeskController extends Controller
         } catch (\Exception $e) {
             // Manejo de excepciones
             Log::error('Error en el cierre de sesión: ' . $e->getMessage());
-            return redirect()->route('login')->withErrors(['error' => 'Error de servidor']);
+            return response()->json([
+                'msg' => 'Error al cerrar sesión.',
+                'status' => 500,
+            ], 500);
         }
     }
    
