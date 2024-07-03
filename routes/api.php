@@ -45,7 +45,7 @@ Route::prefix('desk')->group(function () {
     Route::post('/login', [DeskController::class, 'login']); 
     Route::post('/register', [DeskController::class, 'register']);
     Route::get('/users', [HuespedController::class, 'huespedes']);
-    Route::put('/update/{id}', [HuespedController::class, 'editar']);
+    Route::put('/guestUpdate/{id}', [HuespedController::class, 'editar']);
 });
 
 //WEB ROUTES
