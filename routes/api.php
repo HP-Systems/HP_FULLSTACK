@@ -64,3 +64,4 @@ Route::prefix('web')->group(function () {
 
 Route::post('/users/insert', [UsersController::class, 'insertPersonal'])->name('personal.crear');
 
+Route::post('/logout', [DeskController::class, 'logout'])->name('logout');

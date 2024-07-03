@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 
 use App\Models\User;
 use App\Models\Personal;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -135,6 +136,27 @@ class DeskController extends Controller
         }
         
 
+    }
+    public function logout(Request $request){
+        try {
+            $user = $request->user();
+            Log::info("El usuario con ID {$user->id} ha cerrado sesión exitosamente.");
+
+            $request->user()->tokens()->delete();
+
+            Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+
+           return response()->json([
+                'msg' => 'Sesión cerrada con éxito.',
+                'status' => 200,
+            ], 200);
+        } catch (\Exception $e) {
+            // Manejo de excepciones
+            Log::error('Error en el cierre de sesión: ' . $e->getMessage());
+            return redirect()->route('login')->withErrors(['error' => 'Error de servidor']);
+        }
     }
    
 }
