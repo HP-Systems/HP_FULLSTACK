@@ -72,7 +72,7 @@ class HuespedController extends Controller
                 [
                     "nombre" => "required",
                     "apellido" => "required",
-                    "telefono" => "required|numeric|min:10",
+                    "telefono" => "required|digits:10",
                 ]
             );
             if ($validation->fails()) {
