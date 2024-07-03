@@ -14,6 +14,7 @@ use App\Http\Controllers\WEB\RoomController;
 use App\Http\Controllers\WEB\WebController;
 use App\Http\Controllers\WEB\UsersController;
 use App\Http\Controllers\GLOBAL\HabitacionesController;
+use App\Http\Controllers\GLOBAL\ServiciosController;
 use App\Http\Controllers\GLOBAL\ReservasController as GlobalReservasController;
 
 
@@ -42,6 +43,11 @@ Route::prefix('movil')->group(function () {
 Route::prefix('v1')->group(function () {
     Route::post('/habitaciones/disponibles', [HabitacionesController::class, 'habitacionesDisponibles']);
     Route::delete('/reservas/delete/{idreserva}', [GlobalReservasController::class, 'cancelarReserva']);
+    Route::get('/services', [ServiciosController::class, 'index']);
+
+    
+    Route::post('/tipoServicio/create', [ServiciosController::class, 'crearTipoServicio']);
+    Route::post('/servicio/create', [ServiciosController::class, 'crearServicio']);
 });
 
 //Version 1 movil

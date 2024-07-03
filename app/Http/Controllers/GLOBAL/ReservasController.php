@@ -5,6 +5,7 @@ namespace App\Http\Controllers\GLOBAL;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use App\Models\Reserva;
 
 
@@ -48,6 +49,8 @@ class ReservasController extends Controller
                 ], 200
             );
         } catch (\Exception $e) {
+
+            Log::error('Exception during cancelarReserva: ' . $e->getMessage());
             return response()->json(
                 [
                     'status' => 500,

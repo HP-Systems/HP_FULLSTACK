@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon; 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Reserva;
 use App\Models\HabitacionReserva;
@@ -91,7 +92,7 @@ class ReservasController extends Controller
                 ], 200
             );
         } catch (\Exception $e) {
-            Log::error('Exception during login: ' . $e->getMessage());
+            Log::error('Exception during createReserva: ' . $e->getMessage());
             return response()->json(
                 [
                     'status' => 500,
@@ -140,7 +141,7 @@ class ReservasController extends Controller
                 ], 200
             );
         } catch (\Exception $e) {
-            Log::error('Exception during login: ' . $e->getMessage());
+            Log::error('Exception during obtenerReservaHuesped: ' . $e->getMessage());
             return response()->json(
                 [
                     'status' => 500,
@@ -184,7 +185,7 @@ class ReservasController extends Controller
                 ], 200
             );
         } catch (\Exception $e) {
-            Log::error('Exception during login: ' . $e->getMessage());
+            Log::error('Exception during obtenerReservasPasadasHuesped: ' . $e->getMessage());
             return response()->json(
                 [
                     'status' => 500,
