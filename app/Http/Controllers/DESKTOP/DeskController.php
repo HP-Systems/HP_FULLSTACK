@@ -13,9 +13,12 @@ use Illuminate\Support\Str;
 
 use App\Models\User;
 use App\Models\Personal;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
+use PDOException;
 
 class DeskController extends Controller
 {
@@ -137,28 +140,26 @@ class DeskController extends Controller
         
 
     }
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         try {
-            $user = $request->user();
-            Log::info("El usuario con ID {$user->id} ha cerrado sesión exitosamente.");
-
-            $request->user()->tokens()->delete();
-
+            $user = User::find(Auth::id());
+            $user->tokens()->where('id', $user->currentAccessToken()->id)->delete();
             Auth::logout();
-            request()->session()->invalidate();
-            request()->session()->regenerateToken();
-
-           return response()->json([
-                'msg' => 'Sesión cerrada con éxito.',
-                'status' => 200,
-            ], 200);
-        } catch (\Exception $e) {
-            // Manejo de excepciones
-            Log::error('Error en el cierre de sesión: ' . $e->getMessage());
             return response()->json([
-                'msg' => 'Error al cerrar sesión.',
-                'status' => 500,
-            ], 500);
+                'msg' => 'Usuario deslogueado con exito.',
+                'status'=> 200,
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Exception during logout: ' . $e->getMessage());
+        } catch (QueryException $e) {
+            Log::error('QueryException during logout: ' . $e->getMessage());
+        } catch (PDOException $e) {
+            Log::error('PDOException during logout: ' . $e->getMessage());
+        }
+        catch (ValidationException $e) {
+            Log::error('ValidationException during logout: ' . $e->getMessage());
         }
     }
    
