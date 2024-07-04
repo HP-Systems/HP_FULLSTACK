@@ -66,6 +66,7 @@ Route::prefix('desk')->group(function () {
     Route::post('/login', [DeskController::class, 'login']); 
     Route::post('/register', [DeskController::class, 'register']);
     Route::get('/users', [HuespedController::class, 'huespedes']);
+    Route::put('/guestUpdate/{id}', [HuespedController::class, 'editar']);
     Route::get('/reservas', [DesktopReservasController::class, 'traerReservas']);
     Route::post('/reservas/create', [DesktopReservasController::class, 'createReserva']);
 });
@@ -86,3 +87,6 @@ Route::prefix('web')->group(function () {
 
 Route::post('/users/insert', [UsersController::class, 'insertPersonal'])->name('personal.crear');
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [DeskController::class, 'logout']);
+});

@@ -13,8 +13,12 @@ use Illuminate\Support\Str;
 
 use App\Models\User;
 use App\Models\Personal;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
+use PDOException;
 
 class DeskController extends Controller
 {
@@ -33,15 +37,14 @@ class DeskController extends Controller
                 return response()->json(['error' => $validation->errors()], 400);
             }
 
-            $user = User::where('email', $request->email)->
-            where('userable_type', 1)->first();
+            $user = User::where('email', $request->email)->where('userable_type', 1)->first();
 
             if (!$user) {
                 return response()->json([
                     'message' => 'Sin autorización.',
                 ], 400);
             }
-            $role =Personal::where('id',$user->userable_id)->first();
+            $role = Personal::where('id', $user->userable_id)->first();
 
             if (!$role->rolID == 1 || !$role->rolID == 2) {
                 return response()->json([
@@ -56,8 +59,10 @@ class DeskController extends Controller
                     'message' => 'Credenciales incorrectas.',
                 ], 400);
             }
-        
-            $token = $user->createToken('auth_token')->plainTextToken;
+
+            $token = $user->createToken("token")->plainTextToken;
+            $user->save();
+
 
             return response()->json([
                 'message' => 'Usuario logueado con exito.',
@@ -68,16 +73,14 @@ class DeskController extends Controller
                 'message' => 'Hubo un error al loguear el usuario.'
             ], 500);
             Log::error($e->getMessage());
-        }
-        catch (\PDOException $e) {
+        } catch (\PDOException $e) {
             return response()->json([
                 'message' => 'Hubo um problema al loguear el usuario',
-        
+
             ], 500);
             //el error se puede ver en el log de laravel
             Log::error($e->getMessage());
         }
-        
     }
     public function register(Request $request)
     {
@@ -87,9 +90,9 @@ class DeskController extends Controller
                 [
                     "nombre" => "required",
                     "apellido" => "required",
-                    "telefono" => "required",
+                    "telefono" => "required|digits:10",
                     "email" => "required|email|unique:users,email",
-                    
+
                 ]
             );
 
@@ -113,7 +116,7 @@ class DeskController extends Controller
             //enviar correo con la contraseña
             Mail::to($request->email)->send(new passwordMail($user, $password));
             return response()->json([
-                'data'=>$user,
+                'data' => $user,
                 'msg' => 'Usuario creado con exito',
                 'status' => 200,
             ], 200);
@@ -123,18 +126,33 @@ class DeskController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
             Log::error($e->getMessage());
-            
-        }
-        catch (\PDOException $e) {
+        } catch (\PDOException $e) {
             return response()->json([
                 'message' => 'Hubo um problema al crear el usuario',
-        
+
             ], 500);
             //el error se puede ver en el log de laravel
             Log::error($e->getMessage());
         }
-        
-
     }
-   
+    public function logout(Request $request)
+    {
+        try {
+            // Revocar el token del usuario actual
+            $request->user()->currentAccessToken()->delete();
+            return response()->json([
+                'msg' => 'Sesión cerrada con éxito.',
+                'status' => '200',
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during logout: ' . $e->getMessage());
+
+        } catch (QueryException $e) {
+            Log::error('QueryException during logout: ' . $e->getMessage());
+        } catch (PDOException $e) {
+            Log::error('PDOException during logout: ' . $e->getMessage());
+        } catch (ValidationException $e) {
+            Log::error('ValidationException during logout: ' . $e->getMessage());
+        }
+    }
 }

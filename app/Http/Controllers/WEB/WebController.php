@@ -33,7 +33,7 @@ class WebController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email',
-                'password' => 'required'
+                'password' => 'required|min:8'
             ]);
 
             if ($validator->fails()) {
@@ -59,11 +59,11 @@ class WebController extends Controller
 
             
             // si el role no es 1 ,no tiene permisos para acceder
-            if (!$user->userable_type == 1) {
+            if ($user->userable_type != 1) {
                 return redirect()->back()->withErrors(['error' => 'No tiene permisos para acceder.']);
             }
 
-            $personal = Personal::where('id', $user->id)->first();
+            $personal = Personal::where('id', $user->userable_id)->first();
 
             // si el usuario no es admin, no tiene permisos para acceder
             if ($personal->rolID != 1) {
@@ -124,8 +124,20 @@ class WebController extends Controller
                     "apellido" => "required",
                     "telefono" => "required",
                     "userable_type" => "required",
-                    "email" => ["required", "email", new UniqueEmailForUserableType($request->userable_type)],
+                    "email" => "required|email|unique:users,email",
                     "password" => "required",
+                ],
+                [
+                    'rolID.required_if' => 'El campo :attribute es requerido.',
+                    'rolID.required_if' => 'El campo :attribute es requerido.',
+                    'nombre.required' => 'El campo :attribute es requerido.',
+                    'apellido.required' => 'El campo :attribute es requerido.',
+                    'telefono.required' => 'El campo :attribute es requerido.',
+                    'userable_type.required' => 'El campo :attribute es requerido.',
+                    'email.required' => 'El campo :attribute es requerido.',
+                    'email.email' => 'El campo :attribute es incorrecto.',
+                    'email.unique' => 'El campo :attribute ya existe.',
+                    'password.required' => 'El campo :attribute es requerido.',
                 ]
             );
 
@@ -170,7 +182,8 @@ class WebController extends Controller
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Hubo un error al crear el usuario.'
+                'message' => 'Hubo un error al crear el usuario.',
+                'error' => $e->getMessage(),
                 
             ], 500);
             Log::error($e->getMessage());
