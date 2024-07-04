@@ -64,4 +64,6 @@ Route::prefix('web')->group(function () {
 
 Route::post('/users/insert', [UsersController::class, 'insertPersonal'])->name('personal.crear');
 
-Route::middleware(['auth:sanctum'])->post('/logout',[DeskController::class,'logout']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [DeskController::class, 'logout']);
+});
