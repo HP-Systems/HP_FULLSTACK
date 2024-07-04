@@ -34,9 +34,4 @@ class Reserva extends Model
     {
         return $this->belongsToMany(Tarjeta::class, 'tarjetas_reservas', 'reservaID', 'tarjetaID');
     }
-
-    public function servicios()
-    {
-        return $this->belongsToMany(Servicio::class, 'servicios_reservas', 'reservaID', 'servicioID');
-    }
 }

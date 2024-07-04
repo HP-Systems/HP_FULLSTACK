@@ -16,6 +16,14 @@ class ServicioReserva extends Model
         'reservaID', 
         'cantidad'
     ];
+
+    public function habitacionReserva() {
+        return $this->belongsTo(HabitacionReserva::class, 'habitacionReservaID');
+    }
+
+    public function servicio() {
+        return $this->belongsTo(Servicio::class, 'servicioID');
+    }
     
  
 }

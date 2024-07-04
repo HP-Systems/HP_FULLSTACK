@@ -18,5 +18,12 @@ class HabitacionReserva extends Model
         'habitacion_numero',
     ];
 
-   
+    public function habitacionesReservas() {
+        return $this->hasMany(ServicioReserva::class, 'habitacionReservaID');
+    }
+
+    public function servicios() {
+        return $this->hasMany(ServicioReserva::class, 'servicioID');
+    }
+
 }

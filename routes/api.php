@@ -43,9 +43,8 @@ Route::prefix('movil')->group(function () {
 Route::prefix('v1')->group(function () {
     Route::post('/habitaciones/disponibles', [HabitacionesController::class, 'habitacionesDisponibles']);
     Route::delete('/reservas/delete/{idreserva}', [GlobalReservasController::class, 'cancelarReserva']);
-    Route::get('/services', [ServiciosController::class, 'index']);
 
-    
+    Route::get('/services', [ServiciosController::class, 'index']);
     Route::post('/tipoServicio/create', [ServiciosController::class, 'crearTipoServicio']);
     Route::post('/servicio/create', [ServiciosController::class, 'crearServicio']);
 });
