@@ -38,10 +38,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/status', [UsersController::class, 'cambiarStatus'])->name('cambiarStatus');
    
 
-
     //Route::get('/users', function () {return view('users.users');})->name("users");
     Route::get('/reporte1', function () {return view('reportes.reporte1');})->name("reporte1");
     Route::get('/reporte2', function () {return view('reportes.reporte2');})->name("reporte2");
+    Route::get('/servicios', function () {return view('servicios.servicios');})->name("servicios");
     Route::get('/habitaciones', [RoomController::class, 'index'])->name('habitaciones');
     Route::put('/habitaciones/{id}', [RoomController::class, 'updateRoom'])->name('updateRoom');
     Route::get('/habitaciones/buscar', [RoomController::class, 'buscar'])->name('habitaciones.buscar');

@@ -9,8 +9,7 @@
             <button type="button" class="btn btn-negro" data-bs-toggle="modal" data-bs-target="#addUserModal">Agregar
                 Personal</button>
         </div>
-        <div
-            style="background-color: white; margin-top: 15px !important; margin-right: 20px !important; padding: 20px !important">
+        <div style="background-color: white; margin-top: 15px !important; margin-right: 20px !important; padding: 20px !important">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -22,44 +21,18 @@
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($personal as $pers)
-                        <tr>
-                            <td>{{ $pers->nombre_completo }}</td>
-                            <td>{{ $pers->email }}</td>
-                            <td>{{ $pers->telefono }}</td>
-                            <td>{{ $pers->rol }}</td>
-                            <td>
-                                @if ($pers->status == 1)
-                                    <button disabled type="button" class="btn btn-success">ACTIVO</button>
-                                @else
-                                    <button disabled type="button" class="btn btn-danger">INACTIVO</button>
-                                @endif
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addUserModal"
-                                        data-id="{{ $pers->id }}"
-                                        data-nombre="{{ $pers->nombre }}"
-                                        data-apellido="{{ $pers->apellido }}"
-                                        data-email="{{ $pers->email }}"
-                                        data-telefono="{{ $pers->telefono }}"
-                                        data-rol="{{ $pers->rolID }}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-
-                                @if ($pers->id != $currentUserId) <!-- Condición para ocultar el botón del usuario logueado -->
-                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal"
-                                            data-id="{{ $pers->id }}" data-status="{{ $pers->status }}">
-                                        <i class="fas fa-sync"></i>
-                                    </button>
-                                @endif
-                            </td>
-
-                        </tr>
-                    @endforeach
-
+                <tbody id="personalTableBody">
+                    
                 </tbody>
             </table>
+            <!-- Paginación -->
+            <div class="d-flex justify-content-end">
+                <ul class="pagination custom-pagination" id="pagination" style="background-color: #EEEEEE !important">
+                    <!-- Los enlaces de paginación se llenarán dinámicamente -->
+                </ul>
+            </div>
+            
+
         </div>
     </div>
 
@@ -93,7 +66,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="telefono" class="form-label" style="font-weight: 500">Teléfono</label>
-                            <input type="tel" class="form-control border-thick" id="telefono" name="telefono" required>
+                            <input type="tel" maxlength="10" class="form-control border-thick" id="telefono" name="telefono" required>
                             <div id="telefono-error" class="text-danger"></div>
                         </div>
                         <div class="mb-3">
@@ -140,7 +113,14 @@
     </div>
 
     <script>
+        const personalData = @json($personal);
+        const rowsPerPage = 10;
+        let currentPage = 1;
+
         document.addEventListener('DOMContentLoaded', function () {
+            renderTable();
+            renderPagination();
+
             var addUserModal = document.getElementById('addUserModal');
             addUserModal.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget;
@@ -186,6 +166,105 @@
                 };
             });
         });
+
+        function renderTable() {
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedData = personalData.slice(start, end);
+
+            const tableBody = document.getElementById('personalTableBody');
+            tableBody.innerHTML = '';
+
+            paginatedData.forEach(pers => {
+                const row = `
+                    <tr>
+                        <td>${pers.nombre_completo}</td>
+                        <td>${pers.email}</td>
+                        <td>${pers.telefono}</td>
+                        <td>${pers.rol}</td>
+                        <td>
+                            ${pers.status == 1 ? '<button disabled type="button" class="btn btn-success">ACTIVO</button>' : '<button disabled type="button" class="btn btn-danger">INACTIVO</button>'}
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addUserModal"
+                                    data-id="${pers.id}"
+                                    data-nombre="${pers.nombre}"
+                                    data-apellido="${pers.apellido}"
+                                    data-email="${pers.email}"
+                                    data-telefono="${pers.telefono}"
+                                    data-rol="${pers.rolID}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            ${pers.id != {{ $currentUserId }} ? `
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal"
+                                    data-id="${pers.id}" data-status="${pers.status}">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function renderPagination() {
+            const pageCount = Math.ceil(personalData.length / rowsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            const maxPagesToShow = 3;
+            const half = Math.floor(maxPagesToShow / 2);
+            let startPage = Math.max(1, currentPage - half);
+            let endPage = Math.min(pageCount, currentPage + half);
+
+            if (currentPage <= half) {
+                endPage = Math.min(pageCount, maxPagesToShow);
+            }
+
+            if (currentPage + half > pageCount) {
+                startPage = Math.max(1, pageCount - maxPagesToShow + 1);
+            }
+
+            // Botón de anterior
+            if (currentPage > 1) {
+                const prevPage = `
+                    <li class="page-item">
+                        <a class="page-link" onclick="goToPage(${currentPage - 1})">&laquo;</a>
+                    </li>
+                `;
+                pagination.innerHTML += prevPage;
+            }
+
+            // Botones de paginación
+            for (let i = startPage; i <= endPage; i++) {
+                const pageItem = `
+                    <li class="page-item">
+                        <a class="page-link" style="${i === currentPage ? 'background-color: #65999C !important; color: white !important;' : ''}" onclick="goToPage(${i})">${i}</a>
+                    </li>
+                `;
+                pagination.innerHTML += pageItem;
+            }
+
+            // Botón de siguiente
+            if (currentPage < pageCount) {
+                const nextPage = `
+                    <li class="page-item">
+                        <a class="page-link" onclick="goToPage(${currentPage + 1})">&raquo;</a>
+                    </li>
+                `;
+                pagination.innerHTML += nextPage;
+            }
+        }
+
+
+        
+
+        function goToPage(page) {
+            currentPage = page;
+            renderTable();
+            renderPagination();
+        }
 
         function changeUserStatus(userId, newStatus) {
             // Mostrar pantalla de carga
@@ -349,8 +428,6 @@
             });
         }
 
-       
-
-
     </script>
+
 @endsection
