@@ -30,21 +30,28 @@ Route::post('/verifyNumber', [WebController::class, 'verifyNumber']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/home', function () {return view('home');})->name("home");
-
     Route::get('/dashboard', function () {return view('dashboard.dashboard');})->name("dashboard");
+    
     Route::get('/users', [UsersController::class, 'index'])->name('users');
+    Route::get('/users/tipos', function () {return view('users.tipos_personal');})->name("tipos_personal");
     Route::post('/users/insert', [UsersController::class, 'insertPersonal'])->name('insertPersonal');
     Route::post('/users/edit', [UsersController::class, 'editPersonal'])->name('editPersonal');
     Route::post('/users/status', [UsersController::class, 'cambiarStatus'])->name('cambiarStatus');
    
-
-    //Route::get('/users', function () {return view('users.users');})->name("users");
     Route::get('/reporte1', function () {return view('reportes.reporte1');})->name("reporte1");
     Route::get('/reporte2', function () {return view('reportes.reporte2');})->name("reporte2");
+
     Route::get('/servicios', function () {return view('servicios.servicios');})->name("servicios");
+    Route::get('/servicios/tipos', function () {return view('servicios.tipos_servicios');})->name("tipos_servicios");
+
     Route::get('/habitaciones', [RoomController::class, 'index'])->name('habitaciones');
     Route::put('/habitaciones/{id}', [RoomController::class, 'updateRoom'])->name('updateRoom');
     Route::get('/habitaciones/buscar', [RoomController::class, 'buscar'])->name('habitaciones.buscar');
+    Route::get('/habitaciones/tipos', function () {return view('habitaciones.tipos_habitaciones');})->name("tipos_habitaciones"); 
+
+    Route::get('/tarjetas', function () {return view('tarjetas.tarjetas');})->name("tarjetas");
+    Route::get('/tarjetas/tipos', function () {return view('tarjetas.tipos_tarjetas');})->name("tipos_tarjetas");
+
     Route::get('/configuracion', [InfoHotelController::class, 'index'])->name("configuracion");
     Route::put('/configuracion/{id}', [InfoHotelController::class, 'update'])->name('updateHotel');
 

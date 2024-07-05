@@ -31,8 +31,6 @@
                     <!-- Los enlaces de paginación se llenarán dinámicamente -->
                 </ul>
             </div>
-            
-
         </div>
     </div>
 

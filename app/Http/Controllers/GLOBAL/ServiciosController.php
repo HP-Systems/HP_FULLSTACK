@@ -108,4 +108,21 @@ class ServiciosController extends Controller
             );
         }
     }
+
+    public function obtenerServiciosReserva($id){
+        try{
+            
+
+        } catch(\Exception $e){
+            Log::error('Exception during obtenerServiciosReserva: ' . $e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor.',
+                    'error' => $e->getMessage(),
+                ], 500
+            );
+        }
+    }
 }

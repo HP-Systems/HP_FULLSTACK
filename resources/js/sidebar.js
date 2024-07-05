@@ -6,18 +6,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
             headerpd = document.getElementById(headerId);
 
         if (toggle && nav && bodypd && headerpd) {
-            toggle.addEventListener('click', () => {
-                nav.classList.toggle('show');
-                bodypd.classList.toggle('body-pd');
-                headerpd.classList.toggle('body-pd');
-
-                if(nav.classList.contains('show')) {
-                    nav.classList.remove('sidebar-closed');
-                } else {
-                    nav.classList.add('sidebar-closed');
-                }
+            toggle.addEventListener("click", () => {
+                nav.classList.toggle("show");
+                bodypd.classList.toggle("body-pd");
+                headerpd.classList.toggle("body-pd");
             });
-
+            
             nav.addEventListener('mouseenter', () => {
                 nav.classList.add('show');
                 bodypd.classList.add('body-pd');
@@ -36,6 +30,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     showNavbar('header-toggle', 'nav-bar', 'body-pd', 'header');
 
+    const rightMenuToggle = document.getElementById("menu-toggle-right");
+    const rightNavBar = document.getElementById("nav-bar-right");
+
+    if (rightMenuToggle && rightNavBar) {
+        rightMenuToggle.addEventListener("click", () => {
+            rightNavBar.classList.toggle("mostrar");
+        });
+    }
+
+
     /*===== LINK ACTIVE =====*/
     const linkColor = document.querySelectorAll('.nav_link');
 
@@ -45,6 +49,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     linkColor.forEach(l => l.addEventListener('click', colorLink));
+
+    const linkColorRight = document.querySelectorAll('.nav_right');
+
+    function colorLinkRight() {
+        linkColorRight.forEach(l => l.classList.remove('activ_right'));
+        this.classList.add('activ_right');
+    }
+    
+    linkColorRight.forEach(l => l.addEventListener('click', colorLinkRight));
 
     const reportToggle = document.querySelector('.report-toggle');
 

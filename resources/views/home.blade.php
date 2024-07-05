@@ -12,12 +12,14 @@
     @vite('resources/css/sidebar.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
     @vite('resources/css/custom.css')
-    
 </head>
 <body id="body-pd" style="background-color: #EEEEEE">
     <header class="header" id="header">
         <div class="header_toggle"> 
             <i class='bx bx-menu' id="header-toggle"></i> 
+        </div>
+        <div class="header_toggle"> 
+            <i class='fas fa-ellipsis-v' id="menu-toggle-right"></i> 
         </div>
     </header>
     <div class="l-navbar" id="nav-bar">
@@ -55,14 +57,18 @@
                             <i class='fas fa-clipboard nav_icon'></i> 
                             <span class="nav_name">Reporte 3</span> 
                         </a>
-                        <a href="#" class="nav_link sub"> 
-                            <i class='fas fa-clipboard nav_icon' style="text-decoration: none;"></i> 
-                            <span class="nav_name">Reporte 4</span> 
-                        </a>
                     </div>
+                    <a href="{{ route('servicios') }}" class="nav_link {{ request()->routeIs('servicios') ? 'active' : '' }}" style="text-decoration: none;"> 
+                        <i class='fas fa-clipboard-list nav_icon' style="font-size: 25px; padding-right: 12px"></i> 
+                        <span class="nav_name">Servicios</span> 
+                    </a> 
                     <a href="{{ route('habitaciones') }}" class="nav_link {{ request()->routeIs('habitaciones') ? 'active' : '' }}" style="text-decoration: none;"> 
                         <i class='fas fa-bed nav_icon'></i> 
                         <span class="nav_name">Habitaciones</span> 
+                    </a> 
+                    <a href="{{ route('tarjetas') }}" class="nav_link {{ request()->routeIs('tarjetas') ? 'active' : '' }}" style="text-decoration: none;"> 
+                        <i class='fas fa-address-card nav_icon' style="font-size: 20px;"></i> 
+                        <span class="nav_name">Tarjetas</span> 
                     </a> 
                     <a href="{{ route('configuracion') }}" class="nav_link {{ request()->routeIs('configuracion') ? 'active' : '' }}" style="text-decoration: none;"> 
                         <i class='fas fa-cog nav_icon'></i> 
@@ -82,6 +88,33 @@
         </div>
     </div>
     
+    <div class="r-navbar r-navbar-show" id="nav-bar-right">
+        <div class="configuracion-adicional">
+            <p>GESTIÓN ADICIONAL</p>
+        </div>
+        <hr>
+        <nav class="nav">
+            <div class="nav_list"> 
+                <a href="{{ route('tipos_personal') }}" class="nav_right {{ request()->routeIs('tipos_personal') ? 'activ_right' : '' }}" style="text-decoration: none;"> 
+                    <i class="fas fa-genderless nav_icon"></i> 
+                    <span class="nav_name">Tipos de Personal</span> 
+                </a> 
+                <a href="{{ route('tipos_servicios') }}" class="nav_right {{ request()->routeIs('tipos_servicios') ? 'activ_right' : '' }}" style="text-decoration: none;"> 
+                    <i class="fas fa-genderless nav_icon"></i> 
+                    <span class="nav_name">Tipos de Servicios</span> 
+                </a> 
+                <a href="{{ route('tipos_habitaciones') }}" class="nav_right {{ request()->routeIs('tipos_habitaciones') ? 'activ_right' : '' }}" style="text-decoration: none;"> 
+                    <i class="fas fa-genderless nav_icon"></i> 
+                    <span class="nav_name">Tipos de Habitaciones</span> 
+                </a>
+                <a href="{{ route('tipos_tarjetas') }}" class="nav_right {{ request()->routeIs('tipos_tarjetas') ? 'activ_right' : '' }}" style="text-decoration: none;"> 
+                    <i class="fas fa-genderless nav_icon"></i> 
+                    <span class="nav_name">Tipos de Tarjetas</span> 
+                </a>
+            </div>
+        </nav>
+    </div>
+
     <div class="height-100" style="background-color: #EEEEEE !important">
         @yield('content')
     </div>
@@ -90,11 +123,6 @@
     @vite('resources/js/sidebar.js')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    
-    <!-- Bootstrap bundle JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-
-</body>
-
 </body>
 </html>

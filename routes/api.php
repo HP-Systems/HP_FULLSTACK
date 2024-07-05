@@ -46,8 +46,8 @@ Route::prefix('v1')->group(function () {
     Route::post('/reservas/create', [ReservasController::class, 'createReserva']);
     
     Route::get('/services', [ServiciosController::class, 'index']);
-    Route::post('/tipoServicio/create', [ServiciosController::class, 'crearTipoServicio']);
-    Route::post('/servicio/create', [ServiciosController::class, 'crearServicio']);
+    //Route::post('/tipoServicio/create', [ServiciosController::class, 'crearTipoServicio']);
+    //Route::post('/servicio/create', [ServiciosController::class, 'crearServicio']);
 });
 
 //Version 1 movil
@@ -77,11 +77,13 @@ Route::prefix('web')->group(function () {
     Route::post('/register', [WebController::class, 'register']);
     Route::get('/infoHotel', [InfoHotelController::class, 'infoHotel']);
     Route::put ('/updateHotel/{id}', [InfoHotelController::class, 'update']);
+    
     Route::get('/rooms', [RoomController::class, 'index']);
     Route::post('/storeTipo', [RoomController::class, 'storeTipo']);
     Route::put('/updateTipo/{id}', [RoomController::class, 'updateTipo']);
     Route::post('/storeRoom', [RoomController::class, 'storeRoom']);
     Route::put('/updateRoom/{id}', [RoomController::class, 'updateRoom']);
+    
 });
 
 
