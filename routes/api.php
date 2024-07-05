@@ -43,7 +43,8 @@ Route::prefix('movil')->group(function () {
 Route::prefix('v1')->group(function () {
     Route::post('/habitaciones/disponibles', [HabitacionesController::class, 'habitacionesDisponibles']);
     Route::delete('/reservas/delete/{idreserva}', [GlobalReservasController::class, 'cancelarReserva']);
-
+    Route::post('/reservas/create', [ReservasController::class, 'createReserva']);
+    
     Route::get('/services', [ServiciosController::class, 'index']);
     Route::post('/tipoServicio/create', [ServiciosController::class, 'crearTipoServicio']);
     Route::post('/servicio/create', [ServiciosController::class, 'crearServicio']);
@@ -55,7 +56,6 @@ Route::prefix('v1/movil')->group(function () {
     Route::get('/habitaciones', [HotelController::class, 'habitaciones']);
     Route::get('/tipoHabitaciones', [HotelController::class, 'tipoHabitaciones']);
 
-    Route::post('/reservas/create', [ReservasController::class, 'createReserva']);
     Route::get('/reservas/{iduser}', [ReservasController::class, 'obtenerReservasHuesped']);
     Route::get('/reservas/historial/{iduser}', [ReservasController::class, 'obtenerReservasPasadasHuesped']);
     Route::put('/reservas/editHabitaciones/{idreserva}', [ReservasController::class, 'editarReservaHabitaciones']);
