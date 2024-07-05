@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard', function () {return view('dashboard.dashboard');})->name("dashboard");
     
     Route::get('/users', [UsersController::class, 'index'])->name('users');
-    Route::get('/users/tipos', function () {return view('users.tipos_personal');})->name("tipos_personal");
+    Route::get('/users/tipos', [UsersController::class, 'indexTipos'])->name('tipos_personal');
     Route::post('/users/insert', [UsersController::class, 'insertPersonal'])->name('insertPersonal');
     Route::post('/users/edit', [UsersController::class, 'editPersonal'])->name('editPersonal');
     Route::post('/users/status', [UsersController::class, 'cambiarStatus'])->name('cambiarStatus');

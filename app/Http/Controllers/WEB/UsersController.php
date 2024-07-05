@@ -91,7 +91,7 @@ class UsersController extends Controller
             return response()->json(['msg' => 'Usuario creado con éxito'], 200);
 
         } catch (\Exception $e) {
-            Log::error('Exception during login: ' . $e->getMessage());
+            Log::error('Exception during insertPersonal: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Error al crear el usuario.']);
         }
     }
@@ -131,7 +131,7 @@ class UsersController extends Controller
             return response()->json(['edit' => 'Usuario actualizado con éxito'], 200);
 
         } catch (\Exception $e) {
-            Log::error('Exception during login: ' . $e->getMessage());
+            Log::error('Exception during editPersonal: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Error al actualizar el usuario.']);
         }
     }
@@ -155,9 +155,15 @@ class UsersController extends Controller
 
             return response()->json(['msg' => 'Usuario actualizado con éxito'], 200);
         } catch (\Exception $e) {
-            Log::error('Exception during login: ' . $e->getMessage());
+            Log::error('Exception during cambiarStatus: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Error al actualizar el usuario.']);
         }
+    }
+
+    public function indexTipos(){
+        $roles = Rol::all();
+
+        return view('users.tipos_personal', compact('roles'));
     }
     
 

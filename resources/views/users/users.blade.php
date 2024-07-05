@@ -255,9 +255,6 @@
             }
         }
 
-
-        
-
         function goToPage(page) {
             currentPage = page;
             renderTable();
@@ -272,11 +269,6 @@
                 closeOnClickOutside: false,
                 closeOnEsc: false,
             });
-
-            console.log('buscando user');
-            console.log(userId);
-            console.log(newStatus);
-
 
             jQuery.ajax({
                 type: 'POST',
