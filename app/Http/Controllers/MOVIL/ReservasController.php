@@ -371,7 +371,7 @@ class ReservasController extends Controller
                 ], 200
             );
     
-        } catch(Exception $e){
+        } catch(\Exception $e){
             Log::error('Exception during editarReservaHabitaciones: ' . $e->getMessage());
             return response()->json(
                 [
