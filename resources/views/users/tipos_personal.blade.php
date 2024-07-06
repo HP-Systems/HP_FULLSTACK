@@ -23,7 +23,7 @@
                         <tr>
                             <td>{{ $rol->nombre }}</td>
                             <td>
-                                <button disabled type="button" class="btn btn-success">ACTIVO</button>
+                                {!! $rol->status == 1 ? '<button disabled type="button" class="btn btn-success">ACTIVO</button>' : '<button disabled type="button" class="btn btn-danger">INACTIVO</button>' !!}
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-dark edit-btn" data-id="{{ $rol->id }}" data-nombre="{{ $rol->nombre }}">
