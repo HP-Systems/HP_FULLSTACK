@@ -5,6 +5,7 @@ use App\Http\Controllers\WEB\RoomController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WEB\WebController;
 use App\Http\Controllers\WEB\UsersController;
+use App\Http\Controllers\WEB\ServiciosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reporte1', function () {return view('reportes.reporte1');})->name("reporte1");
     Route::get('/reporte2', function () {return view('reportes.reporte2');})->name("reporte2");
 
-    Route::get('/servicios', function () {return view('servicios.servicios');})->name("servicios");
+    Route::get('/servicios', [ServiciosController::class, 'index'])->name('servicios');
     Route::get('/servicios/tipos', function () {return view('servicios.tipos_servicios');})->name("tipos_servicios");
 
     Route::get('/habitaciones', [RoomController::class, 'index'])->name('habitaciones');

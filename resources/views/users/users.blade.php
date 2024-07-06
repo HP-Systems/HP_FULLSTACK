@@ -1,6 +1,6 @@
 @extends('../home')
 
-@section('title', 'Usuarios - Hotel Project')
+@section('title', 'Personal - Hotel Project')
 
 @section('content')
     <div class="height-100 p-4" style="background-color: #EEEEEE !important; margin-top: 5%!important;">
