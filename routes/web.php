@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/habitaciones', [RoomController::class, 'index'])->name('habitaciones');
     Route::put('/habitaciones/{id}', [RoomController::class, 'updateRoom'])->name('updateRoom');
     Route::get('/habitaciones/buscar', [RoomController::class, 'buscar'])->name('habitaciones.buscar');
+    Route::post('/habitaciones/store', [RoomController::class, 'storeRoom'])->name('room.store');
     Route::get('/configuracion', [InfoHotelController::class, 'index'])->name("configuracion");
     Route::put('/configuracion/{id}', [InfoHotelController::class, 'update'])->name('updateHotel');
 
