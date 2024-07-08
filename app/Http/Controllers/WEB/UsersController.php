@@ -39,7 +39,7 @@ class UsersController extends Controller
                 r.nombre as rol') 
             ->get();
 
-        $roles = Rol::all();
+        $roles = Rol::where('status', '=', 1)->get();
         $currentUserId = auth()->user()->id;
 
         return view('users.users', compact('personal', 'roles', 'currentUserId'));

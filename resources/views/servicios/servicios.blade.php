@@ -44,7 +44,7 @@
                 <div class="modal-body">
                     <form id="servicioModalForm" action="" method="POST">
                         @csrf
-                        <input type="hidden" id="personalId" name="id">
+                        <input type="hidden" id="servicioId" name="id">
                         <div class="mb-3">
                             <label for="name_servicio" class="form-label" style="font-weight: 500">Nombre</label>
                             <input type="text" class="form-control border-thick" id="name_servicio" name="name_servicio" required>
@@ -69,7 +69,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="tipo" class="form-label " style="font-weight: 500">Tipo de Servicio</label>
-                                    <select class="form-select border-thick" id="rol" name="tipo" required>
+                                    <select class="form-select border-thick" id="tipo" name="tipo" required>
                                         @foreach($tipos as $tipo)
                                             <option value="{{ $tipo->id }}">{{ $tipo->tipo }}</option>
                                         @endforeach
@@ -110,6 +110,9 @@
     <script>
         const serviciosData = @json($servicios);
         const csrfToken = '{{ csrf_token() }}';
+        const changeStatusRoute = '{{ route('cambiarStatusServicio') }}';
+        const insertServiceRoute = '{{ route('insertService') }}';
+        const editServiceRoute = '{{ route('editService') }}';
     </script>
     @vite('resources/js/servicios.js')
 

@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var addUserModal = document.getElementById('addUserModal');
     addUserModal.addEventListener('show.bs.modal', function (event) {
+        setFieldError('nombre', nombre, '');
+        setFieldError('apellido', apellido, '');
+        setFieldError('telefono', telefono, '');
+        setFieldError('email', email, '');
+        setFieldError('rol', rol, '');
+
         var button = event.relatedTarget;
         var id = button.getAttribute('data-id');
         var nombre = button.getAttribute('data-nombre');
@@ -32,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmButtonPersonal.onclick = function () {
             saveUser();
         };
-
     });
 
     var confirmStatusChangeModal = document.getElementById('confirmStatusChangeModal');

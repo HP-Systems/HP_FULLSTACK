@@ -44,42 +44,6 @@ class ServiciosController extends Controller
 
     }
 
-    public function crearServicio(Request $request){
-        $validation = Validator::make($request->all(), [
-            'nombre' => 'required|string|max:50',
-            'descripcion' => 'required|string|max:255',
-            'precio' => 'required|numeric',
-            'tipoID' => 'required|integer'
-        ]);
-
-        if ($validation->fails()) {
-            return response()->json(
-                [
-                    'status' => 400,
-                    'data' => [],
-                    'msg' => 'Todos los campos son necesarios y deben cumplir con el formato adecuado.',
-                    'error' => $validation->errors()
-                ], 400
-            );
-        }
-
-        $servicio = Servicio::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-            'precio' => $request->precio,
-            'tipoID' => $request->tipoID
-        ]);
-
-        return response()->json(
-            [
-                'status' => 200,
-                'data' => $servicio,
-                'msg' => 'Servicio creado con éxito',
-                'error' => []
-            ], 200
-        );
-    }
-
     public function index(){
         try{
             //servicios con su tipo de servicio

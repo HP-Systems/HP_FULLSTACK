@@ -44,6 +44,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/servicios', [ServiciosController::class, 'index'])->name('servicios');
     Route::get('/servicios/tipos', function () {return view('servicios.tipos_servicios');})->name("tipos_servicios");
+    Route::post('/servicios/insert', [ServiciosController::class, 'insertService'])->name('insertService');
+    Route::post('/servicios/edit', [ServiciosController::class, 'editService'])->name('editService');
+    Route::post('/servicios/status', [ServiciosController::class, 'cambiarStatus'])->name('cambiarStatusServicio');
 
     Route::get('/habitaciones', [RoomController::class, 'index'])->name('habitaciones');
     Route::put('/habitaciones/{id}', [RoomController::class, 'updateRoom'])->name('updateRoom');
