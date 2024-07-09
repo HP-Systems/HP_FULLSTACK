@@ -34,10 +34,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard', function () {return view('dashboard.dashboard');})->name("dashboard");
     
     Route::get('/users', [UsersController::class, 'index'])->name('users');
-    Route::get('/users/tipos', [UsersController::class, 'indexTipos'])->name('tipos_personal');
     Route::post('/users/insert', [UsersController::class, 'insertPersonal'])->name('insertPersonal');
     Route::post('/users/edit', [UsersController::class, 'editPersonal'])->name('editPersonal');
     Route::post('/users/status', [UsersController::class, 'cambiarStatus'])->name('cambiarStatus');
+
+    Route::get('/users/tipos', [UsersController::class, 'indexTipos'])->name('tipos_personal');
+    Route::post('/users/tipos/insert', [UsersController::class, 'insertTipoPersonal'])->name('insertTipoPersonal');
+    Route::post('/users/tipos/edit', [UsersController::class, 'editTipoPersonal'])->name('editTipoPersonal');
+    Route::post('/users/tipos/status', [UsersController::class, 'cambiarStatusTipo'])->name('cambiarStatusTipoPersonal');
    
     Route::get('/reporte1', function () {return view('reportes.reporte1');})->name("reporte1");
     Route::get('/reporte2', function () {return view('reportes.reporte2');})->name("reporte2");

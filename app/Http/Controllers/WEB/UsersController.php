@@ -165,7 +165,80 @@ class UsersController extends Controller
 
         return view('users.tipos_personal', compact('roles'));
     }
+
+    public function insertTipoPersonal(Request $request){
+        try{
+            $validation = Validator::make(
+                $request->all(), 
+                [
+                    'tipoPersonal' => 'required',
+                ]
+            );
+
+            if ($validation->fails()) {
+                return response()->json(['errors' => $validation->errors()->all()]);
+            }
+
+            $tipo_servicio = Rol::create([
+                'nombre' => $request->tipoPersonal,
+                'status' => 1
+            ]);
+
+            return response()->json(['msg' => 'El tipo de personal ha sido creado correctamente.'], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during insertTipoPersonal: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Error al crear el tipo de personal.']);
+        }
+    }
+
+    public function editTipoPersonal(Request $request){
+        try{
+            $validation = Validator::make(
+                $request->all(), 
+                [
+                    'tipoPersonal' => 'required',
+                ]
+            );
+
+            if ($validation->fails()) {
+                return response()->json(['errors' => $validation->errors()->all()]);
+            }
+
+            $tipo_personal = Rol::find($request->id);
+            $tipo_personal->nombre = $request->tipoPersonal;
+            $tipo_personal->save();
+
+            return response()->json(['edit' => 'El tipo de personal ha sido editado correctamente.'], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during editTipoPersonal: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Error al editar el tipo de personal.']);
+        }
+    }
     
+
+    public function cambiarStatusTipo(Request $request){
+        try{
+            $validation = Validator::make(
+                $request->all(),
+                [
+                    'status' => 'required'
+                ]
+            );
+
+            if ($validation->fails()) {
+                return response()->json(['errors' => $validation->errors()->all()]);
+            }
+
+            $tipo_personal = Rol::find($request->id);
+            $tipo_personal->status = $request->status;
+            $tipo_personal->save();
+
+            return response()->json(['msg' => 'Tipo de personal actualizado con éxito'], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during cambiarStatus: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Error al actualizar el usuario.']);
+        }
+    }
 
 }
 

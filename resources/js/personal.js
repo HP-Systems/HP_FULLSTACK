@@ -22,16 +22,14 @@ document.addEventListener('DOMContentLoaded', function () {
         var rol = button.getAttribute('data-rol');
 
         var modalTitle = addUserModal.querySelector('.modal-title');
-        var formAction = addUserModal.querySelector('#addUserForm').action;
-
         modalTitle.textContent = id ? 'Editar Personal' : 'Crear Nuevo Personal';
+
         addUserModal.querySelector('#personalId').value = id ? id : '';
         addUserModal.querySelector('#nombre').value = nombre ? nombre : '';
         addUserModal.querySelector('#apellido').value = apellido ? apellido : '';
         addUserModal.querySelector('#email').value = email ? email : '';
         addUserModal.querySelector('#telefono').value = telefono ? telefono : '';
         addUserModal.querySelector('#rol').value = rol ? rol : 1;
-
         addUserModal.querySelector('#addUserForm').action = id ? editPersonalRoute : insertPersonalRoute;
 
         var confirmButtonPersonal = document.getElementById('btnModalPersonal');
@@ -94,7 +92,7 @@ function renderTable() {
                 </td>
             </tr>
         `;
-        tableBody.innerHTML += row;
+        tableBody.innerHTML += row; 
     });
 }
 
@@ -261,7 +259,6 @@ function saveUser() {
         url: $('#addUserForm').attr('action'),
         data: jQuery('#addUserForm').serialize(),
         success: function(response) {
-            console.log(response);
             // Ocultar pantalla de carga
             swal.close();
 

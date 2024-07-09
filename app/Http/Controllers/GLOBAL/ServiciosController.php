@@ -12,38 +12,6 @@ use App\Models\TipoServicio;
 
 class ServiciosController extends Controller
 {
-    public function crearTipoServicio(Request $request){
-        $validation = Validator::make($request->all(), [
-            'tipo' => 'required|string|max:50',
-        ]);
-
-        if ($validation->fails()) {
-            return response()->json(
-                [
-                    'status' => 400,
-                    'data' => [],
-                    'msg' => 'Todos los campos son necesarios y deben cumplir con el formato adecuado.',
-                    'error' => $validation->errors()
-                ], 400
-            );
-        }
-
-        $tipo_servicio = TipoServicio::create([
-            'tipo' => $request->tipo,
-            'status' => 1
-        ]);
-
-        return response()->json(
-            [
-                'status' => 200,
-                'data' => $tipo_servicio,
-                'msg' => 'Tipo de Servicio creado con éxito',
-                'error' => []
-            ], 200
-        );
-
-    }
-
     public function index(){
         try{
             //servicios con su tipo de servicio

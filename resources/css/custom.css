@@ -5,19 +5,19 @@
 .btn-custom {
     background-color: #76ABAE; 
     color: white; 
-    font-weight: bold;
+    font-weight: 700;
 }
 
 .btn-custom:hover {
     background-color: #65999C;
     color: white; 
-    font-weight: bold;
+    font-weight: 700;
 }
 
 .btn-custom:active {
     background-color: #65999C !important;
     color: white !important; 
-    font-weight: bold;
+    font-weight: 700;
     border: none; 
 }
 

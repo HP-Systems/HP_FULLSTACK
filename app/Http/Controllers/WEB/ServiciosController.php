@@ -107,4 +107,29 @@ class ServiciosController extends Controller
             return redirect()->back()->withErrors(['error' => 'Error al actualizar el servicio.']);
         }
     }
+
+    public function insertarTipoServicio(Request $request){
+        try{
+            $validation = Validator::make(
+                $request->all(), 
+                [
+                    'tipo' => 'required',
+                ]
+            );
+
+            if ($validation->fails()) {
+                return response()->json(['errors' => $validation->errors()->all()]);
+            }
+
+            $tipo_servicio = TipoServicio::create([
+                'tipo' => $request->tipo,
+                'status' => 1
+            ]);
+
+            return response()->json(['msg' => 'Tipo de Servicio creado con éxito'], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during insertarTipoServicio: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Error al actualizar el servicio.']);
+        }
+    }
 }
