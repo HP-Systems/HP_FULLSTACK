@@ -73,7 +73,10 @@ function dibujarTable() {
                 <td>$${service.precio}</td>
                 <td>${service.tipo}</td>
                 <td>
-                    ${service.status == 1 ? '<button disabled type="button" class="btn btn-success">ACTIVO</button>' : '<button disabled type="button" class="btn btn-danger">INACTIVO</button>'}
+                    ${service.status == 1 
+                        ? `<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${service.id}" data-status="${service.status}">ACTIVO</button>` 
+                        : `<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${service.id}" data-status="${service.status}">INACTIVO</button>`
+                    }
                 </td>
                 <td>
                     <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#servicioModal"
@@ -84,10 +87,6 @@ function dibujarTable() {
                         data-tipo="${service.tipoID}"
                         >
                         <i class="fas fa-edit"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal"
-                            data-id="${service.id}" data-status="${service.status}">
-                        <i class="fas fa-sync"></i>
                     </button>
                 </td>
             </tr>

@@ -52,7 +52,7 @@ class ServiciosController extends Controller
             $validation = Validator::make(
                 $request->all(),
                 [
-                    'nombre' => 'required',
+                    'name_servicio' => 'required',
                     'descripcion' => 'required',
                     'precio' => 'required',
                     'tipo' => 'required'
@@ -64,7 +64,7 @@ class ServiciosController extends Controller
             }
 
             $service = Servicio::create([
-                'nombre' => $request->nombre,
+                'nombre' => $request->name_servicio,
                 'descripcion' => $request->descripcion,
                 'precio' => $request->precio,
                 'tipoID' => $request->tipo,
@@ -82,7 +82,7 @@ class ServiciosController extends Controller
             $validation = Validator::make(
                 $request->all(),
                 [
-                    'nombre' => 'required',
+                    'name_servicio' => 'required',
                     'descripcion' => 'required',
                     'precio' => 'required',
                     'tipo' => 'required'
@@ -94,7 +94,7 @@ class ServiciosController extends Controller
             }
 
             $service = Servicio::find($request->id);
-            $service->nombre = $request->nombre;
+            $service->nombre = $request->name_servicio;
             $service->descripcion = $request->descripcion;
             $service->precio = $request->precio;
             $service->tipoID = $request->tipo;

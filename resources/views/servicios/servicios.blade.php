@@ -52,7 +52,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="descripcion" class="form-label" style="font-weight: 500">Descripcion</label>
-                            <textarea class="form-control border-thick" id="descripcion" rows="3" required></textarea>
+                            <textarea class="form-control border-thick" id="descripcion" rows="3" name="descripcion" required></textarea>
                             <div id="descripcion-error" class="text-danger"></div>
                         </div>
                         <div class="row">

@@ -76,7 +76,10 @@ function renderTable() {
                 <td>${pers.telefono}</td>
                 <td>${pers.rol}</td>
                 <td>
-                    ${pers.status == 1 ? '<button disabled type="button" class="btn btn-success">ACTIVO</button>' : '<button disabled type="button" class="btn btn-danger">INACTIVO</button>'}
+                    ${pers.status == 1 
+                        ? `<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${pers.id}" data-status="${pers.status}" ${pers.id == currentUserId ? 'disabled' : ''}>ACTIVO</button>` 
+                        : `<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${pers.id}" data-status="${pers.status}" ${pers.id == currentUserId ? 'disabled' : ''}>INACTIVO</button>`
+                    }
                 </td>
                 <td>
                     <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addUserModal"
@@ -88,12 +91,6 @@ function renderTable() {
                             data-rol="${pers.rolID}">
                         <i class="fas fa-edit"></i>
                     </button>
-                    ${pers.id != currentUserId ? `
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal"
-                            data-id="${pers.id}" data-status="${pers.status}">
-                        <i class="fas fa-sync"></i>
-                    </button>
-                    ` : ''}
                 </td>
             </tr>
         `;
