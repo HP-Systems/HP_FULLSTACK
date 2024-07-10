@@ -71,7 +71,7 @@ Route::prefix('desk')->group(function () {
     //Route::post('/editContra', [HuespedController::class, 'editarContra']);
 
     Route::put('/guestUpdate/{id}', [HuespedController::class, 'editar']);
-    Route::get('/reservas', [DesktopReservasController::class, 'traerReservas']);
+    Route::get('/reservas/{fecha1?}/{fecha2?}', [DesktopReservasController::class, 'traerReservas']);
     Route::post('/reservas/create', [DesktopReservasController::class, 'createReserva']);
 });
 
