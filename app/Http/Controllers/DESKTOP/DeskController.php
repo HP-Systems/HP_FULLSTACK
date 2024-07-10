@@ -39,6 +39,7 @@ class DeskController extends Controller
 
             $user = User::where('email', $request->email)->where('userable_type', 1)->first();
 
+
             if (!$user) {
                 return response()->json([
                     'message' => 'Sin autorización.',
@@ -46,12 +47,11 @@ class DeskController extends Controller
             }
             $role = Personal::where('id', $user->userable_id)->first();
 
-            if (!$role->rolID == 1 || !$role->rolID == 2) {
+            if (!$role->rolID == 1 || !$role->rolID == 2 || $user->status != 1) {
                 return response()->json([
                     'message' => 'No tiene permisos para acceder.',
                 ], 400);
             }
-
 
             if (!$user || !Hash::check($request->password, $user->password)) {
 

@@ -7,6 +7,9 @@ use App\Models\Huesped;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
 
 class HuespedController extends Controller
 {
@@ -114,5 +117,30 @@ class HuespedController extends Controller
         }
         
     }
+
+    /*public function editarContra(Request $request){
+        $validation = Validator::make(
+            $request->all(),
+            [
+                'id' => 'required',
+                'password' => 'required',
+            ]
+        );
+
+        if ($validation->fails()) {
+            return response()->json(['error' => $validation->errors()], 400);
+        }
+
+        $user = User::where('id', $request->id)->first();
+        $user->password = Hash::make($request->password);
+        
+        $user->save();
+        return response()->json([
+            'data' => $user,
+            'message' => 'Contraseña actualizada con éxito',
+            'status' => 200,
+        ]);
+        
+    }*/
 
 }

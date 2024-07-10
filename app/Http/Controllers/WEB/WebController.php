@@ -57,6 +57,10 @@ class WebController extends Controller
                 return redirect()->back()->withErrors(['error' => 'Credenciales incorrectas.']);
             }
 
+            //usuario inactivo no entra
+            if ($user->status != 1) {
+                return redirect()->back()->withErrors(['error' => 'No tiene permisos para acceder.']);
+            }
             
             // si el role no es 1 ,no tiene permisos para acceder
             if ($user->userable_type != 1) {
