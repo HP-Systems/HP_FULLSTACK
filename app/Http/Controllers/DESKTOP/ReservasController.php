@@ -39,7 +39,6 @@ class ReservasController extends Controller
             })
             ->get();
 
-
             // IDs de las reservas
             $reservaIDs = $reservas->pluck('id');
 
