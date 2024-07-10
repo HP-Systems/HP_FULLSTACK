@@ -55,6 +55,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/habitaciones', [RoomController::class, 'index'])->name('habitaciones');
     Route::put('/habitaciones/{id}', [RoomController::class, 'updateRoom'])->name('updateRoom');
     Route::get('/habitaciones/buscar', [RoomController::class, 'buscar'])->name('habitaciones.buscar');
+    Route::get('/habitaciones/tipos', function () {return view('habitaciones.tipos_habitaciones');})->name("tipos_habitaciones"); 
+
+    Route::get('/tarjetas', function () {return view('tarjetas.tarjetas');})->name("tarjetas");
+    Route::get('/tarjetas/tipos', function () {return view('tarjetas.tipos_tarjetas');})->name("tipos_tarjetas");
+
     Route::post('/habitaciones/store', [RoomController::class, 'storeRoom'])->name('room.store');
     Route::get('/configuracion', [InfoHotelController::class, 'index'])->name("configuracion");
     Route::put('/configuracion/{id}', [InfoHotelController::class, 'update'])->name('updateHotel');
