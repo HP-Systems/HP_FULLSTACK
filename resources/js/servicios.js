@@ -47,13 +47,20 @@ document.addEventListener('DOMContentLoaded', function () {
         var modalBody = confirmStatusChangeModal.querySelector('.modal-body');
         modalTitle.textContent = serviceStatus == '1' ? 'DAR DE BAJA' : 'DAR DE ALTA';
         modalBody.textContent = serviceStatus == '1' 
-            ? '¿Seguro que deseas desactivar este servicio?' 
-            : '¿Seguro que deseas activar este servicio?';
+            ? '¿Está seguro que desea desactivar este servicio?' 
+            : '¿Está seguro que desea activar este servicio?';
 
         var confirmButton = document.getElementById('confirmChangeStatusButton');
         confirmButton.onclick = function () {
             changeServiceStatus(serviceId, serviceStatus == '1' ? 0 : 1);
         };
+    });
+    
+    const precioInput = document.getElementById('precio');
+    precioInput.addEventListener('keydown', function(e) {
+        if (e.key === '-') {
+            e.preventDefault();
+        }
     });
 });
 

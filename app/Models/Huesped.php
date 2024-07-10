@@ -24,7 +24,7 @@ class Huesped extends Model
 
     public function user()
     {
-        return $this->morphOne(User::class, 'userable');
+        return $this->hasOne(User::class, 'userable_id')->where('userable_type', 2);
     }
 
     

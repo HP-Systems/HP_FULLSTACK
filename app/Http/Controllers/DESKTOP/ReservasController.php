@@ -20,15 +20,24 @@ use App\Rules\UniqueEmailForUserableType;
 
 class ReservasController extends Controller
 {
-    public function traerReservas(){
+    public function traerReservas($fecha1 = null, $fecha2 = null){
         try{
-            $hoy = Carbon::now();
-            $haceUnaSemana = $hoy->copy()->subWeek();
+            if (is_null($fecha1) && is_null($fecha2)) {
+                $fecha1 = Carbon::today()->toDateString();
+                $fecha2 = Carbon::today()->toDateString();
+            }
 
-            // Consulta para obtener las reservas a partir de una semana antes de hoy en adelante
-            $reservas = DB::table('reservas')
-                ->where('fecha_entrada', '>=', $haceUnaSemana)
-                ->get();
+            $fechaInicio = Carbon::parse($fecha1)->startOfDay();
+            $fechaFin = Carbon::parse($fecha2)->endOfDay();
+
+            $reservas = Reserva::with(['huesped.user' => function($query){
+                $query->where('userable_type', 2);
+            }])
+            ->where(function($query) use ($fechaInicio, $fechaFin) {
+                $query->whereBetween('fecha_entrada', [$fechaInicio, $fechaFin])
+                      ->orWhereBetween('fecha_salida', [$fechaInicio, $fechaFin]);
+            })
+            ->get();
 
             // IDs de las reservas
             $reservaIDs = $reservas->pluck('id');
@@ -72,11 +81,54 @@ class ReservasController extends Controller
                 return $reserva;
             });
 
+            $reservasConOrden = $reservasConHabitaciones->map(function ($reserva) {
+                $nuevaReserva = [
+                    'id' => $reserva->id,
+                    'huespedID' => $reserva->huespedID,
+                    'fecha_entrada' => $reserva->fecha_entrada,
+                    'fecha_salida' => $reserva->fecha_salida,
+                    'hora_entrada' => $reserva->hora_entrada,
+                    'hora_salida' => $reserva->hora_salida,
+                    'status' => $reserva->status,
+                    'huesped' => [
+                        'id' => $reserva->huesped->id,
+                        'nombre' => $reserva->huesped->nombre,
+                        'apellido' => $reserva->huesped->apellido,
+                        'telefono' => $reserva->huesped->telefono,
+                        'user' => [
+                            'id' => $reserva->huesped->user->id,
+                            'email' => $reserva->huesped->user->email,
+                            'userable_id' => $reserva->huesped->user->userable_id,
+                            'userable_type' => $reserva->huesped->user->userable_type,
+                            'status' => $reserva->huesped->user->status,
+                        ]
+                    ],
+                    'habitaciones' => $reserva->habitaciones->map(function ($habitacion) {
+                        return [
+                            'id' => $habitacion->id,
+                            'numero' => $habitacion->numero,
+                            'tipoID' => $habitacion->tipoID,
+                            'imagen' => $habitacion->imagen,
+                            'status' => $habitacion->status,
+                            'tipo_habitacion' => [
+                                'id' => $habitacion->tipo_habitacion->id,
+                                'tipo' => $habitacion->tipo_habitacion->tipo,
+                                'capacidad' => $habitacion->tipo_habitacion->capacidad,
+                                'precio_noche' => $habitacion->tipo_habitacion->precio_noche,
+                                'descripcion' => $habitacion->tipo_habitacion->descripcion,
+                                'status' => $habitacion->tipo_habitacion->status,
+                            ]
+                        ];
+                    }),
+                ];
+
+                return $nuevaReserva;
+            });
 
             return response()->json(
                 [
                     'status' => 200,
-                    'data' => $reservas,
+                    'data' => $reservasConOrden,
                     'msg' => 'Reservas obtenidas con éxito.',
                     'error' => []
                 ], 200

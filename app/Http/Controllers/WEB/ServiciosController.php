@@ -108,12 +108,18 @@ class ServiciosController extends Controller
         }
     }
 
-    public function insertarTipoServicio(Request $request){
+    public function indexTipos(){
+        $tipos = TipoServicio::all();
+
+        return view('servicios.tipos_servicios', compact('tipos')); 
+    }
+
+    public function insertTipoServicio(Request $request){
         try{
             $validation = Validator::make(
                 $request->all(), 
                 [
-                    'tipo' => 'required',
+                    'tipo_servicio' => 'required',
                 ]
             );
 
@@ -122,14 +128,62 @@ class ServiciosController extends Controller
             }
 
             $tipo_servicio = TipoServicio::create([
-                'tipo' => $request->tipo,
+                'tipo' => $request->tipo_servicio,
                 'status' => 1
             ]);
 
-            return response()->json(['msg' => 'Tipo de Servicio creado con éxito'], 200);
+            return response()->json(['msg' => 'Tipo de servicio creado con éxito'], 200);
         } catch (\Exception $e) {
             Log::error('Exception during insertarTipoServicio: ' . $e->getMessage());
-            return redirect()->back()->withErrors(['error' => 'Error al actualizar el servicio.']);
+            return redirect()->back()->withErrors(['error' => 'Error al insertar el tipo de servicio.']);
+        }
+    }
+
+    public function editTipoServicio(Request $request){
+        try{
+            $validation = Validator::make(
+                $request->all(), 
+                [
+                    'tipo_servicio' => 'required',
+                ]
+            );
+
+            if ($validation->fails()) {
+                return response()->json(['errors' => $validation->errors()->all()]);
+            }
+
+            $tipo_servicio = TipoServicio::find($request->id);
+            $tipo_servicio->tipo = $request->tipo_servicio;
+            $tipo_servicio->save();
+
+            return response()->json(['edit' => 'El tipo de servicio ha sido editado correctamente.'], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during editTipoServicio: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Error al editar el tipo de servicio.']);
+        }
+    }
+
+    public function cambiarStatusTipo(Request $request){
+        try{
+            $validation = Validator::make(
+                $request->all(),
+                [
+                    'status' => 'required'
+                ]
+            );
+
+            if ($validation->fails()) {
+                return response()->json(['errors' => $validation->errors()->all()]);
+            }
+
+            $tipo_servicio = TipoServicio::find($request->id);
+            $tipo_servicio->status = $request->status;
+            $tipo_servicio->save();
+
+            return response()->json(['msg' => 'Tipo de servicio actualizado con éxito'], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during cambiarStatusTipoServicio: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Error al actualizar el tipo de servicio.']);
         }
     }
 }

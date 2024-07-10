@@ -2,107 +2,115 @@ const rowsPerPage = 10;
 let currentPage = 1;
 
 document.addEventListener('DOMContentLoaded', function () {
-    renderTable();
+    dibujarTable();
     renderPagination();
 
-    const inputTelefono = document.getElementById('telefono');
-    inputTelefono.addEventListener('input', function() {
-        this.value = this.value.replace(/\D/g, '');
-    });
-
-    var addUserModal = document.getElementById('addUserModal');
-    addUserModal.addEventListener('show.bs.modal', function (event) {
-        setFieldError('nombre', nombre, '');
-        setFieldError('apellido', apellido, '');
-        setFieldError('telefono', telefono, '');
-        setFieldError('email', email, '');
-        setFieldError('rol', rol, '');
+    var serviceModal = document.getElementById('tipoModal');
+    serviceModal.addEventListener('show.bs.modal', function (event) {
+        setFieldError('tipo_habitacion', tipo_habitacion, '');
+        setFieldError('descripcion', descripcion, '');
+        setFieldError('precio', precio, '');
+        setFieldError('capacidad', capacidad, '');
 
         var button = event.relatedTarget;
         var id = button.getAttribute('data-id');
-        var nombre = button.getAttribute('data-nombre');
-        var apellido = button.getAttribute('data-apellido');
-        var email = button.getAttribute('data-email');
-        var telefono = button.getAttribute('data-telefono');
-        var rol = button.getAttribute('data-rol');
+        var tipo_habitacion = button.getAttribute('data-tipo_habitacion');
+        var descripcion = button.getAttribute('data-descripcion');
+        var precio = button.getAttribute('data-precio');
+        var capacidad = button.getAttribute('data-capacidad');
 
-        var modalTitle = addUserModal.querySelector('.modal-title');
-        modalTitle.textContent = id ? 'Editar Personal' : 'Crear Nuevo Personal';
+        var modalTitle = serviceModal.querySelector('.modal-title');
 
-        addUserModal.querySelector('#personalId').value = id ? id : '';
-        addUserModal.querySelector('#nombre').value = nombre ? nombre : '';
-        addUserModal.querySelector('#apellido').value = apellido ? apellido : '';
-        addUserModal.querySelector('#email').value = email ? email : '';
-        addUserModal.querySelector('#telefono').value = telefono ? telefono : '';
-        addUserModal.querySelector('#rol').value = rol ? rol : 1;
-        addUserModal.querySelector('#addUserForm').action = id ? editPersonalRoute : insertPersonalRoute;
+        modalTitle.textContent = id ? 'Editar tipo de habitación' : 'Crear nuevo tipo de habitación';
+        serviceModal.querySelector('#tipoId').value = id ? id : '';
+        serviceModal.querySelector('#tipo_habitacion').value = tipo_habitacion ? tipo_habitacion : '';
+        serviceModal.querySelector('#descripcion').value = descripcion ? descripcion : '';
+        serviceModal.querySelector('#precio').value = precio ? precio : '';
+        serviceModal.querySelector('#capacidad').value = capacidad ? capacidad : '';
 
-        var confirmButtonPersonal = document.getElementById('btnModalPersonal');
-        confirmButtonPersonal.onclick = function () {
-            saveUser();
+        serviceModal.querySelector('#tipoModalForm').action = id ? editTiposHabitacionesRoute : insertTiposHabitacionesRoute;
+
+        var confirmButton = document.getElementById('btnModalTipo');
+        confirmButton.onclick = function () {
+            save();
         };
     });
 
     var confirmStatusChangeModal = document.getElementById('confirmStatusChangeModal');
     confirmStatusChangeModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
-        var userId = button.getAttribute('data-id');
-        var userStatus = button.getAttribute('data-status');
+        var id = button.getAttribute('data-id');
+        var status = button.getAttribute('data-status');
 
         var modalTitle = confirmStatusChangeModal.querySelector('.modal-title');
         var modalBody = confirmStatusChangeModal.querySelector('.modal-body');
-        modalTitle.textContent = userStatus == '1' ? 'DAR DE BAJA' : 'DAR DE ALTA';
-        modalBody.textContent = userStatus == '1' 
-            ? '¿Está seguro que desea desactivar a este miembro del personal? Una vez desactivado, no podrá acceder al sistema.' 
-            : '¿Está seguro que desea dar de alta a este miembro del personal? Esto lo marcará como activo y podrá usar el sistema.';
+        modalTitle.textContent = status == '1' ? 'DAR DE BAJA' : 'DAR DE ALTA';
+        modalBody.textContent = status == '1' 
+            ? '¿Está seguro que desea desactivar este tipo de habitación?' 
+            : '¿Está seguro que desea activar este tipo de habitación?';
 
         var confirmButton = document.getElementById('confirmChangeStatusButton');
         confirmButton.onclick = function () {
-            changeUserStatus(userId, userStatus == '1' ? 0 : 1);
+            changeStatus(id, status == '1' ? 0 : 1);
         };
+    });
+    
+    const precioInput = document.getElementById('precio');
+    precioInput.addEventListener('keydown', function(e) {
+        if (e.key === '-') {
+            e.preventDefault();
+        }
+    });
+
+    const capacidadInput = document.getElementById('capacidad');
+    capacidadInput.addEventListener('keydown', function(e) {
+        // Prevenir la entrada del signo de menos
+        if (e.key === '-') {
+            e.preventDefault();
+        }
     });
 });
 
-function renderTable() {
+function dibujarTable() {
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    const paginatedData = personalData.slice(start, end);
+    const paginatedData = tiposData.slice(start, end);
 
-    const tableBody = document.getElementById('personalTableBody');
+    const tableBody = document.getElementById('tiposHabitacionesTableBody');
     tableBody.innerHTML = '';
 
-    paginatedData.forEach(pers => {
+    paginatedData.forEach(tipo => {
         const row = `
             <tr>
-                <td>${pers.nombre_completo}</td>
-                <td>${pers.email}</td>
-                <td>${pers.telefono}</td>
-                <td>${pers.rol}</td>
+                <td>${tipo.tipo}</td>
+                <td>${tipo.descripcion}</td>
+                <td>$${tipo.precio_noche}</td>
+                <td>${tipo.capacidad}</td>
                 <td>
-                    ${pers.status == 1 
-                        ? `<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${pers.id}" data-status="${pers.status}" ${pers.id == currentUserId ? 'disabled' : ''}>ACTIVO</button>` 
-                        : `<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${pers.id}" data-status="${pers.status}" ${pers.id == currentUserId ? 'disabled' : ''}>INACTIVO</button>`
+                    ${tipo.status == 1 
+                        ? `<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${tipo.id}" data-status="${tipo.status}">ACTIVO</button>` 
+                        : `<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${tipo.id}" data-status="${tipo.status}">INACTIVO</button>`
                     }
                 </td>
                 <td>
-                    <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addUserModal"
-                            data-id="${pers.id}"
-                            data-nombre="${pers.nombre}"
-                            data-apellido="${pers.apellido}"
-                            data-email="${pers.email}"
-                            data-telefono="${pers.telefono}"
-                            data-rol="${pers.rolID}">
+                    <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#tipoModal"
+                        data-id="${tipo.id}"
+                        data-tipo_habitacion="${tipo.tipo}"
+                        data-descripcion="${tipo.descripcion}"
+                        data-precio="${tipo.precio_noche}"
+                        data-capacidad="${tipo.capacidad}"
+                        >
                         <i class="fas fa-edit"></i>
                     </button>
                 </td>
             </tr>
         `;
-        tableBody.innerHTML += row; 
+        tableBody.innerHTML += row;
     });
 }
 
 function renderPagination() {
-    const pageCount = Math.ceil(personalData.length / rowsPerPage);
+    const pageCount = Math.ceil(tiposData.length / rowsPerPage);
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
 
@@ -158,11 +166,11 @@ function renderPagination() {
 
 function goToPage(page) {
     currentPage = page;
-    renderTable();
+    dibujarTable();
     renderPagination();
 }
 
-function changeUserStatus(userId, newStatus) {
+function changeStatus(serviceId, newStatus) {
     swal({
         text: "Cargando...",
         button: false,
@@ -175,7 +183,7 @@ function changeUserStatus(userId, newStatus) {
         url: changeStatusRoute,
         data: {
             _token: csrfToken,
-            id: userId,
+            id: serviceId,
             status: newStatus
         },
         success: function(response) {
@@ -185,7 +193,7 @@ function changeUserStatus(userId, newStatus) {
                 if(newStatus == 0){
                     swal({
                         title: "¡Éxito!",
-                        text: "El estado del usuario ha sido desactivado correctamente.",
+                        text: "El servicio ha sido desactivado correctamente.",
                         icon: "success",
                     }).then((value) => {
                         location.reload();
@@ -193,7 +201,7 @@ function changeUserStatus(userId, newStatus) {
                 } else{
                     swal({
                         title: "¡Éxito!",
-                        text: "El estado del usuario ha sido activado correctamente.",
+                        text: "El servicio ha sido activado correctamente.",
                         icon: "success",
                     }).then((value) => {
                         location.reload();
@@ -202,20 +210,40 @@ function changeUserStatus(userId, newStatus) {
             } else {
                 swal({
                     title: "Error",
-                    text: "Ocurrió un error al cambiar el estado del usuario.",
+                    text: "Ocurrió un error al cambiar el estado del servicio.",
                     icon: "error",
                 });
             }
         },
         error: function(xhr, status, error) {
+            console.log(error);
             swal.close();
             swal({
                 title: "Error",
-                text: "Ocurrió un error al cambiar el estado del usuario.",
+                text: "Ocurrió un error al cambiar el estado del servicio.",
                 icon: "error",
             });
         }
     });
+}
+
+
+function validateForm() {
+    var isValid = true;
+
+    var tipo_habitacion = document.getElementById('tipo_habitacion').value.trim();
+    var descripcion = document.getElementById('descripcion').value.trim();
+    var precio = document.getElementById('precio').value.trim();
+    var capacidad = document.getElementById('capacidad').value.trim();
+
+    setFieldError('tipo_habitacion', tipo_habitacion, 'Por favor complete este campo');
+    setFieldError('descripcion', descripcion, 'Por favor complete este campo');
+    setFieldError('precio', precio, 'Por favor complete este campo');
+    setFieldError('capacidad', capacidad, 'Por favor complete este campo');
+
+    isValid = tipo_habitacion && descripcion && precio && capacidad;
+
+    return isValid;
 }
 
 function setFieldError(fieldId, value, errorMessage) {
@@ -223,32 +251,11 @@ function setFieldError(fieldId, value, errorMessage) {
     document.getElementById(errorElementId).innerText = value ? '' : errorMessage;
 }
 
-function validateForm() {
-    var isValid = true;
-
-    var nombre = document.getElementById('nombre').value.trim();
-    var apellido = document.getElementById('apellido').value.trim();
-    var telefono = document.getElementById('telefono').value.trim();
-    var email = document.getElementById('email').value.trim();
-    var rol = document.getElementById('rol').value;
-
-    setFieldError('nombre', nombre, 'Por favor complete este campo');
-    setFieldError('apellido', apellido, 'Por favor complete este campo');
-    setFieldError('telefono', telefono, 'Por favor complete este campo');
-    setFieldError('email', email, 'Por favor complete este campo');
-    setFieldError('rol', rol, 'Por favor seleccione un tipo de usuario');
-
-    isValid = nombre && apellido && telefono && email && rol;
-
-    return isValid;
-}
-
-function saveUser() {
+function save() {
     if (!validateForm()) {
         return;
     }
 
-    // Mostrar pantalla de carga
     swal({
         text: "Cargando...",
         button: false,
@@ -256,21 +263,19 @@ function saveUser() {
         closeOnEsc: false,
     });
 
-    // Deshabilitar botón de guardar
     $('#saveButton').prop('disabled', true);
 
     jQuery.ajax({
         type: 'POST',
-        url: $('#addUserForm').attr('action'),
-        data: jQuery('#addUserForm').serialize(),
+        url: $('#tipoModalForm').attr('action'),
+        data: jQuery('#tipoModalForm').serialize(),
         success: function(response) {
-            // Ocultar pantalla de carga
             swal.close();
 
             if (response['msg']) {
                 swal({
                     title: "¡Éxito!",
-                    text: "El usuario ha sido creado correctamente.",
+                    text: response['msg'],
                     icon: "success",
                 }).then((value) => {
                     location.reload();
@@ -278,7 +283,7 @@ function saveUser() {
             } else if (response['edit']) {
                 swal({
                     title: "¡Éxito!",
-                    text: "El usuario ha sido editado correctamente.",
+                    text: response['edit'],
                     icon: "success",
                 }).then((value) => {
                     location.reload();
@@ -298,7 +303,6 @@ function saveUser() {
             }
         },
         error: function(xhr, status, error) {
-            // Ocultar pantalla de carga y mostrar mensaje de error
             swal.close();
             swal({
                 title: "Error!",
@@ -311,5 +315,6 @@ function saveUser() {
             $('#saveButton').prop('disabled', false);
         }
     });
+
 }
 

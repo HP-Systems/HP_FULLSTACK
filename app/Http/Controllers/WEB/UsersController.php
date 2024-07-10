@@ -184,7 +184,7 @@ class UsersController extends Controller
                 return response()->json(['errors' => $validation->errors()->all()]);
             }
 
-            $tipo_servicio = Rol::create([
+            $rol = Rol::create([
                 'nombre' => $request->tipoPersonal,
                 'status' => 1
             ]);
@@ -220,7 +220,6 @@ class UsersController extends Controller
         }
     }
     
-
     public function cambiarStatusTipo(Request $request){
         try{
             $validation = Validator::make(
@@ -241,10 +240,9 @@ class UsersController extends Controller
             return response()->json(['msg' => 'Tipo de personal actualizado con éxito'], 200);
         } catch (\Exception $e) {
             Log::error('Exception during cambiarStatus: ' . $e->getMessage());
-            return redirect()->back()->withErrors(['error' => 'Error al actualizar el usuario.']);
+            return redirect()->back()->withErrors(['error' => 'Error al actualizar el tipo de personal.']);
         }
     }
-
 }
 
 

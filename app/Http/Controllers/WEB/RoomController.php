@@ -237,5 +237,95 @@ class RoomController extends Controller
     
         return response()->json(['html' => $view]);
     }
+
+    public function indexTipos(){
+        $tipos = TipoHabitacion::all();
+
+        return view('habitaciones.tipos_habitaciones', compact('tipos'));
+    }
+    
+    public function insertTipoHabitacion(Request $request){
+        try{
+            $validation = Validator::make(
+                $request->all(), 
+                [
+                    'tipo_habitacion' => 'required',
+                    'descripcion' => 'required',
+                    'precio' => 'required',
+                    'capacidad' => 'required',
+                ]
+            );
+
+            if ($validation->fails()) {
+                return response()->json(['errors' => $validation->errors()->all()]);
+            }
+
+            $tipo_habitacion = TipoHabitacion::create([
+                'tipo' => $request->tipo_habitacion,
+                'descripcion' => $request->descripcion,
+                'precio_noche' => $request->precio,
+                'capacidad' => $request->capacidad
+            ]);
+
+            return response()->json(['msg' => 'El tipo de habitacion ha sido creado correctamente.'], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during insertTipoHabitacion: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Error al crear el tipo de habitacion.']);
+        }
+    }
+
+    public function editTipoHabitacion(Request $request){
+        try{
+            $validation = Validator::make(
+                $request->all(), 
+                [
+                    'tipo_habitacion' => 'required',
+                    'descripcion' => 'required',
+                    'precio' => 'required',
+                    'capacidad' => 'required',
+                ]
+            );
+
+            if ($validation->fails()) {
+                return response()->json(['errors' => $validation->errors()->all()]);
+            }
+
+            $tipo_habitacion = TipoHabitacion::find($request->id);
+            $tipo_habitacion->tipo = $request->tipo_habitacion;
+            $tipo_habitacion->descripcion = $request->descripcion;
+            $tipo_habitacion->precio_noche = $request->precio;
+            $tipo_habitacion->capacidad = $request->capacidad;
+            $tipo_habitacion->save();
+
+            return response()->json(['edit' => 'El tipo de habitación ha sido editado correctamente.'], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during editTipoHabitacion: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Error al editar el tipo de habitación.']);
+        }
+    }
+
+    public function cambiarStatusTipo(Request $request){
+        try{
+            $validation = Validator::make(
+                $request->all(),
+                [
+                    'status' => 'required'
+                ]
+            );
+
+            if ($validation->fails()) {
+                return response()->json(['errors' => $validation->errors()->all()]);
+            }
+
+            $tipo_habitacion = TipoHabitacion::find($request->id);
+            $tipo_habitacion->status = $request->status;
+            $tipo_habitacion->save();
+
+            return response()->json(['msg' => 'Tipo de habitación actualizado con éxito'], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during cambiarStatusTipoServicio: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Error al actualizar el tipo de habitación.']);
+        }
+    }
     
 }
