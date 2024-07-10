@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
     renderTable();
     renderPagination();
 
+    const inputTelefono = document.getElementById('telefono');
+    inputTelefono.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '');
+    });
+
     var addUserModal = document.getElementById('addUserModal');
     addUserModal.addEventListener('show.bs.modal', function (event) {
         setFieldError('nombre', nombre, '');

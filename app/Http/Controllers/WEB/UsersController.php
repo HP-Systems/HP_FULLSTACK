@@ -52,12 +52,13 @@ class UsersController extends Controller
                 [
                     "nombre" => "required",
                     "apellido" => "required",
-                    "telefono" => "required|digits:10",
+                    "telefono" => "required|digits:10|numeric",
                     "email" => ["required", "email", new UniqueEmailForUserableType($request->rol)],
                     'rol' => 'required|exists:roles,id'
                 ],
                 [
                     'telefono.digits' => 'El teléfono debe tener 10 dígitos.',
+                    'telefono.numeric' => 'El teléfono debe ser un número.',
                     'email.email' => 'El email debe tener un formato válido.'
                 ]
             );
@@ -103,14 +104,18 @@ class UsersController extends Controller
                 [
                     "nombre" => "required",
                     "apellido" => "required",
-                    "telefono" => "required|max:10",
+                    "telefono" => "required|digits:10|numeric",
                     "email" => [
                         "required", 
                         "email", 
                         new UniqueEmailNotId($request->rol, $request->id)
                     ],
                     'rol' => 'required|exists:roles,id'
+                ],
+                [
+                    'telefono.digits' => 'El teléfono debe tener 10 dígitos.',
                 ]
+                
             );
 
             if ($validation->fails()) {
