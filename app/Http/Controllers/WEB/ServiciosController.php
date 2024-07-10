@@ -111,7 +111,7 @@ class ServiciosController extends Controller
     public function indexTipos(){
         $tipos = TipoServicio::all();
 
-        return view('servicios.tipos_servicios', compact('tipos'));
+        return view('servicios.tipos_servicios', compact('tipos')); 
     }
 
     public function insertTipoServicio(Request $request){
