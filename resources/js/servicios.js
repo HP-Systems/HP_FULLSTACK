@@ -55,6 +55,13 @@ document.addEventListener('DOMContentLoaded', function () {
             changeServiceStatus(serviceId, serviceStatus == '1' ? 0 : 1);
         };
     });
+    
+    const precioInput = document.getElementById('precio');
+    precioInput.addEventListener('keydown', function(e) {
+        if (e.key === '-') {
+            e.preventDefault();
+        }
+    });
 });
 
 function dibujarTable() {

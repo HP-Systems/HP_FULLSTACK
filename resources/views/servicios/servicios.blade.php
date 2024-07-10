@@ -61,7 +61,7 @@
                                     <label for="precio" class="form-label" style="font-weight: 500">Precio</label>
                                     <div class="input-group">
                                         <span class="input-group-text border-thick">$</span>
-                                        <input type="number" step="0.01" class="form-control border-thick" id="precio" name="precio" required>
+                                        <input type="number" step="0.01" min="0" class="form-control border-thick" id="precio" name="precio" required>
                                     </div>
                                     <div id="precio-error" class="text-danger"></div>
                                 </div>
