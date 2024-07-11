@@ -22,20 +22,22 @@ class ReservasController extends Controller
 {
     public function traerReservas($fecha1 = null, $fecha2 = null){
         try{
+            $fechaActual = Carbon::today()->toDateString();
+
             if (is_null($fecha1) && is_null($fecha2)) {
-                $fecha1 = Carbon::today()->toDateString();
-                $fecha2 = Carbon::today()->toDateString();
+            $fecha1 = $fechaActual;
+            $fecha2 = $fechaActual;
             }
 
-            $fechaInicio = Carbon::parse($fecha1)->startOfDay();
-            $fechaFin = Carbon::parse($fecha2)->endOfDay();
+            $fechaInicio = $fecha1;
+            $fechaFin = $fecha2;
 
             $reservas = Reserva::with(['huesped.user' => function($query){
-                $query->where('userable_type', 2);
+            $query->where('userable_type', 2);
             }])
             ->where(function($query) use ($fechaInicio, $fechaFin) {
-                $query->whereBetween('fecha_entrada', [$fechaInicio, $fechaFin])
-                      ->orWhereBetween('fecha_salida', [$fechaInicio, $fechaFin]);
+            $query->where('fecha_entrada', '<=', $fechaFin)
+                    ->where('fecha_salida', '>=', $fechaInicio);
             })
             ->get();
 
