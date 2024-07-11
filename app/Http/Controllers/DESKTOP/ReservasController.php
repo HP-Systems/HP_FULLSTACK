@@ -44,6 +44,7 @@ class ReservasController extends Controller
             // IDs de las reservas
             $reservaIDs = $reservas->pluck('id');
 
+
             //Habitaciones asociadas a esas reservas
             $habitacionesReservadas = DB::table('habitaciones_reservas')
                 ->whereIn('reservaID', $reservaIDs)
@@ -127,6 +128,7 @@ class ReservasController extends Controller
                 return $nuevaReserva;
             });
 
+           
             return response()->json(
                 [
                     'status' => 200,
