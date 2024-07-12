@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Models\TipoTarjeta;
+use App\Models\Tarjeta;
 
 class TarjetasController extends Controller
 {
@@ -80,9 +81,14 @@ class TarjetasController extends Controller
 
             $tipo_tarjeta = TipoTarjeta::find($request->id);
             $tipo_tarjeta->status = $request->status;
-            $tipo_tarjeta->save();
-
-            return response()->json(['msg' => 'Tipo de tarjeta actualizado con éxito'], 200);
+            
+            if ($tipo_tarjeta->save()) {
+                Tarjeta::where('tipoID', $request->id)->update(['status' => $request->status]);
+    
+                return response()->json(['msg' => 'Tipo de tarjeta actualizado con éxito'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el tipo de tarjeta.'], 500);
+            }
         } catch (\Exception $e) {
             Log::error('Exception during cambiarStatusTipoTarjeta: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Error al actualizar el tipo de tarjeta.']);

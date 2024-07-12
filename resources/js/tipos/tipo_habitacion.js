@@ -64,7 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const capacidadInput = document.getElementById('capacidad');
     capacidadInput.addEventListener('keydown', function(e) {
-        // Prevenir la entrada del signo de menos
+        if (e.key === '0' && this.value.length === 0) {
+            e.preventDefault();
+        }
+
         if (e.key === '-') {
             e.preventDefault();
         }

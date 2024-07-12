@@ -319,9 +319,14 @@ class RoomController extends Controller
 
             $tipo_habitacion = TipoHabitacion::find($request->id);
             $tipo_habitacion->status = $request->status;
-            $tipo_habitacion->save();
-
-            return response()->json(['msg' => 'Tipo de habitación actualizado con éxito'], 200);
+            
+            if ($tipo_habitacion->save()) {
+                Habitacion::where('tipoID', $request->id)->update(['status' => $request->status]);
+    
+                return response()->json(['msg' => 'Tipo de habitación actualizado con éxito'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el tipo de habitación.'], 500);
+            }
         } catch (\Exception $e) {
             Log::error('Exception during cambiarStatusTipoServicio: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Error al actualizar el tipo de habitación.']);

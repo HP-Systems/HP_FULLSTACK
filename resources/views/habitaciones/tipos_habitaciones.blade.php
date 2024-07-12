@@ -6,7 +6,7 @@
     <div class="height-100 p-4" style="background-color: #EEEEEE !important; margin-top: 5%!important;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h4>Tipos de Habitaciones</h4>
-            <button type="button" class="btn btn-negro" data-bs-toggle="modal" data-bs-target="#tipoModal">Agregar Servicio</button>
+            <button type="button" class="btn btn-negro" data-bs-toggle="modal" data-bs-target="#tipoModal">Agregar Tipo de Habitacion</button>
         </div>
         <div style="background-color: white; margin-top: 15px !important; margin-right: 20px !important; padding: 20px !important">
             <table class="table table-hover">
@@ -69,7 +69,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="capacidad" class="form-label" style="font-weight: 500">Capacidad</label>
-                                    <input type="number" min="0" class="form-control border-thick" id="capacidad" name="capacidad" required>
+                                    <input type="number" min="1" class="form-control border-thick" id="capacidad" name="capacidad" required>
                                     <div id="capacidad-error" class="text-danger"></div>
                                 </div>
                             </div>
