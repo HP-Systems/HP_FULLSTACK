@@ -235,9 +235,20 @@ class UsersController extends Controller
 
             $tipo_personal = Rol::find($request->id);
             $tipo_personal->status = $request->status;
-            $tipo_personal->save();
+            
+            if ($tipo_personal->save()) {
+                $personales = Personal::where('rolID', $request->id)->get();
 
-            return response()->json(['msg' => 'Tipo de personal actualizado con éxito'], 200);
+                foreach ($personales as $personal) {
+                    User::where('userable_id', $personal->id)
+                        ->where('userable_type', 1)
+                        ->update(['status' => $request->status]);
+                }
+    
+                return response()->json(['msg' => 'Tipo de personal y personal relacionado actualizados con éxito'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el tipo de personal.'], 500);
+            }
         } catch (\Exception $e) {
             Log::error('Exception during cambiarStatus: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Error al actualizar el tipo de personal.']);
