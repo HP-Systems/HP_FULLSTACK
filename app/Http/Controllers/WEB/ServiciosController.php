@@ -15,7 +15,7 @@ class ServiciosController extends Controller
     public function index(){
         $servicios = DB::table('servicios as s')
             ->join('tipo_servicio as ts', 'ts.id', '=', 's.tipoID')
-            ->selectRaw('s.id, s.nombre, s.descripcion, s.precio, s.status, s.tipoID, ts.tipo') 
+            ->selectRaw('s.id, s.nombre, s.descripcion, s.precio, s.status, s.tipoID, ts.tipo, ts.status as status_tipo') 
             ->get();
 
         $tipos = TipoServicio::where('status', '=', 1)->get();
@@ -178,9 +178,14 @@ class ServiciosController extends Controller
 
             $tipo_servicio = TipoServicio::find($request->id);
             $tipo_servicio->status = $request->status;
-            $tipo_servicio->save();
 
-            return response()->json(['msg' => 'Tipo de servicio actualizado con éxito'], 200);
+            if ($tipo_servicio->save()) {
+                Servicio::where('tipoID', $request->id)->update(['status' => $request->status]);
+    
+                return response()->json(['msg' => 'Tipo de servicio actualizado con éxito'], 200);
+            } else {
+                return response()->json(['error' => 'No se pudo actualizar el tipo de servicio.'], 500);
+            }
         } catch (\Exception $e) {
             Log::error('Exception during cambiarStatusTipoServicio: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Error al actualizar el tipo de servicio.']);

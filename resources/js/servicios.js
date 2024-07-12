@@ -81,8 +81,8 @@ function dibujarTable() {
                 <td>${service.tipo}</td>
                 <td>
                     ${service.status == 1 
-                        ? `<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${service.id}" data-status="${service.status}">ACTIVO</button>` 
-                        : `<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${service.id}" data-status="${service.status}">INACTIVO</button>`
+                        ? `<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${service.id}" data-status="${service.status}" ${service.status_tipo == 0 ? 'disabled' : ''}>ACTIVO</button>` 
+                        : `<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${service.id}" data-status="${service.status}" ${service.status_tipo == 0 ? 'disabled' : ''}>INACTIVO</button>`
                     }
                 </td>
                 <td>
@@ -91,13 +91,11 @@ function dibujarTable() {
                         data-nombre="${service.nombre}"
                         data-descripcion="${service.descripcion}"
                         data-precio="${service.precio}"
-                        data-tipo="${service.tipoID}"
-                        >
+                        data-tipo="${service.tipoID}">
                         <i class="fas fa-edit"></i>
                     </button>
                 </td>
-            </tr>
-        `;
+            </tr>`;
         tableBody.innerHTML += row;
     });
 }

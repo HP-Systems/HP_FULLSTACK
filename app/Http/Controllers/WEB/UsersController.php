@@ -36,7 +36,8 @@ class UsersController extends Controller
                 CONCAT(p.nombre, " ", p.apellido) as nombre_completo, 
                 p.telefono, 
                 r.id as rolID,
-                r.nombre as rol') 
+                r.nombre as rol,
+                r.status as status_tipo') 
             ->get();
 
         $roles = Rol::where('status', '=', 1)->get();

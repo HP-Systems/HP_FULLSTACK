@@ -80,8 +80,8 @@ function renderTable() {
                 <td>${pers.rol}</td>
                 <td>
                     ${pers.status == 1 
-                        ? `<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${pers.id}" data-status="${pers.status}" ${pers.id == currentUserId ? 'disabled' : ''}>ACTIVO</button>` 
-                        : `<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${pers.id}" data-status="${pers.status}" ${pers.id == currentUserId ? 'disabled' : ''}>INACTIVO</button>`
+                        ? `<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${pers.id}" data-status="${pers.status}" ${pers.id == currentUserId || pers.status_tipo == 0 ? 'disabled' : ''}>ACTIVO</button>` 
+                        : `<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmStatusChangeModal" data-id="${pers.id}" data-status="${pers.status}" ${pers.id == currentUserId || pers.status_tipo == 0 ? 'disabled' : ''}>INACTIVO</button>`
                     }
                 </td>
                 <td>
