@@ -99,11 +99,11 @@ class ReservasController extends Controller
                         'apellido' => $reserva->huesped->apellido,
                         'telefono' => $reserva->huesped->telefono,
                         'user' => [
-                            'id' => $reserva->huesped->user->id,
-                            'email' => $reserva->huesped->user->email,
-                            'userable_id' => $reserva->huesped->user->userable_id,
-                            'userable_type' => $reserva->huesped->user->userable_type,
-                            'status' => $reserva->huesped->user->status,
+                            'id' => $reserva->huesped->user->id ? $reserva->huesped->user->id : null,
+                            'email' => $reserva->huesped->user->email ? $reserva->huesped->user->email : null,
+                            'userable_id' => $reserva->huesped->user->userable_id ? $reserva->huesped->user->userable_id : null,
+                            'userable_type' => $reserva->huesped->user->userable_type ? $reserva->huesped->user->userable_type : null,
+                            'status' => $reserva->huesped->user->status ? $reserva->huesped->user->status : null,
                         ]
                     ],
                     'habitaciones' => $reserva->habitaciones->map(function ($habitacion) {
@@ -128,7 +128,6 @@ class ReservasController extends Controller
                 return $nuevaReserva;
             });
 
-           
             return response()->json(
                 [
                     'status' => 200,
