@@ -61,6 +61,13 @@ Route::prefix('v1/movil')->group(function () {
     Route::get('/reservas/historial/{iduser}', [ReservasController::class, 'obtenerReservasPasadasHuesped']);
     Route::put('/reservas/editHabitaciones/{idreserva}', [ReservasController::class, 'editarReservaHabitaciones']);
 });
+//version 1 Huespedes
+Route::prefix('v1/huespedes')->group(function () {
+    Route::get('/create', [DeskController::class, 'register']);
+    Route::get('/index', [HuespedController::class, 'huespedes']);
+    Route::put('/edit/{id}', [HuespedController::class, 'editar']);
+});
+
 
 //DESKTOP ROUTES
 Route::prefix('desk')->group(function () {
