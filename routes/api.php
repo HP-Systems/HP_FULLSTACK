@@ -16,7 +16,7 @@ use App\Http\Controllers\WEB\UsersController;
 use App\Http\Controllers\GLOBAL\HabitacionesController;
 use App\Http\Controllers\GLOBAL\ServiciosController;
 use App\Http\Controllers\GLOBAL\ReservasController as GlobalReservasController;
-
+use App\Http\Controllers\GLOBAL\TarjetasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +48,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/services', [ServiciosController::class, 'index']);
     Route::post('/tipoServicio/create', [ServiciosController::class, 'crearTipoServicio']);
     Route::post('/servicio/create', [ServiciosController::class, 'crearServicio']);
+    Route::post('/nfc/create',[TarjetasController::class, 'crearTarjeta']);
 });
 
 //Version 1 movil
@@ -62,7 +63,7 @@ Route::prefix('v1/movil')->group(function () {
 });
 //version 1 Huespedes
 Route::prefix('v1/huespedes')->group(function () {
-    Route::get('/create', [DeskController::class, 'register']);
+    Route::post('/create', [DeskController::class, 'register']);
     Route::get('/index', [HuespedController::class, 'huespedes']);
     Route::put('/edit/{id}', [HuespedController::class, 'editar']);
 });
