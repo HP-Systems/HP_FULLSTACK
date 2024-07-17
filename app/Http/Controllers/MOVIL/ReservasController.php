@@ -13,97 +13,6 @@ use App\Models\HabitacionReserva;
 
 class ReservasController extends Controller
 {
-    public function createReserva(Request $request){
-        /*Formato esperado
-            {
-                "fecha_entrada" : "2024-07-02",
-                "fecha_salida" : "2024-07-10",
-                "huespedID" : 1,
-                "habitaciones" : [
-                    {
-                        "id" : "1"
-                    },
-                    {
-                        "id" : "5"
-                    }
-                ]
-            }
-        */
-        try{
-            $validation = Validator::make(
-                $request->all(),
-                [
-                    "fecha_entrada" => "required",
-                    "fecha_salida" => "required",
-                    "huespedID" => "required",
-                    "habitaciones" => "required",
-                ]
-            );
-
-            if ($validation->fails()) {
-                return response()->json(
-                    [
-                        'status' => 400,
-                        'data' => [],
-                        'msg' => 'Todos los campos son necesarios y deben cumplir con el formato adecuado.',
-                        'error' => $validation->errors()
-                    ], 400
-                );
-            }
-
-            $reserva = Reserva::create([
-                'huespedID' => $request->huespedID,
-                'fecha_entrada' => $request->fecha_entrada,
-                'fecha_salida' => $request->fecha_salida,
-                'status' => 1
-            ]);
-
-            $now = now();
-            if (is_array($request->habitaciones) && count($request->habitaciones) > 0) {
-                foreach ($request->habitaciones as $habitacion) {
-                    if (isset($habitacion['id'])) {
-                        DB::table('habitaciones_reservas')->insert([
-                            'reservaID' => $reserva->id,
-                            'habitacionID' => $habitacion['id'],
-                            'created_at' => $now,
-                            'updated_at' => $now
-                        ]);
-                    }
-                }
-            } else {
-                return response()->json(
-                    [
-                        'status' => 400,
-                        'data' => [],
-                        'msg' => 'El campo habitaciones es requerido y debe ser un array no vacío.',
-                        'error' => []
-                    ], 400
-                );
-            }
-
-            $reservaCreada = Reserva::with('habitaciones')->find($reserva->id);
-
-            return response()->json(
-                [
-                    'status' => 200,
-                    'data' => $reservaCreada,
-                    'msg' => 'Reserva creada con éxito.',
-                    'error' => []
-                ], 200
-            );
-        } catch (\Exception $e) {
-            Log::error('Exception during createReserva: ' . $e->getMessage());
-            return response()->json(
-                [
-                    'status' => 500,
-                    'data' => [],
-                    'msg' => 'Error de servidor.',
-                    'error' => $e->getMessage(),
-                ], 500
-            );
-        }
-    }
-
     public function obtenerReservasHuesped($idUser){
         try{
             if (!is_numeric($idUser) || (int)$idUser <= 0) {
@@ -120,7 +29,7 @@ class ReservasController extends Controller
             $hoy = Carbon::today()->toDateString();
 
             $reservas = Reserva::with('habitaciones')
-                    ->where('id', $idUser)
+                    ->where('huespedID', $idUser)
                     // Reservas en proceso
                     ->where(function($query) use ($hoy) {
                         $query->where('fecha_entrada', '<=', $hoy)
@@ -169,7 +78,7 @@ class ReservasController extends Controller
             $hoy = Carbon::today()->toDateString();
 
             $reservas = Reserva::with('habitaciones')
-                    ->where('id', $idUser)
+                    ->where('huespedID', $idUser)
                     // Reservas pasadas
                     ->where(function($query) use ($hoy) {
                         $query->where('fecha_salida', '<', $hoy);
@@ -359,14 +268,26 @@ class ReservasController extends Controller
             ->where('hr.reservaID', $idreserva)
             ->select('th.id as tipoID', 'th.tipo', 'h.id as habitacionID', 'h.numero')
             ->get()
-            ->groupBy('tipoID');
+            ->groupBy('tipoID')
+            ->map(function ($item, $key) {
+                return [
+                    'tipoID' => $key,
+                    'tipo' => $item->first()->tipo,
+                    'habitaciones' => $item->map(function ($subItem) {
+                        return [
+                            'habitacionID' => $subItem->habitacionID,
+                            'numero' => $subItem->numero
+                        ];
+                    })->values()->all()
+                ];
+            })->values()->all();
 
 
             return response()->json(
                 [
                     'status' => 200,
                     'data' => $reservaEditada,
-                    'msg' => 'Reservas actualizadas con éxito.',
+                    'msg' => 'Habitaciones de la reserva actualizadas con éxito.',
                     'error' => []
                 ], 200
             );
