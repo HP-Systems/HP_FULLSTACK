@@ -47,10 +47,8 @@ Route::prefix('v1')->group(function () {
     Route::get('/reservas/detalle/{idreserva}', [GlobalReservasController::class, 'detalleReserva']);
     
     Route::get('/services', [ServiciosController::class, 'index']);
-    Route::get('/services/solicitar', [ServiciosController::class, 'insertarServiciosReserva']);
+    Route::post('/services/solicitar', [ServiciosController::class, 'insertarServiciosReserva']);
     Route::get('/services/historial/{idreserva}', [ServiciosController::class, 'obtenerServiciosReserva']);
-    //Route::post('/tipoServicio/create', [ServiciosController::class, 'crearTipoServicio']);
-    Route::post('/servicio/create', [ServiciosController::class, 'crearServicio']);
 });
 
 //Version 1 movil
