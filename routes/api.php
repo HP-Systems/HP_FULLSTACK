@@ -66,8 +66,10 @@ Route::prefix('v1/movil')->group(function () {
 Route::prefix('v1/huespedes')->group(function () {
     Route::get('/create', [DeskController::class, 'register']);
     Route::get('/index', [HuespedController::class, 'huespedes']);
-    Route::put('/editar/{id}', [HuespedController::class, 'editar']);
+    Route::put('/edit/{id}', [HuespedController::class, 'editar']);
 });
+
+
 //DESKTOP ROUTES
 Route::prefix('desk')->group(function () {
     Route::post('/login', [DeskController::class, 'login']); 
