@@ -6,7 +6,6 @@
 @section('title', 'Configuracion - Hotel Project')
 
 @section('content')
-@vite('resources/css/info.css')
 <div class="height-100 p-5" style="background-color: #EEEEEE">
     <!-- Contenido específico de la vista de usuarios -->
     <h4>Configuracion del Sistema</h4>
@@ -122,6 +121,8 @@
     <p>Hotel no especificado.</p>
    @endif
   </div>
+  
+  @vite('resources/css/info.css')
   @vite('resources/js/app.js')
   @if ($errors->any())
   <script>
