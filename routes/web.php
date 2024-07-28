@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\WEB\InfoHotelController;
+use App\Http\Controllers\WEB\ReportesController;
 use App\Http\Controllers\WEB\RoomController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WEB\WebController;
@@ -39,7 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
    
 
     //Route::get('/users', function () {return view('users.users');})->name("users");
-    Route::get('/reporte1', function () {return view('reportes.reporte1');})->name("reporte1");
+    Route::get('/reporte1', [ReportesController::class,'ventasPorMes'])->name("reporte1");
+    Route::post('/reporte1', [ReportesController::class,'ventasPorMesFiltrar'])->name("reporte1.filtar");
+    Route::get('/reporte1/pdf', [ReportesController::class,'pdfVentasPorMes'])->name("reporte1.pdf");
     Route::get('/reporte2', function () {return view('reportes.reporte2');})->name("reporte2");
     Route::get('/servicios', function () {return view('servicios.servicios');})->name("servicios");
     Route::get('/habitaciones', [RoomController::class, 'index'])->name('habitaciones');

@@ -1,0 +1,61 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+
+.pagination .page-item {
+    margin: 0 2px; /* Ajusta el margen entre los elementos */
+}
+
+.pagination .page-link {
+    color:black;
+    text-decoration: none;
+    border: 1px solid #76ABAE;
+    border-radius: 3px;
+    transition: all 0.3s;
+}
+
+.pagination .page-link:hover {
+    background-color: #65999C;
+    color:white ;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #65999C;
+    border-color: #65999C;
+    color: black;
+}
+
+
+.active-page .page-link {
+    background-color: #65999C;
+    border-color: #65999C;
+    color: white !important;
+}
+
+.date-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.date-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+.btnFiltro
+{
+    background-color: #65999C;
+    border-color: #65999C;
+    border-radius: 5px;
+    color: white;
+}
+
+label {
+    margin-right: 10px;
+    font-weight: bold;
+}
