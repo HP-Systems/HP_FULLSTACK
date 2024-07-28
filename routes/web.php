@@ -51,6 +51,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reporte1', [ReportesController::class,'ventasPorMes'])->name("reporte1");
     Route::post('/reporte1', [ReportesController::class,'ventasPorMesFiltrar'])->name("reporte1.filtar");
     Route::get('/reporte1/pdf', [ReportesController::class,'pdfVentasPorMes'])->name("reporte1.pdf");
+    Route::get('/reporte2', function () {return view('reportes.reporte2');})->name("reporte2");
+
 
 
     //SERVICIOS
