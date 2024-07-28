@@ -51,7 +51,10 @@ class ReportesController extends Controller
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio'
         ],$message);
         if($validator->fails()){
-            return redirect()->route('reporte1')->withErrors($validator)->withInput();
+            $fechaInicio= Carbon::now()->startOfMonth()->toDateString();
+            $fechaFin= Carbon::now()->endOfMonth()->toDateString();
+            return redirect()->route('reporte1', ['fecha_inicio' => $fechaInicio, 'fecha_fin' => $fechaFin])->withErrors($validator);
+            
         }
         $fechaInicio = $request->input('fecha_inicio');
         $fechaFin = $request->input('fecha_fin');
@@ -75,6 +78,21 @@ class ReportesController extends Controller
     {
        try 
        {
+        $message=[
+            'fecha_inicio.required' => 'La fecha de inicio es requerida',
+            'fecha_fin.required' => 'La fecha de fin es requerida',
+            'fecha_fin.after_or_equal' => 'La fecha de fin debe ser mayor o igual a la fecha de inicio'
+        ];
+        $validator= Validator::make($request->all(),[
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio'
+        ],$message);
+        if($validator->fails()){
+            $fechaInicio= Carbon::now()->startOfMonth()->toDateString();
+            $fechaFin= Carbon::now()->endOfMonth()->toDateString();
+            return redirect()->route('reporte1', ['fecha_inicio' => $fechaInicio, 'fecha_fin' => $fechaFin])->withErrors($validator);
+            
+        }
         $fechaInicio = $request->input('fecha_inicio');
         $fechaFin = $request->input('fecha_fin');
          Carbon::setLocale('es');
