@@ -100,23 +100,24 @@ class DeskController extends Controller
                 return response()->json(['error' => $validation->errors()], 400);
             }
 
-            $user = Huesped::create([
+            $userr= Huesped::create([
                 "nombre" => $request->nombre,
                 "apellido" => $request->apellido,
                 "telefono" => $request->telefono,
             ]);
+
             $password = Str::random(15);
 
             $user = User::create([
                 "email" => $request->email,
                 "password" => Hash::make($password),
-                "userable_id" => $user->id,
+                "userable_id" => $userr->id,
                 "userable_type" => 2,
             ]);
             //enviar correo con la contraseña
             Mail::to($request->email)->send(new passwordMail($user, $password));
             return response()->json([
-                'data' => $user,
+                'data' => $userr,
                 'msg' => 'Usuario creado con exito',
                 'status' => 200,
             ], 200);
