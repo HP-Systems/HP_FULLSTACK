@@ -14,18 +14,17 @@ return new class extends Migration
         Schema::create('limpiezas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('personalID');
-            $table->unsignedBigInteger('habitacionID');
+            $table->unsignedBigInteger('habitacion_reservaID');
             $table->unsignedBigInteger('tarjetaID');
-            $table->date('fecha'); 
-            $table->time('hora_inicio');
+            $table->date('fecha');
+            $table->time('hora_inicio')->nullable();
             $table->time('hora_fin')->nullable();
-            $table->boolean('status')->default(1);
+            $table->integer('status')->default(1);
+            $table->timestamps();
 
             $table->foreign('personalID')->references('id')->on('personal');
-            $table->foreign('habitacionID')->references('id')->on('habitaciones');
+            $table->foreign('habitacion_reservaID')->references('id')->on('habitaciones_reservas');
             $table->foreign('tarjetaID')->references('id')->on('tarjetas');
-
-            $table->timestamps();
         });
     }
 

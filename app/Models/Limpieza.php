@@ -14,7 +14,7 @@ class Limpieza extends Model
 
     protected $fillable = [
         'personalID',
-        'habitacionID',
+        'habitacion_reservaID',
         'tarjetaID',
         'fecha',
         'hora_inicio',
@@ -29,9 +29,9 @@ class Limpieza extends Model
     }
 
     
-    public function habitacion()
+    public function habitacionReserva()
     {
-        return $this->belongsTo(Habitacion::class, 'habitacionID');
+        return $this->belongsTo(habitacionReserva::class, 'habitacion_reservaID');
     }
 
     

@@ -74,7 +74,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/habitaciones/tipos/status', [RoomController::class, 'cambiarStatusTipo'])->name('cambiarStatusTipoHabitacion');
 
     //TARJETAS
-    Route::get('/tarjetas', function () {return view('tarjetas.tarjetas');})->name("tarjetas");
+    Route::get('/tarjetas', [TarjetasController::class, 'indexTarjetas'])->name('tarjetas');
+    Route::post('/tarjetas/status', [TarjetasController::class, 'cambiarStatusTarjeta'])->name('cambiarStatusTarjeta');
 
     //TIPOS DE TARJETAS
     Route::get('/tarjetas/tipos', [TarjetasController::class, 'indexTipos'])->name('tipos_tarjetas');

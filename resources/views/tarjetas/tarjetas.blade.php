@@ -1,67 +1,72 @@
 @extends('../home')
 
-@section('title', 'Dashboard - Hotel Project')
+@section('title', 'Tarjetas - Hotel Project')
 
 @section('content')
-<div class="height-100 p-5" style="background-color: #EEEEEE">
+    <div class="height-100 p-5" style="background-color: #EEEEEE">
+        <div style="margin-top: 3%">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Tarjetas</h4>
 
-    <div style="margin-top: 3%">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">Tarjetas</h4>
-            <button class="btn btn-custom">Agregar Tarjeta</button>
+                <!-- Formulario de filtro -->
+                <form method="GET" action="{{ route('tarjetas') }}" id="filtroForm">
+                    <div class="form-group">
+                        <div class="d-flex align-items-center">
+                            <!-- Filtro de tipo -->
+                            <label for="tipo" style="font-weight: 600; font-size: 15px; padding-right: 5px">Tipo:</label>
+                            <div class="dropdown-wrapper" style="padding-right: 15px">
+                                <select name="tipo" id="tipo" class="form-control fixed-width-select">
+                                    <option value="todos" {{ request('tipo') == 'todos' ? 'selected' : '' }}>Todos</option>
+                                    @foreach($tipos as $tipo)
+                                        <option value="{{ $tipo->id }}" {{ request('tipo') == $tipo->id ? 'selected' : '' }}>{{ $tipo->tipo }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Filtro de disponibilidad -->
+                            <label for="filtro" style="font-weight: 600; font-size: 15px; padding-right: 5px">Disponibilidad:</label>
+                            <div class="dropdown-wrapper" style="padding-right: 15px">
+                                <select name="filtro" id="filtro" class="form-control fixed-width-select">
+                                    <option value="todas" {{ request('filtro') == 'todas' ? 'selected' : '' }}>Todas</option>
+                                    <option value="ocupadas" {{ request('filtro') == 'ocupadas' ? 'selected' : '' }}>Libres</option>
+                                    <option value="disponibles" {{ request('filtro') == 'disponibles' ? 'selected' : '' }}>Asignadas</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-custom">Filtrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap" style="margin-top: 2%" id="tarjetasContainer">
+            @include('tarjetas.cards_tarjetas', ['tarjetas' => $tarjetas])
         </div>
     </div>
+
     
-    <div class="d-flex flex-wrap justify-content-between">
-        <!-- Tarjeta 1 -->
-        <div class="card m-2" style="flex: 1 1 23%; max-width: 23%; position: relative;">
-            <div class="card-body">
-                <h5 class="card-title">Tarjeta 1</h5>
-                <p class="card-text">Tipo: Limpieza</p>
-                <button class="btn btn-danger">ACTIVA</button>
-                <button class="btn btn-link p-0" style="position: absolute; top: 10px; right: 10px;">
-                    <i class="fas fa-edit" style="color: black;"></i>
-                </button>
-            </div>
-        </div>
-
-
-        <!-- Tarjeta 2 -->
-        <div class="card m-2" style="flex: 1 1 23%; max-width: 23%; position: relative;">
-            <div class="card-body">
-                <h5 class="card-title">Tarjeta 2</h5>
-                <p class="card-text">Tipo: Administrativa</p>
-                <button class="btn btn-success">INACTIVA</button>
-                <button class="btn btn-link p-0" style="position: absolute; top: 10px; right: 10px;">
-                    <i class="fas fa-edit" style="color: black;"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Tarjeta 3 -->
-        <div class="card m-2" style="flex: 1 1 23%; max-width: 23%; position: relative;">
-            <div class="card-body">
-                <h5 class="card-title">Tarjeta 3</h5>
-                <p class="card-text">Tipo: Limpieza</p>
-                <button class="btn btn-success">ACTIVA</button>
-                <button class="btn btn-link p-0" style="position: absolute; top: 10px; right: 10px;">
-                    <i class="fas fa-edit" style="color: black;"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Tarjeta 4 -->
-        <div class="card m-2" style="flex: 1 1 23%; max-width: 23%; position: relative;">
-            <div class="card-body">
-                <h5 class="card-title">Tarjeta 4</h5>
-                <p class="card-text">Tipo: Huesped</p>
-                <button class="btn btn-success">ACTIVA</button>
-                <button class="btn btn-link p-0" style="position: absolute; top: 10px; right: 10px;">
-                    <i class="fas fa-edit" style="color: black;"></i>
-                </button>
+    <!-- Modal de cambio de status -->
+    <div class="modal fade" id="confirmStatusChangeModal" tabindex="-1" aria-labelledby="confirmStatusChangeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmStatusChangeModalLabel">CAMBIO DE ESTADO</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="font-size: 17px">
+                    Mensaje
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmChangeStatusButton">ACEPTAR</button>
+                </div>
             </div>
         </div>
     </div>
 
-</div>
+    <script>
+        const csrfToken = '{{ csrf_token() }}';
+        const changeStatusRoute = '{{ route('cambiarStatusTarjeta') }}';
+    </script>
+
+    @vite('resources/js/tarjetas.js')
 @endsection

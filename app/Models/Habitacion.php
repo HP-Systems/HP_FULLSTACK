@@ -24,11 +24,6 @@ class Habitacion extends Model
         return $this->belongsTo(TipoHabitacion::class, 'tipoID');
     }
 
-    public function limpiezas()
-    {
-        return $this->hasMany(Limpieza::class, 'habitacionID');
-    }
-
     public function reservas()
     {
         return $this->belongsToMany(Reserva::class, 'habitaciones_reservas', 'habitacionID', 'reservaID');
