@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Ingresos Mensuales</title>
+    <title>Reporte de Ingresos</title>
     <style>
         footer {
             position: fixed;
@@ -153,7 +153,7 @@
                     </td>
                     <td>
                         <div class="text-right">
-                            <h1 class=" font-weight-bold">Reporte de Ingresos Mensuales</h1>
+                            <h1 class=" font-weight-bold">Reporte de Ingresos</h1>
                             <b>
                                 <p class="text-muted font-weight-bold">{{ $fechaInicio }} - {{$fechaFin}}</p>
                             </b>
