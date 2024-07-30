@@ -14,6 +14,7 @@ class TarjetasController extends Controller
         try{
         // Validar los datos de entrada
         $validatedData = $request->validate([
+            'data.id' => 'required',
             'data.tipoID' => 'required|integer',
         ]);
         // Verificar si la tarjeta ya existe
