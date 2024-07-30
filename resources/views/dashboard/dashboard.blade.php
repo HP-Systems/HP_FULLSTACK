@@ -35,6 +35,5 @@
         font-size: 1.2em; /* Aumenta el tamaño de la letra */
     }
 </style>
-<script src="{{ mix('resources/js/dashboard.js') }}"></script>
 @vite('resources/js/dashboard.js')
 @endsection
