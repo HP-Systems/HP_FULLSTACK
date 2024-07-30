@@ -17,6 +17,7 @@ use App\Http\Controllers\GLOBAL\HabitacionesController;
 use App\Http\Controllers\GLOBAL\ServiciosController;
 use App\Http\Controllers\GLOBAL\ReservasController as GlobalReservasController;
 use App\Http\Controllers\GLOBAL\TarjetasController;
+use App\Http\Controllers\WEB\dashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,7 +50,12 @@ Route::prefix('v1')->group(function () {
     Route::get('/services', [ServiciosController::class, 'index']);
     Route::post('/services/solicitar', [ServiciosController::class, 'insertarServiciosReserva']);
     Route::get('/services/historial/{idreserva}', [ServiciosController::class, 'obtenerServiciosReserva']);
+    Route::post('/tipoServicio/create', [ServiciosController::class, 'crearTipoServicio']);
+    Route::post('/servicio/create', [ServiciosController::class, 'crearServicio']);
+
     Route::post('/nfc/create',[TarjetasController::class, 'crearTarjeta']);
+    Route::get('/nfc/index',[TarjetasController::class, 'indexTarjeta']);
+
 });
 
 //Version 1 movil
@@ -79,6 +85,7 @@ Route::prefix('desk')->group(function () {
 
     Route::put('/guestUpdate/{id}', [HuespedController::class, 'editar']);
     Route::get('/reservas/{fecha1?}/{fecha2?}', [DesktopReservasController::class, 'traerReservas']);
+    Route::get('/reservas', [DesktopReservasController::class, 'traerReservas']);
     Route::post('/reservas/create', [DesktopReservasController::class, 'createReserva']);
 });
 
@@ -88,6 +95,11 @@ Route::prefix('web')->group(function () {
     Route::post('/register', [WebController::class, 'register']);
     Route::get('/infoHotel', [InfoHotelController::class, 'infoHotel']);
     Route::put ('/updateHotel/{id}', [InfoHotelController::class, 'update']);
+
+    Route::get ('/dashboard/servicios', [dashboardController::class, 'servicios']);
+    Route::get ('dashboard/ventasMes',[dashboardController::class,'ventaPorMes']);
+    Route::get ('dashboard/usuariosMes',[dashboardController::class,'usuariosPorMes']);
+    Route::get('/dashboard/ingresosPorTipo', [dashboardController::class, 'ingresosPorTipoHabitacion']);
     
     /*Route::get('/rooms', [RoomController::class, 'index']);
     Route::post('/storeTipo', [RoomController::class, 'storeTipo']);

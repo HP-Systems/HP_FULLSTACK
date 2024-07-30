@@ -5,7 +5,7 @@
 @vite('resources/css/reporte1.css')
 <div class="height-100 p-5 mx-auto m-3" style="background-color: #EEEEEE">
 <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h4>Ingresos por mes</h4>
+    <h4>Ingresos</h4>
     <div style="display: flex; align-items: center;">
     <a href="{{ route('reporte1.pdf') }}"id="download-button"><button type="button" class="btn btn-danger" style="margin-right: 10px;">
             <i class="fa fa-cloud-download"></i>
