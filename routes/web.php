@@ -32,7 +32,7 @@ Route::get('/verify', function () {return view('login.verify');})->middleware('s
 Route::post('/verifyNumber', [WebController::class, 'verifyNumber']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/home', function () {return view('home');})->name("home");
+    Route::get('/home', function () {return view('dashboard.dashboard');})->name("home");
     Route::get('/dashboard', function () {return view('dashboard.dashboard');})->name("dashboard");
     
     //PERSONAL
