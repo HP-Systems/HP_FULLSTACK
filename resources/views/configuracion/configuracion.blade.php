@@ -114,7 +114,7 @@
           
         >{{ $hotel->descripcion ?? '' }}</textarea>
       </div>
-      <button type="submit">Guardar</button>
+      <button type="submit" class="guardar">Guardar</button>
       
     </form>
     @else
@@ -130,6 +130,16 @@
                 title: "Error!",
                 text: "{{ $errors->first() }}",
                 icon: "error",
+            });
+        </script>
+    @endif
+
+    @if(session('success'))
+        <script>
+           swal({
+                title: "¡Éxito!",
+                text: "{{ session('success') }}",
+                icon: "success",
             });
         </script>
     @endif
