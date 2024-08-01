@@ -2,6 +2,7 @@
 @section('title', 'Habitaciones - Hotel Project')
 @section('content')
 @vite('resources/css/card.css')
+
 <div class="height-100 p-5" style="background-color: #EEEEEE">
     <br>
     <div class="header-container mb-3">
@@ -230,6 +231,7 @@
     });
 </script>
 @vite('resources/js/app.js')
+
 @if ($errors->any())
 <script>
     swal({
@@ -237,7 +239,18 @@
         text: "{{ $errors->first() }}",
         icon: "error",
     });
+    
 </script>
+
 @endif
+@if(session('success'))
+        <script>
+           swal({
+                title: "¡Éxito!",
+                text: "{{ session('success') }}",
+                icon: "success",
+            });
+        </script>
+    @endif
 
 @endsection

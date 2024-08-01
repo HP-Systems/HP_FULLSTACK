@@ -22,6 +22,7 @@
                 <div style="width: 100%;"><canvas id="myChart"></canvas></div>
             </div>
         </div>    
+        
         <div class="card" style="flex: 1; margin: 10px;">
             <div class="card-body bg-white" style="background-color: #EEEEEE;">
                 <div style="width: 100%;"><canvas id="myChart4"></canvas></div>
@@ -35,5 +36,7 @@
         font-size: 1.2em; /* Aumenta el tamaño de la letra */
     }
 </style>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 @vite('resources/js/dashboard.js')
 @endsection

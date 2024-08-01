@@ -47,11 +47,11 @@
                     <div class="report-submenu">
                         <a href="{{ route('reporte1') }}" class="nav_link sub {{ request()->routeIs('reporte1') ? 'active' : '' }}" style="text-decoration: none;"> 
                             <i class='fas fa-clipboard nav_icon'></i> 
-                            <span class="nav_name">Ingresos</span> 
+                            <span class="nav_name">Ingresos General</span> 
                         </a>
                         <a href="{{ route('reporte2') }}" class="nav_link sub {{ request()->routeIs('reporte2') ? 'active' : '' }}" style="text-decoration: none;"> 
                             <i class='fas fa-clipboard nav_icon'></i> 
-                            <span class="nav_name">Reporte 2</span> 
+                            <span class="nav_name">Tipos Habitaciones</span> 
                         </a>
                         <a href="#" class="nav_link sub" style="text-decoration: none;"> 
                             <i class='fas fa-clipboard nav_icon'></i> 
