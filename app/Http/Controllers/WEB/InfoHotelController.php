@@ -45,6 +45,7 @@ class InfoHotelController extends Controller
                 'numeric' => 'El campo :attribute debe ser un número',
                 'digits' => 'El campo :attribute debe tener exactamente :digits dígitos',
                 'date_format' => 'El campo :attribute debe tener un formato de hora válido',
+                'max' => 'El campo :attribute supero el máximo de caracteres permitidos',
             ];
 
             $validator = Validator::make($request->all(), [
@@ -54,7 +55,7 @@ class InfoHotelController extends Controller
                 'telefono' => 'required|numeric|digits:10',
                 'checkin' => 'required|date_format:H:i',
                 'checkout' => 'required|date_format:H:i',
-                'descripcion' => 'required|string',
+                'descripcion' => 'required|string|max:255',
 
             ], $messages);
             if ($validator->fails()) {
