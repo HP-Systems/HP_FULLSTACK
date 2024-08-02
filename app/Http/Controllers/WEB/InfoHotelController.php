@@ -55,7 +55,7 @@ class InfoHotelController extends Controller
                 'telefono' => 'required|numeric|digits:10',
                 'checkin' => 'required|date_format:H:i',
                 'checkout' => 'required|date_format:H:i',
-                'descripcion' => 'required|string|max:255',
+                'descripcion' => 'required',
 
             ], $messages);
             if ($validator->fails()) {
