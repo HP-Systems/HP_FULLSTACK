@@ -8,13 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Limpieza extends Model
 {
     use HasFactory;
-
     protected $table = 'limpiezas'; 
-
 
     protected $fillable = [
         'personalID',
-        'habitacion_reservaID',
+        'reservaID',
         'tarjetaID',
         'fecha',
         'hora_inicio',
@@ -29,9 +27,9 @@ class Limpieza extends Model
     }
 
     
-    public function habitacionReserva()
+    public function reserva()
     {
-        return $this->belongsTo(habitacionReserva::class, 'habitacion_reservaID');
+        return $this->belongsTo(Reserva::class, 'reservaID');
     }
 
     

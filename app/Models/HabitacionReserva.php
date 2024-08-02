@@ -26,8 +26,4 @@ class HabitacionReserva extends Model
         return $this->hasMany(ServicioReserva::class, 'servicioID');
     }
 
-    public function limpiezas() {
-        return $this->hasMany(Limpieza::class, 'habitacion_reservaID');
-    }
-
 }

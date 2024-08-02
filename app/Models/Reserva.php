@@ -34,4 +34,8 @@ class Reserva extends Model
     {
         return $this->belongsToMany(Tarjeta::class, 'tarjetas_reservas', 'reservaID', 'tarjetaID');
     }
+
+    public function limpiezas() {
+        return $this->hasMany(Limpieza::class, 'reservaID');
+    }
 }
