@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('telefono');
             $table->time('checkin');
             $table->time('checkout');
-            $table->string('descripcion');
+            $table->mediumText('descripcion');
             $table->timestamps();
         });
     }
