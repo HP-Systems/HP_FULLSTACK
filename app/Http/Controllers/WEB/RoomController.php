@@ -332,5 +332,49 @@ class RoomController extends Controller
             return redirect()->back()->withErrors(['error' => 'Error al actualizar el tipo de habitación.']);
         }
     }
-    
+
+    public function actualizarImagen(Request $request){
+        try {
+            $validation = Validator::make(
+                $request->all(),
+                [
+                    'imagen' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                ]
+            );
+
+            if ($validation->fails()) {
+                return back()->with(['error' => $validation->errors()->all()]);
+            }
+
+            $id = $request->id;
+            $tipo_habitacion = TipoHabitacion::find($id);
+            $imagen = $request->file('imagen');
+            $nombreImagen = time() . '.' . $imagen->getClientOriginalExtension();
+            $destino = public_path("/images/tipo_habitacion/{$id}");
+
+            // Crear el directorio si no existe
+            if (!file_exists($destino)) {
+                mkdir($destino, 0755, true);
+            }
+
+            // Eliminar imagen existente si hay una
+            if ($tipo_habitacion->imagen && file_exists(public_path($tipo_habitacion->imagen))) {
+                unlink(public_path($tipo_habitacion->imagen));
+            }
+
+            // Mover la nueva imagen
+            $imagen->move($destino, $nombreImagen);
+
+            $tipo_habitacion->imagen = "images/tipo_habitacion/{$id}/{$nombreImagen}";
+            if ($tipo_habitacion->save()) {
+                return back()->with(['msg' => 'Imagen guardada exitosamente'], 200);
+            } else {
+                return back()->with(['error' => 'No se pudo subir la imagen'], 500);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Exception during actualizarImagenTipoHabitacion: ' . $e->getMessage());
+            return back()->with(['error' => 'Error al subir la imagen.'], 500);
+        }
+    }
 }

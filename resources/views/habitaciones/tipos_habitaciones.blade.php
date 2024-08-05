@@ -49,7 +49,7 @@
                             <label for="tipo_habitacion" class="form-label" style="font-weight: 500">Nombre</label>
                             <input type="text" class="form-control border-thick" id="tipo_habitacion" name="tipo_habitacion" required>
                             <div id="tipo_habitacion-error" class="text-danger"></div>
-                        </div>
+                        </div> 
                         <div class="mb-3">
                             <label for="descripcion" class="form-label" style="font-weight: 500">Descripcion</label>
                             <textarea class="form-control border-thick" id="descripcion" rows="3" name="descripcion" required></textarea>
@@ -103,14 +103,64 @@
         </div>
     </div>
 
+    <!-- Modal de foto -->
+    <div class="modal fade" id="fotoModal" tabindex="-1" aria-labelledby="fotoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="fotoModalLabel" style="font-size: 20px">IMAGEN DEL TIPO: SENCILLA</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; right: 1rem;"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <form id="subirImgForm" action="{{ route('actualizarImagen') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" id="imagenID" name="id">
+                        <div class="mb-3">
+                            <label for="imagen" class="form-label" style="font-weight: 500">Selecciona la imagen</label>
+                            <input type="file" class="form-control" name="imagen" id="imagen" autocomplete="off" required>
+                        </div>
+                        <div class="form-group row justify-content-center" id="contenedorImg">
+                            <img class="card-img-top" id="img" alt="Imagen tipo habitación" style="max-width: 100%; height: auto;">
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="submit" class="btn btn-custom" id="confirmFotoModal">SUBIR IMAGEN</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
         const tiposData = @json($tipos);
         const csrfToken = '{{ csrf_token() }}';
         const changeStatusRoute = '{{ route('cambiarStatusTipoHabitacion') }}';
         const insertTiposHabitacionesRoute = '{{ route('insertTipoHabitacion') }}';
         const editTiposHabitacionesRoute = '{{ route('editTipoHabitacion') }}';
+        const subirImgRoute = '{{ route('actualizarImagen') }}';
     </script>
     @vite('resources/js/tipos/tipo_habitacion.js')
 
+
+    @if (session('error'))
+        <script>
+            swal({
+                title: "Error!",
+                text: "{{ session('error') }}",
+                icon: "error",
+            });
+            
+        </script>
+    @endif
+    @if(session('msg'))
+        <script>
+        swal({
+                title: "¡Éxito!",
+                text: "{{ session('msg') }}",
+                icon: "success",
+            });
+        </script>
+    @endif
     
 @endsection

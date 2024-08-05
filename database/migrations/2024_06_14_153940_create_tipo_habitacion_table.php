@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('tipo', 50);
             $table->integer('capacidad');
+            $table->string('imagen');
             $table->decimal('precio_noche', 10, 2);
             $table->text('descripcion');
             $table->boolean('status')->default(1);

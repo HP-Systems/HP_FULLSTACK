@@ -54,6 +54,41 @@ document.addEventListener('DOMContentLoaded', function () {
             changeStatus(id, status == '1' ? 0 : 1);
         };
     });
+
+    var imagenModal = document.getElementById('fotoModal');
+    imagenModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var id = button.getAttribute('data-id');
+        var tipo = button.getAttribute('data-tipo_habitacion');
+        var imagenUrl = button.getAttribute('data-imagen');
+        imagenModal.querySelector('#imagenID').value = id;
+
+        var modalTitle = imagenModal.querySelector('.modal-title');
+        modalTitle.textContent = 'IMAGEN DEL TIPO: ' + tipo;
+
+        var contenedorImg = document.getElementById('contenedorImg');
+        var img = document.getElementById('img');
+        var imgElement = imagenModal.querySelector('#img');
+
+        console.log(imagenUrl);
+
+        if(imagenUrl == 'null'  ){
+            img.style.display = 'none';
+            contenedorImg.style.display = 'none';
+        } else{
+            // Verifica si imagenUrl no está vacío o es null
+            contenedorImg.style.display = 'block';
+            img.style.display = 'block';
+            imgElement.src = "http://127.0.0.1:8000/" + imagenUrl;
+        }
+
+        var confirmButton = document.getElementById('confirmFotoModal');
+        confirmButton.onclick = function () {
+            subirFoto();
+        };
+    });
+
+
     
     const precioInput = document.getElementById('precio');
     precioInput.addEventListener('keydown', function(e) {
@@ -105,12 +140,85 @@ function dibujarTable() {
                         >
                         <i class="fas fa-edit"></i>
                     </button>
+                    <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#fotoModal"
+                        data-id="${tipo.id}"
+                        data-tipo_habitacion="${tipo.tipo}"
+                        data-imagen="${tipo.imagen}"
+                        >
+                        <i class="fas fa-image"></i>
+                    </button>
                 </td>
             </tr>
         `;
         tableBody.innerHTML += row;
     });
 }
+
+function validateImagen(){
+    var validacion = true;
+    var imagen = document.getElementById('imagen').value.trim();
+    
+    validacion = imagen;
+    return validacion;
+}
+
+function subirFoto(){
+    if (!validateImagen()) {
+        return;
+    }
+
+    var form = document.getElementById('subirImgForm');
+    var formData = new FormData(form);
+
+    swal({
+        text: "Cargando...",
+        button: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    });
+
+    jQuery.ajax({
+        type: 'POST',
+        url: $('#subirImgForm').attr('action'),
+        data: formData,
+        success: function(response) {
+            swal.close();
+
+            console.log(response);
+
+            /*if (response['msg']) {
+                swal({
+                    title: "¡Éxito!",
+                    text: "La imagen ha sido subida correctamente.",
+                    icon: "success",
+                }).then(() => {
+                    location.reload();
+                });
+            } else if (response.errors) {
+                swal({
+                    title: "Error!",
+                    text: response.errors.join("\n"),
+                    icon: "error",
+                });
+            } else {
+                swal({
+                    title: "Error!",
+                    text: "Error al procesar la solicitud.",
+                    icon: "error",
+                });
+            }*/
+        },
+        error: function(xhr, status, error) {
+            swal.close();
+            swal({
+                title: "Error!",
+                text: "Error al procesar la solicitud.",
+                icon: "error",
+            });
+        },
+    });
+}
+
 
 function renderPagination() {
     const pageCount = Math.ceil(tiposData.length / rowsPerPage);
@@ -192,6 +300,8 @@ function changeStatus(serviceId, newStatus) {
         success: function(response) {
             swal.close();
 
+            console.log(response);
+
             if (response['msg']) {
                 if(newStatus == 0){
                     swal({
@@ -219,7 +329,7 @@ function changeStatus(serviceId, newStatus) {
             }
         },
         error: function(xhr, status, error) {
-            console.log(error);
+            //console.log(error);
             swal.close();
             swal({
                 title: "Error",
@@ -229,7 +339,6 @@ function changeStatus(serviceId, newStatus) {
         }
     });
 }
-
 
 function validateForm() {
     var isValid = true;
@@ -278,7 +387,7 @@ function save() {
             if (response['msg']) {
                 swal({
                     title: "¡Éxito!",
-                    text: response['msg'],
+                    text: response.msg,
                     icon: "success",
                 }).then((value) => {
                     location.reload();
@@ -286,7 +395,7 @@ function save() {
             } else if (response['edit']) {
                 swal({
                     title: "¡Éxito!",
-                    text: response['edit'],
+                    text: response.edit,
                     icon: "success",
                 }).then((value) => {
                     location.reload();
@@ -318,6 +427,5 @@ function save() {
             $('#saveButton').prop('disabled', false);
         }
     });
-
 }
 

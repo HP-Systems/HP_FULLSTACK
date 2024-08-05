@@ -118,7 +118,7 @@ class TarjetasController extends Controller
                     WHEN r.status = 0 THEN 1
                     WHEN tr.status = 0 THEN 1
                     WHEN CURDATE() BETWEEN r.fecha_entrada AND r.fecha_salida THEN 0
-                    WHEN CURDATE() = l.fecha THEN 1
+                    WHEN CURDATE() = l.fecha THEN 0
                     ELSE 1
                 END as disponibilidadBool
             FROM tarjetas t
@@ -143,9 +143,9 @@ class TarjetasController extends Controller
         }
 
         if ($filtro == 'ocupadas') {
-            $query->having('disponibilidad', '=', 0);
-        } elseif ($filtro == 'disponibles') {
             $query->having('disponibilidad', '=', 1);
+        } elseif ($filtro == 'disponibles') {
+            $query->having('disponibilidad', '=', 0);
         }
 
         $tarjetas = $query->get();

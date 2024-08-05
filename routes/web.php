@@ -73,12 +73,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/habitaciones', [RoomController::class, 'index'])->name('habitaciones');
     Route::put('/habitaciones/{id}', [RoomController::class, 'updateRoom'])->name('updateRoom');
     Route::get('/habitaciones/buscar', [RoomController::class, 'buscar'])->name('habitaciones.buscar');
+    Route::post('/habitaciones/store', [RoomController::class, 'storeRoom'])->name('room.store');
    
     //TIPOS DE HABITACIONES
     Route::get('/habitaciones/tipos', [RoomController::class, 'indexTipos'])->name('tipos_habitaciones');
     Route::post('/habitaciones/tipos/insert', [RoomController::class, 'insertTipoHabitacion'])->name('insertTipoHabitacion');
     Route::post('/habitaciones/tipos/edit', [RoomController::class, 'editTipoHabitacion'])->name('editTipoHabitacion');
     Route::post('/habitaciones/tipos/status', [RoomController::class, 'cambiarStatusTipo'])->name('cambiarStatusTipoHabitacion');
+    Route::post('/habitaciones/tipos/imagen', [RoomController::class, 'actualizarImagen'])->name('actualizarImagen');
 
     //TARJETAS
     Route::get('/tarjetas', [TarjetasController::class, 'indexTarjetas'])->name('tarjetas');
@@ -90,9 +92,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tarjetas/tipos/edit', [TarjetasController::class, 'editTipoTarjeta'])->name('editTipoTarjeta');
     Route::post('/tarjetas/tipos/status', [TarjetasController::class, 'cambiarStatusTipo'])->name('cambiarStatusTipoTarjeta');
 
-    //HABITACIONES
-    Route::post('/habitaciones/store', [RoomController::class, 'storeRoom'])->name('room.store');
-    
     //CONFIGURACION
     Route::get('/configuracion', [InfoHotelController::class, 'index'])->name("configuracion");
     Route::put('/configuracion/{id}', [InfoHotelController::class, 'update'])->name('updateHotel');

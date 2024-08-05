@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('limpiezas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('personalID');
-            $table->unsignedBigInteger('reservaID');
+            $table->unsignedBigInteger('habitacion_reservaID');
+            //$table->unsignedBigInteger('reservaID');
             $table->unsignedBigInteger('tarjetaID');
             $table->date('fecha');
             $table->time('hora_inicio')->nullable();
@@ -23,7 +24,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('personalID')->references('id')->on('personal');
-            $table->foreign('reservaID')->references('id')->on('reservas');
+            $table->foreign('habitacion_reservaID')->references('id')->on('habitaciones_reservas');
+            //$table->foreign('reservaID')->references('id')->on('reservas');
             $table->foreign('tarjetaID')->references('id')->on('tarjetas');
         });
     }
