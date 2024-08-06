@@ -91,10 +91,15 @@ class DeskController extends Controller
                     "nombre" => "required",
                     "apellido" => "required",
                     "telefono" => "required|digits:10",
-                    "email" => "required|email|unique:users,email",
+                    "email" => "required|email",
 
                 ]
             );
+            if (User::where('email', $request->email)->where('userable_type', 2)->exists()) {
+                return response()->json([
+                    'msg' => 'El usuario con este email ya existe.',
+                ], 409);
+            }
 
             if ($validation->fails()) {
                 return response()->json(['error' => $validation->errors()], 400);
@@ -116,6 +121,7 @@ class DeskController extends Controller
             ]);
             //enviar correo con la contraseña
             Mail::to($request->email)->send(new passwordMail($user, $password));
+            
             return response()->json([
                 'data' => $userr,
                 'msg' => 'Usuario creado con exito',
