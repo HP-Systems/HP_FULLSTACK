@@ -8,6 +8,7 @@ use App\Models\Personal;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
 use Illuminate\Support\Str;
@@ -31,27 +32,32 @@ class PersonalController extends Controller
                 ]
             );
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
                     'msg' => 'Error al obtener el personal',
-                    'data' => $e->getMessage()
                 ]
+                
             );
         } catch (\PDOException $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
                     'msg' => 'Error al obtener el personal',
-                    'data' => $e->getMessage()
                 ]
             );
+
         } catch (\Illuminate\Validation\Validator $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
                     'msg' => 'Error al obtener el personal',
-                    'data' => $e->getMessage()
                 ]
             );
         }
@@ -127,6 +133,8 @@ class PersonalController extends Controller
                 ]
             );
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
@@ -135,6 +143,8 @@ class PersonalController extends Controller
                 ]
             );
         } catch (\PDOException $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
@@ -142,6 +152,8 @@ class PersonalController extends Controller
                 ]
             );
         } catch (\Illuminate\Validation\Validator $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
@@ -176,13 +188,16 @@ class PersonalController extends Controller
                         'data' => $vaidator->errors()
                     ]
                 );
+                
             }
-            $personal = Personal::find($request->id);
+            $personal = Personal::where('id', $request->id)
+                    ->whereIn('rolID', [2, 3])
+                    ->first();
             if (!$personal) {
                 return response()->json(
                     [
                         'status' => 404,
-                        'msg' => 'Personal no encontrado',
+                        'msg' => 'Personal no encontrado envia el id del personal',
                     ]
                 );
             }
@@ -207,27 +222,36 @@ class PersonalController extends Controller
                 ]
             );
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
-                    'msg' => 'Error al crear el personal',
+                    'msg' => 'Error al editar el personal',
 
                 ]
             );
+
         } catch (\PDOException $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
-                    'msg' => 'Error al crear el personal',
+                    'msg' => 'Error al editar el personal pdo',
                 ]
             );
+
         } catch (\Illuminate\Validation\Validator $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
-                    'msg' => 'Error al crear el personal',
+                    'msg' => 'Error al editar el personal',
                 ]
             );
+
         }
     }
     public function desactivarPersonal(Request $request)
@@ -264,25 +288,31 @@ class PersonalController extends Controller
                 ]
             );
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
-                    'msg' => 'Error al crear el personal',
+                    'msg' => 'Error al desactivar el personal',
 
                 ]
             );
         } catch (\PDOException $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
-                    'msg' => 'Error al crear el personal',
+                    'msg' => 'Error al desactivar el personal',
                 ]
             );
         } catch (\Illuminate\Validation\Validator $e) {
+            Log::error($e->getMessage());
+
             return response()->json(
                 [
                     'status' => 500,
-                    'msg' => 'Error al crear el personal',
+                    'msg' => 'Error al desactivar el personal',
                 ]
             );
         }
