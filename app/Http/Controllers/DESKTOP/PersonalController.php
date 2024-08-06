@@ -232,7 +232,6 @@ class PersonalController extends Controller
     }
     public function desactivarPersonal(Request $request)
     {
-
         try {
             $personal = User::find($request->id);
             if (!$personal) {
@@ -240,6 +239,18 @@ class PersonalController extends Controller
                     [
                         'status' => 404,
                         'msg' => 'Personal no encontrado',
+                    ]
+                );
+            }
+            if($personal->status==0)
+            {
+                $personal->status = 1;
+                $personal->save();
+                return response()->json(
+                    [
+                        'status' => 200,
+                        'msg' => 'Personal activado correctamente',
+                        'data' => $personal
                     ]
                 );
             }
