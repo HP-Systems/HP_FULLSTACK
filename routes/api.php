@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\DESKTOP\DeskController;
 use App\Http\Controllers\DESKTOP\HuespedController;
+use App\Http\Controllers\DESKTOP\PersonalController;
 use App\Http\Controllers\DESKTOP\ReservasController as DesktopReservasController;
 use App\Http\Controllers\MOVIL\HotelController;
 use App\Http\Controllers\MOVIL\MovilController;
@@ -87,6 +88,11 @@ Route::prefix('desk')->group(function () {
     Route::get('/reservas/{fecha1?}/{fecha2?}', [DesktopReservasController::class, 'traerReservas']);
     Route::get('/reservas', [DesktopReservasController::class, 'traerReservas']);
     Route::post('/reservas/create', [DesktopReservasController::class, 'createReserva']);
+
+    Route::get('/personal/index', [PersonalController::class, 'obtenerPersonal']);
+    Route::post('/personal/create', [PersonalController::class, 'createPersonal']);
+    Route::put('/personal/edit/{id}', [PersonalController::class, 'editarPersonal']);
+    Route::delete('/personal/delete/{id}', [PersonalController::class, 'desactivarPersonal']);
 });
 
 //WEB ROUTES
