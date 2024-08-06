@@ -14,8 +14,6 @@ class ServiciosController extends Controller
         try{
             $fechaActual = Carbon::today()->toDateString();
 
-            echo $fechaActual;
-
             if (is_null($fecha1) && is_null($fecha2)) {
                 $fecha1 = $fechaActual;
                 $fecha2 = $fechaActual;
