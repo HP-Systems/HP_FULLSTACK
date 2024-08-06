@@ -25,8 +25,8 @@ class ReservasController extends Controller
             $fechaActual = Carbon::today()->toDateString();
 
             if (is_null($fecha1) && is_null($fecha2)) {
-            $fecha1 = $fechaActual;
-            $fecha2 = $fechaActual;
+                $fecha1 = $fechaActual;
+                $fecha2 = $fechaActual;
             }
 
             $fechaInicio = $fecha1;

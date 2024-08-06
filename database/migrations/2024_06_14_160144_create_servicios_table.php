@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('descripcion');
             $table->decimal('precio', 10, 2);
             $table->unsignedBigInteger('tipoID');
-            $table->boolean('status')->default(1);
+            $table->integer('status')->default(1);
 
             $table->foreign('tipoID')->references('id')->on('tipo_servicio');
 

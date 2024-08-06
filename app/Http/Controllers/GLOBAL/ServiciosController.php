@@ -84,6 +84,7 @@ class ServiciosController extends Controller
                         'servicioID' => $servicio['servicioID'],
                         'habitacionReservaID' => $habitacionReserva->id,
                         'cantidad' => $servicio['cantidad'],
+                        'fecha' => now()->toDateString(), // Fecha en formato YYYY-mm-dd
                         'status' => 1, 
                         'created_at' => now(),
                         'updated_at' => now()
@@ -208,6 +209,5 @@ class ServiciosController extends Controller
                 ], 500
             );
         }
-    }
-    
+    }    
 }

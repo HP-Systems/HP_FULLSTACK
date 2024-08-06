@@ -6,6 +6,7 @@ use App\Http\Controllers\AppController;
 use App\Http\Controllers\DESKTOP\DeskController;
 use App\Http\Controllers\DESKTOP\HuespedController;
 use App\Http\Controllers\DESKTOP\ReservasController as DesktopReservasController;
+use App\Http\Controllers\DESKTOP\ServiciosController as DesktopServiciosController;
 use App\Http\Controllers\MOVIL\HotelController;
 use App\Http\Controllers\MOVIL\MovilController;
 use App\Http\Controllers\MOVIL\ReservasController;
@@ -86,6 +87,7 @@ Route::prefix('desk')->group(function () {
 
     Route::put('/guestUpdate/{id}', [HuespedController::class, 'editar']);
     Route::get('/reservas/{fecha1?}/{fecha2?}', [DesktopReservasController::class, 'traerReservas']);
+    Route::get('/servicios/{fecha1?}/{fecha2?}', [DesktopServiciosController::class, 'obtenerServiciosSolicitados']);
     Route::get('/reservas', [DesktopReservasController::class, 'traerReservas']);
     Route::post('/reservas/create', [DesktopReservasController::class, 'createReserva']);
 });
