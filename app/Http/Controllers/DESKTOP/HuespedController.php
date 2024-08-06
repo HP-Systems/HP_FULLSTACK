@@ -66,7 +66,7 @@ class HuespedController extends Controller
             if($huesped == null)
             {
                 return response()->json([
-                    'message' => 'No se encontró el huesped',
+                    'message' => 'No se encontró el huesped favor de enviar el id del huesped',
                 ], 404);
             }
           
