@@ -239,7 +239,7 @@ class PersonalController extends Controller
                 return response()->json(
                     [
                         'status' => 404,
-                        'msg' => 'Personal no encontrado',
+                        'msg' => 'Personal no encontrado envia el id del usuario ',
                     ]
                 );
             }
