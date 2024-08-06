@@ -81,10 +81,18 @@ class MovilController extends Controller
                 if ($user->status == true) {
                     $token = $user->createToken('login')->plainTextToken;
                     $user->save();
-
+                    $huesped= Huesped::where('id', $user->userable_id)->first();
+                    $userData = [
+                        'id_huesped' => $huesped->id,
+                        'id_user' => $user->id,
+                        'nombre' => $huesped->nombre,
+                        'apellido' => $huesped->apellido,
+                        'telefono' => $huesped->telefono,
+                        'email' => $user->email,
+                    ];
                     return response()->json([
                         'message' => 'Login successful',
-                        'user' => $user,
+                        'user' => $userData,
                         'token' => $token,
                     ], 201);
                                        
