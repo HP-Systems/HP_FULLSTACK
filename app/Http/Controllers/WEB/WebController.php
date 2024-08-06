@@ -99,7 +99,7 @@ class WebController extends Controller
             $user->codigo = $hashed_admin_code;
             $user->save();
             // Enviar al el correo electrónico
-            //SendActivationURL::dispatch($url, $user, $admin_code);
+            SendActivationURL::dispatch($url, $user, $admin_code);
 
             return redirect($url)->with('message', 'Por favor, revise su correo para confirmar su cuenta.');
 
