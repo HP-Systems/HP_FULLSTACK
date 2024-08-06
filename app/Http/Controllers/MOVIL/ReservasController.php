@@ -30,6 +30,7 @@ class ReservasController extends Controller
 
             $reservas = Reserva::with('habitaciones')
                     ->where('huespedID', $idUser)
+                    ->where('status', '!=', 0)
                     // Reservas en proceso
                     ->where(function($query) use ($hoy) {
                         $query->where('fecha_entrada', '<=', $hoy)
@@ -76,6 +77,7 @@ class ReservasController extends Controller
 
             $reservas = Reserva::with('habitaciones')
                     ->where('huespedID', $idUser)
+                    ->where('status', '!=', 0)
                     // Reservas futuras
                     ->where(function($query) use ($hoy) {
                         $query->where('fecha_entrada', '>=', $hoy);
@@ -121,6 +123,7 @@ class ReservasController extends Controller
 
             $reservas = Reserva::with('habitaciones')
                     ->where('huespedID', $idUser)
+                    ->where('status', '!=', 0)
                     // Reservas pasadas
                     ->where(function($query) use ($hoy) {
                         $query->where('fecha_salida', '<', $hoy);
@@ -206,6 +209,7 @@ class ReservasController extends Controller
                 ->keyBy('tipoID');
     
             $habitacionesNuevas = collect($request->habitaciones)->keyBy('tipoID');
+
     
             $habitacionesIguales = [];
             $habitacionesAgregar = [];

@@ -67,7 +67,7 @@ Route::prefix('v1/movil')->group(function () {
     Route::get('/reservas/proceso/{iduser}', [ReservasController::class, 'obtenerReservasProceso']);
     Route::get('/reservas/futuras/{iduser}', [ReservasController::class, 'obtenerReservasFuturas']);
     Route::get('/reservas/historial/{iduser}', [ReservasController::class, 'obtenerReservasPasadasHuesped']);
-    Route::put('/reservas/editHabitaciones/{idreserva}', [ReservasController::class, 'editarReservaHabitaciones']);
+    Route::post('/reservas/editHabitaciones/{idreserva}', [ReservasController::class, 'editarReservaHabitaciones']);
 });
 
 //version 1 Huespedes

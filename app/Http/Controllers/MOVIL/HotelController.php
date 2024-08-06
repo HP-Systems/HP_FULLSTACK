@@ -11,106 +11,95 @@ use Illuminate\Support\Facades\Log;
 
 class HotelController extends Controller
 {
-    public function hotelIndex(Request $request)
-    {
+    public function hotelIndex(Request $request){
         try{
             $hotel = Hotel::first();
             return response()->json($hotel, 200);
             
-        }catch(\Exception $e){
+        } catch(\Exception $e){
             Log::error($e->getMessage());
-        }
-        catch (\PDOException $e) {
+        } catch (\PDOException $e) {
             Log::error($e->getMessage());
         }
     }
-    public function habitaciones()
-    {
+
+    public function habitaciones(){
         try {
-        $habitaciones = Habitacion::with('tipoHabitacion')->get();
-        $habitaciones->map(function ($habitacion) {
-            $habitacion->tipo = $habitacion->tipoHabitacion->tipo;
-            $habitacion->capacidad = $habitacion->tipoHabitacion->capacidad;
-            $habitacion->precio_noche = $habitacion->tipoHabitacion->precio_noche;
-            $habitacion->descripcion = $habitacion->tipoHabitacion->descripcion;
-            unset($habitacion->tipoHabitacion);
-            return $habitacion;
-        });
-        return response()->json(
-            [
+            $habitaciones = Habitacion::with(['tipoHabitacion' => function ($query) {
+                $query->where('status', 1);
+            }])
+            ->where('status', 1)
+            ->get();
+
+            $habitaciones->map(function ($habitacion) {
+                $habitacion->tipo = $habitacion->tipoHabitacion->tipo;
+                $habitacion->capacidad = $habitacion->tipoHabitacion->capacidad;
+                $habitacion->imagen = $habitacion->tipoHabitacion->imagen;
+                $habitacion->precio_noche = $habitacion->tipoHabitacion->precio_noche;
+                $habitacion->descripcion = $habitacion->tipoHabitacion->descripcion;
+                unset($habitacion->tipoHabitacion);
+                return $habitacion;
+            });
+
+            return response()->json([
                 'data'=>$habitaciones,
                 'msg' => 'Habitaciones obtenidas con éxito',
                 'status' => 200,
-                ]
-        );
-    }
-    catch (\Exception $e) {
-        Log::error($e->getMessage());
-        return response()->json(
-            [
+                ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return response()->json([
                 'msg' => 'Hubo un error al obtener las habitaciones',
                 'status' => 500,
-                ]
-        );
-    }
-    catch (\PDOException $e) {
-        Log::error($e->getMessage());
-        return response()->json(
-            [
+            ]);
+        } catch (\PDOException $e) {
+            Log::error($e->getMessage());
+
+            return response()->json([
                 'msg' => 'Hubo un error al obtener las habitaciones',
                 'status' => 500,
-                ]
-        );
-    }
-    catch (\Illuminate\Database\QueryException $e) {
-        Log::error($e->getMessage());
-        return response()->json(
-            [
+            ]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::error($e->getMessage());
+
+            return response()->json([
                 'msg' => 'Hubo un error al obtener las habitaciones',
                 'status' => 500,
-                ]
-        );
+            ]);
+        }
     }
-        
-    }
-    public function tipoHabitaciones()
-    {
+
+    public function tipoHabitaciones(){
         try {
-        $tipoHabitaciones = TipoHabitacion::all();
-        return response()->json(
-            [
+            $tipoHabitaciones = TipoHabitacion::where('status', 1)->get();
+
+            return response()->json([
                 'data'=>$tipoHabitaciones,
                 'msg' => 'Tipos de habitaciones obtenidos con éxito',
                 'status' => 200,
-                ]
-        );
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return response()->json([
+                'msg' => 'Hubo un error al obtener los tipos de habitaciones',
+                'status' => 500,
+            ]);
+        } catch (\PDOException $e) {
+            Log::error($e->getMessage());
+
+            return response()->json([
+                'msg' => 'Hubo un error al obtener los tipos de habitaciones',
+                'status' => 500,
+            ]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::error($e->getMessage());
+            
+            return response()->json([
+                'msg' => 'Hubo un error al obtener los tipos de habitaciones',
+                'status' => 500,
+            ]);
+        }
     }
-catch (\Exception $e) {
-    Log::error($e->getMessage());
-    return response()->json(
-        [
-            'msg' => 'Hubo un error al obtener los tipos de habitaciones',
-            'status' => 500,
-            ]
-    );
-}
-catch (\PDOException $e) {
-    Log::error($e->getMessage());
-    return response()->json(
-        [
-            'msg' => 'Hubo un error al obtener los tipos de habitaciones',
-            'status' => 500,
-            ]
-    );
-}
-catch (\Illuminate\Database\QueryException $e) {
-    Log::error($e->getMessage());
-    return response()->json(
-        [
-            'msg' => 'Hubo un error al obtener los tipos de habitaciones',
-            'status' => 500,
-            ]
-        );
-    }
-}
 }
