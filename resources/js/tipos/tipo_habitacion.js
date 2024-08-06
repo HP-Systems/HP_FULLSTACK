@@ -5,12 +5,13 @@ document.addEventListener('DOMContentLoaded', function () {
     dibujarTable();
     renderPagination();
 
-    var serviceModal = document.getElementById('tipoModal');
-    serviceModal.addEventListener('show.bs.modal', function (event) {
+    var tipoModal = document.getElementById('tipoModal');
+    tipoModal.addEventListener('show.bs.modal', function (event) {
         setFieldError('tipo_habitacion', tipo_habitacion, '');
         setFieldError('descripcion', descripcion, '');
         setFieldError('precio', precio, '');
         setFieldError('capacidad', capacidad, '');
+        setFieldError('imgForm', imgForm, '');
 
         var button = event.relatedTarget;
         var id = button.getAttribute('data-id');
@@ -19,20 +20,23 @@ document.addEventListener('DOMContentLoaded', function () {
         var precio = button.getAttribute('data-precio');
         var capacidad = button.getAttribute('data-capacidad');
 
-        var modalTitle = serviceModal.querySelector('.modal-title');
+        var modalTitle = tipoModal.querySelector('.modal-title');
+
+        console.log(id);
 
         modalTitle.textContent = id ? 'Editar tipo de habitación' : 'Crear nuevo tipo de habitación';
-        serviceModal.querySelector('#tipoId').value = id ? id : '';
-        serviceModal.querySelector('#tipo_habitacion').value = tipo_habitacion ? tipo_habitacion : '';
-        serviceModal.querySelector('#descripcion').value = descripcion ? descripcion : '';
-        serviceModal.querySelector('#precio').value = precio ? precio : '';
-        serviceModal.querySelector('#capacidad').value = capacidad ? capacidad : '';
+        tipoModal.querySelector('#tipoId').value = id ? id : '';
+        tipoModal.querySelector('#tipo_habitacion').value = tipo_habitacion ? tipo_habitacion : '';
+        tipoModal.querySelector('#descripcion').value = descripcion ? descripcion : '';
+        tipoModal.querySelector('#precio').value = precio ? precio : '';
+        tipoModal.querySelector('#capacidad').value = capacidad ? capacidad : '';
+        tipoModal.querySelector('#imgForm').value = '';
+        tipoModal.querySelector('#tipoModalForm').action = id ? editTiposHabitacionesRoute : insertTiposHabitacionesRoute;
 
-        serviceModal.querySelector('#tipoModalForm').action = id ? editTiposHabitacionesRoute : insertTiposHabitacionesRoute;
 
         var confirmButton = document.getElementById('btnModalTipo');
         confirmButton.onclick = function () {
-            save();
+            save(id);
         };
     });
 
@@ -70,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
         var img = document.getElementById('img');
         var imgElement = imagenModal.querySelector('#img');
 
-        console.log(imagenUrl);
 
         if(imagenUrl == 'null'  ){
             img.style.display = 'none';
@@ -183,8 +186,6 @@ function subirFoto(){
         data: formData,
         success: function(response) {
             swal.close();
-
-            console.log(response);
 
             /*if (response['msg']) {
                 swal({
@@ -300,8 +301,6 @@ function changeStatus(serviceId, newStatus) {
         success: function(response) {
             swal.close();
 
-            console.log(response);
-
             if (response['msg']) {
                 if(newStatus == 0){
                     swal({
@@ -340,20 +339,32 @@ function changeStatus(serviceId, newStatus) {
     });
 }
 
-function validateForm() {
+function validateForm(id) {
     var isValid = true;
 
     var tipo_habitacion = document.getElementById('tipo_habitacion').value.trim();
     var descripcion = document.getElementById('descripcion').value.trim();
     var precio = document.getElementById('precio').value.trim();
     var capacidad = document.getElementById('capacidad').value.trim();
+    var imgForm = document.getElementById('imgForm').value.trim();
 
     setFieldError('tipo_habitacion', tipo_habitacion, 'Por favor complete este campo');
     setFieldError('descripcion', descripcion, 'Por favor complete este campo');
     setFieldError('precio', precio, 'Por favor complete este campo');
     setFieldError('capacidad', capacidad, 'Por favor complete este campo');
 
-    isValid = tipo_habitacion && descripcion && precio && capacidad;
+    
+    if(id == '' || id== null){
+        if(imgForm == ''){
+            document.getElementById('imgForm-error').innerText = 'Por favor seleccione una imagen';
+        } else{
+            document.getElementById('imgForm-error').innerText = '';
+        }
+    
+        isValid = tipo_habitacion && descripcion && precio && capacidad && imgForm;
+    } else{
+        isValid = tipo_habitacion && descripcion && precio && capacidad;
+    }
 
     return isValid;
 }
@@ -363,10 +374,12 @@ function setFieldError(fieldId, value, errorMessage) {
     document.getElementById(errorElementId).innerText = value ? '' : errorMessage;
 }
 
-function save() {
-    if (!validateForm()) {
+function save(id) {
+    if (!validateForm(id)) {
         return;
     }
+
+    console.log(id);
 
     swal({
         text: "Cargando...",
@@ -377,10 +390,20 @@ function save() {
 
     $('#saveButton').prop('disabled', true);
 
+    var form = document.getElementById('tipoModalForm');
+    var formData = new FormData(form);
+
+
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+
     jQuery.ajax({
         type: 'POST',
         url: $('#tipoModalForm').attr('action'),
-        data: jQuery('#tipoModalForm').serialize(),
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function(response) {
             swal.close();
 

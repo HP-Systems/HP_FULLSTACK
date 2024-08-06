@@ -13,7 +13,7 @@ use App\Models\HabitacionReserva;
 
 class ReservasController extends Controller
 {
-    public function obtenerReservasHuesped($idUser){
+    public function obtenerReservasProceso($idUser){
         try{
             if (!is_numeric($idUser) || (int)$idUser <= 0) {
                 return response()->json(
@@ -35,10 +35,7 @@ class ReservasController extends Controller
                         $query->where('fecha_entrada', '<=', $hoy)
                               ->where('fecha_salida', '>=', $hoy);
                     })
-                    // Reservas futuras
-                    ->orWhere(function($query) use ($hoy) {
-                        $query->where('fecha_entrada', '>=', $hoy);
-                    })
+                    ->orderBy('fecha_entrada', 'asc')
                     ->get();
 
             return response()->json(
@@ -50,7 +47,52 @@ class ReservasController extends Controller
                 ], 200
             );
         } catch (\Exception $e) {
-            Log::error('Exception during obtenerReservaHuesped: ' . $e->getMessage());
+            Log::error('Exception during obtenerReservasProceso: ' . $e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor.',
+                    'error' => $e->getMessage(),
+                ], 500
+            );
+        }
+    }
+
+    public function obtenerReservasFuturas($idUser){
+        try{
+            if (!is_numeric($idUser) || (int)$idUser <= 0) {
+                return response()->json(
+                    [
+                        'status' => 400,
+                        'data' => [],
+                        'msg' => 'El ID proporcionado no es válido.',
+                        'error' => ['El ID debe ser un número entero positivo.']
+                    ], 400
+                );
+            }
+
+            $hoy = Carbon::today()->toDateString();
+
+            $reservas = Reserva::with('habitaciones')
+                    ->where('huespedID', $idUser)
+                    // Reservas futuras
+                    ->where(function($query) use ($hoy) {
+                        $query->where('fecha_entrada', '>=', $hoy);
+                    })
+                    ->orderBy('fecha_entrada', 'asc')
+                    ->get();
+
+            return response()->json(
+                [
+                    'status' => 200,
+                    'data' => $reservas,
+                    'msg' => 'Reservas obtenidas con éxito.',
+                    'error' => []
+                ], 200
+            );
+        } catch (\Exception $e) {
+            Log::error('Exception during obtenerReservasFuturas: ' . $e->getMessage());
             return response()->json(
                 [
                     'status' => 500,

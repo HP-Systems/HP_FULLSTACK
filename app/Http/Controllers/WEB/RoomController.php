@@ -246,6 +246,13 @@ class RoomController extends Controller
     
     public function insertTipoHabitacion(Request $request){
         try{
+            $messages = [
+                'imgForm.required' => 'Por favor, seleccione una imagen para subir.',
+                'imgForm.image' => 'El archivo seleccionado debe ser una imagen.',
+                'imgForm.mimes' => 'La imagen debe ser de tipo jpeg, png, jpg o gif.',
+                'imgForm.max' => 'La imagen no debe superar los 2MB.',
+            ];
+
             $validation = Validator::make(
                 $request->all(), 
                 [
@@ -253,7 +260,8 @@ class RoomController extends Controller
                     'descripcion' => 'required',
                     'precio' => 'required',
                     'capacidad' => 'required',
-                ]
+                    'imgForm' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                ], $messages
             );
 
             if ($validation->fails()) {
@@ -266,6 +274,28 @@ class RoomController extends Controller
                 'precio_noche' => $request->precio,
                 'capacidad' => $request->capacidad
             ]);
+            
+            $id = $tipo_habitacion->id;
+
+            $imagen = $request->file('imgForm');
+            $nombreImagen = time() . '.' . $imagen->getClientOriginalExtension();
+            $destino = public_path("/images/tipo_habitacion/{$id}");
+
+            // Crear el directorio si no existe
+            if (!file_exists($destino)) {
+                mkdir($destino, 0755, true);
+            }
+
+            // Eliminar imagen existente si hay una
+            if ($tipo_habitacion->imagen && file_exists(public_path($tipo_habitacion->imagen))) {
+                unlink(public_path($tipo_habitacion->imagen));
+            }
+
+            // Mover la nueva imagen
+            $imagen->move($destino, $nombreImagen);
+
+            $tipo_habitacion->imagen = "images/tipo_habitacion/{$id}/{$nombreImagen}";
+            $tipo_habitacion->save();
 
             return response()->json(['msg' => 'El tipo de habitacion ha sido creado correctamente.'], 200);
         } catch (\Exception $e) {
@@ -295,6 +325,29 @@ class RoomController extends Controller
             $tipo_habitacion->descripcion = $request->descripcion;
             $tipo_habitacion->precio_noche = $request->precio;
             $tipo_habitacion->capacidad = $request->capacidad;
+
+            $id = $request->id;
+            if ($request->hasFile('imgForm')) {
+                $imagen = $request->file('imgForm');
+                $nombreImagen = time() . '.' . $imagen->getClientOriginalExtension();
+                $destino = public_path("/images/tipo_habitacion/{$id}");
+
+                // Crear el directorio si no existe
+                if (!file_exists($destino)) {
+                    mkdir($destino, 0755, true);
+                }
+
+                // Eliminar imagen existente si hay una
+                if ($tipo_habitacion->imagen && file_exists(public_path($tipo_habitacion->imagen))) {
+                    unlink(public_path($tipo_habitacion->imagen));
+                }
+
+                // Mover la nueva imagen
+                $imagen->move($destino, $nombreImagen);
+
+                $tipo_habitacion->imagen = "images/tipo_habitacion/{$id}/{$nombreImagen}";
+            }
+
             $tipo_habitacion->save();
 
             return response()->json(['edit' => 'El tipo de habitación ha sido editado correctamente.'], 200);
@@ -335,11 +388,19 @@ class RoomController extends Controller
 
     public function actualizarImagen(Request $request){
         try {
+            $messages = [
+                'imagen.required' => 'Por favor, seleccione una imagen para subir.',
+                'imagen.image' => 'El archivo seleccionado debe ser una imagen.',
+                'imagen.mimes' => 'La imagen debe ser de tipo jpeg, png, jpg o gif.',
+                'imagen.max' => 'La imagen no debe superar los 2MB.',
+            ];
+    
             $validation = Validator::make(
                 $request->all(),
                 [
                     'imagen' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                ]
+                ],
+                $messages
             );
 
             if ($validation->fails()) {
@@ -371,7 +432,6 @@ class RoomController extends Controller
             } else {
                 return back()->with(['error' => 'No se pudo subir la imagen'], 500);
             }
-
         } catch (\Exception $e) {
             Log::error('Exception during actualizarImagenTipoHabitacion: ' . $e->getMessage());
             return back()->with(['error' => 'Error al subir la imagen.'], 500);

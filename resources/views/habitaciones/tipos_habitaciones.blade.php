@@ -42,7 +42,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="tipoModalForm" action="" method="POST">
+                    <form id="tipoModalForm" action="" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" id="tipoId" name="id">
                         <div class="mb-3">
@@ -72,6 +72,11 @@
                                     <input type="number" min="1" class="form-control border-thick" id="capacidad" name="capacidad" required>
                                     <div id="capacidad-error" class="text-danger"></div>
                                 </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="imgForm" class="form-label" style="font-weight: 500">Selecciona la imagen</label>
+                                <input type="file" class="form-control border-thick" name="imgForm" id="imgForm" autocomplete="off" accept="image/*" required>
+                                <div id="imgForm-error" class="text-danger"></div>
                             </div>
                         </div>
                     </form>
@@ -117,7 +122,7 @@
                         <input type="hidden" id="imagenID" name="id">
                         <div class="mb-3">
                             <label for="imagen" class="form-label" style="font-weight: 500">Selecciona la imagen</label>
-                            <input type="file" class="form-control" name="imagen" id="imagen" autocomplete="off" required>
+                            <input type="file" class="form-control border-thick" name="imagen" id="imagen" autocomplete="off" accept="image/*" required>
                         </div>
                         <div class="form-group row justify-content-center" id="contenedorImg">
                             <img class="card-img-top" id="img" alt="Imagen tipo habitación" style="max-width: 100%; height: auto;">
@@ -131,7 +136,6 @@
         </div>
     </div>
 
-
     <script>
         const tiposData = @json($tipos);
         const csrfToken = '{{ csrf_token() }}';
@@ -142,17 +146,22 @@
     </script>
     @vite('resources/js/tipos/tipo_habitacion.js')
 
-
     @if (session('error'))
+        @php
+            $error = session('error');
+            if (is_array($error)) {
+                $error = $error[0];
+            }
+        @endphp
         <script>
             swal({
                 title: "Error!",
-                text: "{{ session('error') }}",
+                text: "{{ $error }}",
                 icon: "error",
             });
-            
         </script>
     @endif
+
     @if(session('msg'))
         <script>
         swal({
