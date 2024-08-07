@@ -102,7 +102,7 @@ class ServiciosController extends Controller
                 }
             }
     
-            AccessEvent::dispatch("Servicios insertados en la reserva $reservaID");
+            AccessEvent::dispatch("Servicios insertados en la reserva");
             return response()->json(
                 [
                     'status' => 200,
