@@ -53,10 +53,6 @@
                             <i class='fas fa-clipboard nav_icon'></i> 
                             <span class="nav_name">Tipos Habitaciones</span> 
                         </a>
-                        <a href="#" class="nav_link sub" style="text-decoration: none;"> 
-                            <i class='fas fa-clipboard nav_icon'></i> 
-                            <span class="nav_name">Reporte 3</span> 
-                        </a>
                     </div>
                     <a href="{{ route('servicios') }}" class="nav_link {{ request()->routeIs('servicios') ? 'active' : '' }}" style="text-decoration: none;"> 
                         <i class='fas fa-clipboard-list nav_icon' style="font-size: 25px; padding-right: 12px"></i> 
