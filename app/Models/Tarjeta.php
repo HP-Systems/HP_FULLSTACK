@@ -12,6 +12,7 @@ class Tarjeta extends Model
     protected $table = 'tarjetas'; 
 
     protected $fillable = [
+        'numero',
         'tipoID',
         'status',
     ];

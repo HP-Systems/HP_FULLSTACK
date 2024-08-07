@@ -8,6 +8,7 @@ use App\Http\Controllers\DESKTOP\HuespedController;
 use App\Http\Controllers\DESKTOP\PersonalController;
 use App\Http\Controllers\DESKTOP\ReservasController as DesktopReservasController;
 use App\Http\Controllers\DESKTOP\ServiciosController as DesktopServiciosController;
+use App\Http\Controllers\DESKTOP\TarjetasController as DesktopTarjetasController;
 use App\Http\Controllers\MOVIL\HotelController;
 use App\Http\Controllers\MOVIL\MovilController;
 use App\Http\Controllers\MOVIL\ReservasController;
@@ -42,18 +43,18 @@ Route::prefix('movil')->group(function () {
     Route::post('/login', [MovilController::class, 'login']); 
 });
 
-//Version 1 global
+//Version 1 global 
 Route::prefix('v1')->group(function () {
     Route::post('/habitaciones/disponibles', [HabitacionesController::class, 'habitacionesDisponibles']);
     Route::put('/reservas/delete/{idreserva}', [GlobalReservasController::class, 'cancelarReserva']);
     Route::post('/reservas/create', [GlobalReservasController::class, 'createReserva']);
     Route::get('/reservas/detalle/{idreserva}', [GlobalReservasController::class, 'detalleReserva']);
-    
+
     Route::get('/services', [ServiciosController::class, 'index']);
     Route::post('/services/solicitar', [ServiciosController::class, 'insertarServiciosReserva']);
     Route::get('/services/historial/{idreserva}', [ServiciosController::class, 'obtenerServiciosReserva']);
-    Route::post('/tipoServicio/create', [ServiciosController::class, 'crearTipoServicio']);
     Route::post('/servicio/create', [ServiciosController::class, 'crearServicio']);
+    Route::post('/tipoServicio/create', [ServiciosController::class, 'crearTipoServicio']);
 
     Route::post('/nfc/create',[TarjetasController::class, 'crearTarjeta']);
     Route::get('/nfc/index',[TarjetasController::class, 'indexTarjeta']);
@@ -96,6 +97,11 @@ Route::prefix('desk')->group(function () {
     Route::post('/personal/create', [PersonalController::class, 'crearPersonal']);
     Route::put('/personal/edit/{id}', [PersonalController::class, 'editarPersonal']);
     Route::delete('/personal/delete/{id}', [PersonalController::class, 'desactivarPersonal']);
+
+    Route::get('/tarjetas', [DesktopTarjetasController::class, 'traerTarjetas']);
+    Route::post('/tarjetas/create', [DesktopTarjetasController::class, 'crearTarjeta']);
+    Route::put('/tarjetas/edit/{id}', [DesktopTarjetasController::class, 'editTarjeta']);
+    Route::post('/tarjetas/status/{id}', [DesktopTarjetasController::class, 'cambiarStatus']);
 });
 
 //WEB ROUTES
