@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\GLOBAL;
 
-use App\Events\AccessEvent; 
+use App\Events\accessEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -102,7 +102,7 @@ class ServiciosController extends Controller
                 }
             }
     
-            AccessEvent::dispatch("Servicios insertados en la reserva");
+            accessEvent::dispatch("Servicios insertados en la reserva $reservaID");
             return response()->json(
                 [
                     'status' => 200,
