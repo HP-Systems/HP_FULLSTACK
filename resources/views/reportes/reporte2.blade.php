@@ -48,9 +48,9 @@
                     <td>{{$habitacion->Numero_Habitacion}}</td>
                     <td>{{$habitacion->Fecha_Entrada}}</td>
                     <td>{{$habitacion->Fecha_Salida}}</td>
-                    <td>{{$habitacion->Total_Alojamiento}}</td>
-                    <td>{{$habitacion->Total_Servicios}}</td>
-                    <td>{{$habitacion->Total_General}}</td>
+                    <td>${{$habitacion->Total_Alojamiento}}</td>
+                    <td>${{$habitacion->Total_Servicios}}</td>
+                    <td>${{$habitacion->Total_General}}</td>
 
                 </tr>
                 @endforeach

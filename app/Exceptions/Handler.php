@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Throwable;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -52,7 +53,14 @@ class Handler extends ExceptionHandler
         if ($exception instanceof InvalidSignatureException) {
             return redirect('/');
         }
-
+        
+    if ($exception instanceof AuthenticationException) {
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return response()->json(["error" => 30001, "message" => "authenticate failed"], 401);
+        } else {
+            return redirect()->guest(route('login'));
+        }
+    }
         return parent::render($request, $exception);
     }
 }
