@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\nfcEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
@@ -129,4 +130,9 @@ Route::post('/users/insert', [UsersController::class, 'insertPersonal'])->name('
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [DeskController::class, 'logout']);
+});
+
+Route::post('/prueba', function () {
+    event(new nfcEvent('Hola mundo',2));
+    return response()->json(['message' => 'Event has been sent!']);
 });

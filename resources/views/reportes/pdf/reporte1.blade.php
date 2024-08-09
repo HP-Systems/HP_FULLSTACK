@@ -187,9 +187,9 @@
                     <tr>
                         <td colspan="2" class="text-center font-weight-bold"></td>
                         <td class="text-left font-weight-bold"><b>Total</b></td>
-                        <td class="text-left font-weight-bold"><b>${{$alojamiento}}</b></td>
-                        <td class="text-left font-weight-bold"><b>${{$servicios}}</b></td>
-                        <td class="text-left font-weight-bold"><b>${{$total}}</b></td>
+                        <td class="text-left font-weight-bold"><b>{{$alojamiento}}</b></td>
+                        <td class="text-left font-weight-bold"><b>{{$servicios}}</b></td>
+                        <td class="text-left font-weight-bold"><b>{{$total}}</b></td>
 
                     </tr>
                 </tbody>

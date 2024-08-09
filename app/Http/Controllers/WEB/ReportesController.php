@@ -99,9 +99,9 @@ class ReportesController extends Controller
             // Llama al procedimiento almacenado
             $ventas = DB::select('CALL GenerarReporteVentasPorMes(?, ?)', [$fechaInicio->toDateString(), $fechaFin]);
 
-            $total = collect($ventas)->sum('Total_General');
-            $alojamiento = collect($ventas)->sum('Total_Alojamiento');
-            $servicios = collect($ventas)->sum('Total_Servicios');
+            $total = '$' . number_format(collect($ventas)->sum('Total_General'), 2, '.', ',');
+            $alojamiento = '$' . number_format(collect($ventas)->sum('Total_Alojamiento'), 2, '.', ',');
+            $servicios = '$' . number_format(collect($ventas)->sum('Total_Servicios'), 2, '.', ',');
             $logoPath = public_path('images/logo.jpg');
 
             $data = [
@@ -218,27 +218,26 @@ class ReportesController extends Controller
             $tiposHabitaciones = DB::select('CALL GenerarReporteTipoHabitacionMes(?, ?)', [$fechaInicio->toDateString(), $fechaFin]);
 
 
-            $tiposHabitacionesCollection = collect
-            ($tiposHabitaciones);
+            $tiposHabitacionesCollection = collect($tiposHabitaciones);
 
             $agrupadoPorTipo = $tiposHabitacionesCollection->groupBy('Tipo_Habitacion');
 
             foreach ($agrupadoPorTipo as $key => $value) {
                 $items = [];
-                $totalGeneral = $value->sum('Total_General');
-                $totalAlojamiento = $value->sum('Total_Alojamiento');
-                $totalServicios = $value->sum('Total_Servicios');
+                $totalGeneral = '$' . number_format($value->sum('Total_General'), 2, '.', ',');
+                $totalAlojamiento = '$' . number_format($value->sum('Total_Alojamiento'), 2, '.', ',');
+                $totalServicios = '$' . number_format($value->sum('Total_Servicios'), 2, '.', ',');
                 foreach ($value as $item) {
                     $items[] = $item;
                 }
                 $agrupadoPorTipoConTotales[$key] = [
-                    'items'=>$items,
+                    'items' => $items,
                     'total' => $totalGeneral,
                     'alojamiento' => $totalAlojamiento,
                     'servicios' => $totalServicios
                 ];
             }
-           
+
 
             $logoPath = public_path('images/logo.jpg');
 
@@ -248,8 +247,8 @@ class ReportesController extends Controller
                 'fechaFin' => $fechaFinFormateada,
                 'logo' => $logoPath,
             ];
-           
-            $pdf = PDF::loadView('reportes.pdf.reporte2',$data );
+
+            $pdf = PDF::loadView('reportes.pdf.reporte2', $data);
             // Agregar pie de página
             $pdf->setOption('footer-center', 'Derechos Reservados &copy; ' . date('Y'));
             return $pdf->download('reporte_tipo_habitacion.pdf');

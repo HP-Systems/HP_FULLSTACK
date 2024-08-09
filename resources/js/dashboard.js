@@ -87,44 +87,72 @@ async function DatosVentasMes() {
     }
 }
 async function GraficoVentasMes() {
-    try{
-    const datos = await DatosVentasMes();
+    try {
+        const datos = await DatosVentasMes();
 
-    const labels = datos.map(item => item.mes);
-    const totales = datos.map(item => item.total);
-    const data = {
-        labels: labels,
-        datasets: [{
-            label: 'Ingreso por Mes',
-            data: totales,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            fill: false,
-            backgroundColor: 'rgb(75, 192, 192)',
-            borderColor: [
-                'rgb(118, 171, 174)',
-                'rgb(255, 99, 132)',
-                'rgb(255, 159, 64)',
-                'rgb(255, 205, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(54, 162, 235)',
-                'rgb(153, 102, 255)',
-                'rgb(201, 203, 207)'
-              ],
-              borderWidth: 1
+        const labels = datos.map(item => item.mes);
+        const totales = datos.map(item => item.total);
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Ingreso por Mes',
+                data: totales,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: false,
+                backgroundColor: 'rgb(75, 192, 192)',
+                borderColor: [
+                    'rgb(118, 171, 174)',
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(201, 203, 207)'
+                ],
+                borderWidth: 1
             }]
+        };
 
-    };
+        const options = {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value);
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(context.raw);
+                            return label;
+                        }
+                    }
+                }
+            }
+        };
 
-    const config = {
-        type: 'line',
-        data: data,
-      };
-    new Chart(document.getElementById('myChart2'), config);
+        // Aquí puedes continuar con la configuración del gráfico, por ejemplo:
+        const ctx = document.getElementById('myChart2').getContext('2d');
+        new Chart(ctx, {
+            type: 'line', // o 'line', 'pie', etc.
+            data: data,
+            options: options
+        });
+
     } catch (error) {
-        console.error('Error al obtener los datos');
-        return [];
+        console.error('Error al obtener los datos de ventas:', error);
     }
-
 }
 
 //Usuarios 
@@ -201,47 +229,72 @@ async function DatosIngresosTipoHabitacion() {
         return [];
     }
 }
+let myChart4; // Variable para almacenar la instancia del gráfico
+
 async function GraficoIngresosTipoHabitacion() {
-    try{
-const datos = await DatosIngresosTipoHabitacion();
-const labels = datos.map(item => item.nombre);
-const totales = datos.map(item => item.total);
-const data = {
-    labels: labels,
-    datasets: [{
-        label: 'Ingresos por Tipo de Habitacion en el Año',
-        data: totales,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        fill: false,
-        backgroundColor: ['rgb(118, 171, 174)',
-                'rgb(255, 99, 132)',
-                'rgb(255, 159, 64)',
-                'rgb(255, 205, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(54, 162, 235)',
-                'rgb(153, 102, 255)',
-                'rgb(201, 203, 207)'],
-        borderColor: [
-            'rgb(118, 171, 174)',
-            'rgb(255, 99, 132)',
-            'rgb(255, 159, 64)',
-            'rgb(255, 205, 86)',
-            'rgb(75, 192, 100)',
-            'rgb(54, 162, 235)',
-            'rgb(153, 102, 255)',
-            'rgb(201, 203, 207)'
-          ],
-          borderWidth: 1
-        }]
+    try {
+        const datos = await DatosIngresosTipoHabitacion();
+        const labels = datos.map(item => item.nombre);
+        const totales = datos.map(item => item.total);
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Ingresos por Tipo de Habitacion en el Año',
+                data: totales,
+                backgroundColor: [
+                    'rgb(118, 171, 174)',
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(10, 203, 207)'
+                ],
+                borderColor: [
+                    'rgb(118, 171, 174)',
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 100)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(10, 203, 207)'
+                ],
+                borderWidth: 1
+            }]
+        };
+        const config = {
+            type: 'pie',
+            data: data,
+            options: {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(context.raw);
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        };
 
-};
-const config = {
-    type:'pie',
-    data: data,
+        // Destruir el gráfico existente si ya existe
+        if (myChart4) {
+            myChart4.destroy();
+        }
 
-};
-new Chart(document.getElementById('myChart4'), config);
-    }catch (error) {
+        // Crear el nuevo gráfico
+        const ctx = document.getElementById('myChart4').getContext('2d');
+        myChart4 = new Chart(ctx, config);
+
+    } catch (error) {
         console.error('Error al obtener los datos');
         return [];
     }

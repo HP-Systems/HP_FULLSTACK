@@ -1,9 +1,14 @@
 $(document).ready(function() {
-    $('.verification-code').keyup(function(e) {
+    $('.verification-code').on('input', function(e) {
+        // Convertir a mayúsculas
+        this.value = this.value.toUpperCase();
+
+        // Mover al siguiente campo si se alcanza la longitud máxima
         if (this.value.length == this.maxLength) {
             $(this).next('.verification-code').focus();
         }
-        
+
+        // Actualizar el valor del código de verificación completo
         let verificationCode = '';
         $('.verification-code').each(function() {
             verificationCode += $(this).val();
@@ -21,5 +26,20 @@ $(document).ready(function() {
                 }
             }
         }
+    }).on('paste', function(e) {
+        e.preventDefault();
+        let pasteData = (e.originalEvent || e).clipboardData.getData('text/plain').toUpperCase();
+        let fields = $('.verification-code');
+        for (let i = 0; i < fields.length; i++) {
+            fields[i].value = pasteData[i] || '';
+        }
+        fields.eq(pasteData.length).focus();
+
+        // Actualizar el valor del código de verificación completo
+        let verificationCode = '';
+        $('.verification-code').each(function() {
+            verificationCode += $(this).val();
+        });
+        $('#verification_code').val(verificationCode);
     });
 });

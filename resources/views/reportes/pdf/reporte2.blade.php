@@ -186,18 +186,18 @@
                     <td>{{$habitacion->Numero_Habitacion}}</td>
                     <td>{{$habitacion->Fecha_Entrada}}</td>
                     <td>{{$habitacion->Fecha_Salida}}</td>
-                    <td>{{$habitacion->Total_Alojamiento}}</td>
-                    <td>{{$habitacion->Total_Servicios}}</td>
-                    <td>{{$habitacion->Total_General}}</td>
+                    <td>${{$habitacion->Total_Alojamiento}}</td>
+                    <td>${{$habitacion->Total_Servicios}}</td>
+                    <td>${{$habitacion->Total_General}}</td>
                     
                 </tr>
                 @endforeach
                 <tr>
                     <td colspan="4" class="text-center font-weight-bold"></td>
                     <td class="text-left font-weight-bold"><b>Total</b></td>
-                    <td class="text-left">{{$habitaciones["alojamiento"]}}</td>
-                    <td class="text-left ">{{$habitaciones["servicios"]}}</td>
-                    <td class="text-right">{{$habitaciones["total"]}}</td>
+                    <td class="text-left font-weight-bold">{{$habitaciones["alojamiento"]}}</td>
+                    <td class="text-left font-weight-bold ">{{$habitaciones["servicios"]}}</td>
+                    <td class="text-right font-weight-bold">{{$habitaciones["total"]}}</td>
 
                 </tr>
                 </tbody>
