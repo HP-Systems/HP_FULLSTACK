@@ -14,16 +14,17 @@ class RoomController extends Controller
 {
     public function index()
     {
-        $habitaciones = Habitacion::with('tipoHabitacion')->get();
+        $habitaciones = Habitacion::with('tipoHabitacion')->orderBy('numero', 'asc')->get();
         $habitaciones->map(function ($habitacion) {
             $habitacion->tipo = $habitacion->tipoHabitacion->tipo;
             $habitacion->capacidad = $habitacion->tipoHabitacion->capacidad;
             $habitacion->precio_noche = $habitacion->tipoHabitacion->precio_noche;
             $habitacion->descripcion = $habitacion->tipoHabitacion->descripcion;
+            $habitacion->imagen = $habitacion->tipoHabitacion->imagen;
             unset($habitacion->tipoHabitacion);
             return $habitacion;
         });
-        $tipoHabitaciones = TipoHabitacion::all();
+        $tipoHabitaciones = TipoHabitacion::all()->where('status', 1);
         return view('habitaciones.habitaciones', ['habitaciones' => $habitaciones, 'tipoHabitaciones' => $tipoHabitaciones]);
     }
 
@@ -113,13 +114,11 @@ class RoomController extends Controller
                 'required' => 'El campo :attribute es obligatorio',
                 'string' => 'El campo :attribute debe ser un texto',
                 'numeric' => 'El campo :attribute debe ser un número',
-                'imagen' => 'El campo :attribute debe ser una imagen',
                 'numero.unique' => 'El número de habitación ya esta en uso',
             ];
             $validator = Validator::make($request->all(), [
                 'numero' => 'required|numeric|unique:habitaciones,numero',
                 'tipoID' => 'required|numeric',
-                'imagen' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ], $messages);
 
             if ($validator->fails()) {
@@ -128,20 +127,14 @@ class RoomController extends Controller
             if (!TipoHabitacion::find($request->tipoID)) {
                 return back()->with('error', 'Tipo de habitación no encontrado');
             }
-            if ($request->hasFile('imagen')) {
-                $imagen = $request->file('imagen');
-                $nombreImagen = time() . '.' . $imagen->getClientOriginalExtension();
-                $destino = public_path('/images');
-                $imagen->move($destino, $nombreImagen);
+           
                 $habitacion = new Habitacion();
                 $habitacion->numero = $request->numero;
                 $habitacion->tipoID = $request->tipoID;
                 $habitacion->status = $request->status;
-                $habitacion->imagen = $nombreImagen;
+                $habitacion->imagen = 'images/default.jpg';
                 $habitacion->save();
-                return back()->with('success', 'Habitación actualizada con éxito');
-            }
-            return back ()->withErrors($validator)->withInput();
+                return back()->with('success', 'Habitación creada con éxito');
            
         } catch (ValidationException $e) {
             Log::error($e->getMessage());
@@ -163,14 +156,12 @@ class RoomController extends Controller
                 'required' => 'El campo :attribute es obligatorio',
                 'string' => 'El campo :attribute debe ser un texto',
                 'numeric' => 'El campo :attribute debe ser un número',
-                'imagen' => 'El campo :attribute debe ser una imagen',
                 'status' => 'El campo :attribute debe ser un booleano',
                 'numero.unique' => 'El número de habitación ya esta en uso',
             ];
             $validator = Validator::make($request->all(), [
                 'numero' => 'required|numeric|unique:habitaciones,numero,' . $id . ',id',
                 'tipoID' => 'required|numeric',
-                'imagen' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'status' => 'required|boolean',
 
             ], $messages);
@@ -182,20 +173,6 @@ class RoomController extends Controller
                 $validator->errors()->add('tipoID', 'Tipo de habitación no encontrado');
                 return back()->withErrors($validator)->withInput();
             }
-            if ($request->hasFile('imagen')) {
-                $imagen = $request->file('imagen');
-                $nombreImagen = time() . '.' . $imagen->getClientOriginalExtension();
-                $destino = public_path('/images');
-                $imagen->move($destino, $nombreImagen);
-
-                $habitacion->numero = $request->numero;
-                $habitacion->tipoID = $request->tipoID;
-                $habitacion->status = $request->status;
-                $habitacion->imagen = $nombreImagen;
-                $habitacion->save();
-                return back()->with('success', 'Habitación actualizada con éxito');
-            }
-
             //si no se selecciona una imagen guardamos la imagen que ya tenia 
             $habitacion->numero = $request->numero;
             $habitacion->tipoID = $request->tipoID;
