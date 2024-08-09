@@ -30,11 +30,12 @@ class TarjetasController extends Controller
         $validation = Validator::make(
             $request->all(),
             [
-                "numero" => "required",
+                "numero" => "required|unique:tarjetas,numero",
                 "tipoID" => "required",
             ],
             [
                 'numero.required' => 'El campo :attribute es obligatorio.',
+                'numero.unique' => 'La tarjeta ya se encuentra registrada.',
                 'tipoID.required' => 'El campo :attribute es obligatorio.',
             ]  
         );
