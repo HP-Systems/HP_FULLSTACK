@@ -36,26 +36,26 @@ class HuespedController extends Controller
                 ]
             );
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => 'Hubo un error al obtener los huespedes..',
                 $e->getMessage(),
             ], 500);
-            Log::error($e->getMessage());
         }
         catch (\PDOException $e) {
+            //el error se puede ver en el log de laravel
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => 'Hubo um problema al obtener los huespedes',
             ], 500);
-            //el error se puede ver en el log de laravel
-            Log::error($e->getMessage());
         }
         catch (\Illuminate\Database\QueryException $e) {
+            //el error se puede ver en el log de laravel
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => 'Hubo um problema al obtener los huespedes.',
         
             ], 500);
-            //el error se puede ver en el log de laravel
-            Log::error($e->getMessage());
         }
     }
     public function editar( Request $request, $id)
@@ -91,31 +91,27 @@ class HuespedController extends Controller
                 'status' => 200,
             ]);
 
-        }catch(\Exception $e)
-        {
+        } catch(\Exception $e){
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => 'Hubo un error al actualizar el huesped.',
                 $e->getMessage(),
             ], 500);
+        } catch (\PDOException $e){
+            //el error se puede ver en el log de laravel
             Log::error($e->getMessage());
-        }
-        catch (\PDOException $e) {
             return response()->json([
                 'message' => 'Hubo um problema al actualizar el huesped',
         
             ], 500);
+        } catch (\Illuminate\Database\QueryException $e){
             //el error se puede ver en el log de laravel
             Log::error($e->getMessage());
-        }
-        catch (\Illuminate\Database\QueryException $e) {
             return response()->json([
                 'message' => 'Hubo um problema al actualizar el huesped.',
         
             ], 500);
-            //el error se puede ver en el log de laravel
-            Log::error($e->getMessage());
         }
-        
     }
 
     /*public function editarContra(Request $request){
