@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Tarjeta;
+use App\Models\TipoTarjeta;
 
 class TarjetasController extends Controller
 {
@@ -179,6 +180,30 @@ class TarjetasController extends Controller
                     'msg' => 'Tarjeta no encontrada.',
                     'error' => []
                 ], 400
+            );
+        }
+    }
+
+    public function obtenerTiposTarjetas(){
+        try{
+            $tiposTarjetas = TipoTarjeta::all();
+
+            return response()->json(
+                [
+                    'status' => 200,
+                    'data' => $tiposTarjetas,
+                    'msg' => 'Tipos de tarjetas obtenidas correctamente',
+                    'error' => []
+                ], 200
+            );
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor',
+                    'error' => $e->getMessage(),
+                ], 500
             );
         }
     }

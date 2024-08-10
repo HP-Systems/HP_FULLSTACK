@@ -59,6 +59,7 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/nfc/create',[TarjetasController::class, 'crearTarjeta']);
     Route::get('/nfc/index',[TarjetasController::class, 'indexTarjeta']);
+    Route::post('/nfc/validate',[TarjetasController::class, 'validarTarjeta']);
 
 });
 
@@ -103,6 +104,7 @@ Route::prefix('desk')->group(function () {
     Route::post('/tarjetas/create', [DesktopTarjetasController::class, 'crearTarjeta']);
     Route::put('/tarjetas/edit/{id}', [DesktopTarjetasController::class, 'editTarjeta']);
     Route::post('/tarjetas/status/{id}', [DesktopTarjetasController::class, 'cambiarStatus']);
+    Route::get('/tarjetas/tipos', [DesktopTarjetasController::class, 'obtenerTiposTarjetas']);
 });
 
 //WEB ROUTES
@@ -127,7 +129,6 @@ Route::prefix('web')->group(function () {
 
 
 Route::post('/users/insert', [UsersController::class, 'insertPersonal'])->name('personal.crear');
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [DeskController::class, 'logout']);
 });

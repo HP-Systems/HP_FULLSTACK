@@ -5,62 +5,215 @@ namespace App\Http\Controllers\GLOBAL;
 use App\Http\Controllers\Controller;
 use App\Models\Tarjeta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon; 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TarjetasController extends Controller
 {
-    public function crearTarjeta(Request $request)
-    {
+    public function crearTarjeta(Request $request){
         try{
-        // Validar los datos de entrada
-        $validatedData = $request->validate([
-            'data.id' => 'required',
-            'data.tipoID' => 'required|integer',
-        ]);
-        // Verificar si la tarjeta ya existe
-        $tarjeta = Tarjeta::where('id', $validatedData['data']['id'])->first();
-        if ($tarjeta) {
+            // Validar los datos de entrada
+            $validatedData = $request->validate([
+                'data.id' => 'required',
+                'data.tipoID' => 'required|integer',
+            ]);
+            // Verificar si la tarjeta ya existe
+            $tarjeta = Tarjeta::where('id', $validatedData['data']['id'])->first();
+            if ($tarjeta) {
+                return response()->json([
+                    'status' => 400,
+                    'data' => [],
+                    'msg' => 'La tarjeta ya existe.'
+                ], 400);
+            }
+
+
+            // Crear la tarjeta en la base de datos
+            $tarjeta = Tarjeta::create([
+                'id' => $validatedData['data']['id'],
+                'tipoID' => $validatedData['data']['tipoID'],
+                'status' => 1,
+            ]);
+
             return response()->json([
-                'status' => 400,
-                'data' => [],
-                'msg' => 'La tarjeta ya existe.'
-            ], 400);
+                'status' => 200,
+                'data' => $tarjeta,
+                'msg' => 'Tarjeta creada con éxito.'
+            ]);
         }
-
-
-        // Crear la tarjeta en la base de datos
-        $tarjeta = Tarjeta::create([
-            'id' => $validatedData['data']['id'],
-            'tipoID' => $validatedData['data']['tipoID'],
-            'status' => 1,
-        ]);
-
-        return response()->json([
-            'status' => 200,
-            'data' => $tarjeta,
-            'msg' => 'Tarjeta creada con éxito.'
-        ]);
-    }
-    catch (\Exception $e) {
-        return response()->json([
-            'status' => 500,
-            'data' => [],
-            'msg' => 'Hubo un error al crear la tarjeta.',
-            'error' => $e->getMessage()
-        ], 500);
+        catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'data' => [],
+                'msg' => 'Hubo un error al crear la tarjeta.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
-    }
-    public function indexTarjeta()
-    {
-        
-       
+    public function indexTarjeta(){
         $tarjetas = Tarjeta::with('tipoTarjeta', 'reservas', 'limpiezas')->get();
         return response()->json([
             'status' => 200,
             'data' => $tarjetas,
             'msg' => 'Tarjetas obtenidas con éxito.'
         ]);
+    }
+
+    public function validarTarjeta(Request $request){
+        try{
+            $validation = Validator::make(
+                $request->all(),
+                [
+                    "tarjeta" => "required",
+                    "habitacionID" => "required",
+                ]
+            );
+
+            if ($validation->fails()) {
+                return response()->json(
+                    [
+                        'status' => 400,
+                        'data' => [],
+                        'msg' => 'Todos los campos son necesarios y deben cumplir con el formato adecuado.',
+                        'error' => $validation->errors()
+                    ], 400
+                );
+            }
+
+            $numeroTarjeta = $request->tarjeta;
+            $habitacionId = $request->habitacionID;
+            $fechaActual = Carbon::today()->toDateString();
+
+            $infoTarjeta = DB::table('tarjetas as t')
+                ->join('tipo_tarjeta as tt', 'tt.id', '=', 't.tipoID')
+                ->select('t.id', 't.numero as UID', 'tt.tipo', 't.status')
+                ->where('t.numero', $numeroTarjeta)
+                ->first();
+
+            if (!$infoTarjeta) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => false,
+                    'msg' => 'Tarjeta no encontrada.'
+                ]);
+            }
+
+            $statusTarjeta = $infoTarjeta->status;
+            $tipoTarjeta = $infoTarjeta->tipo;
+
+            //validar si la tarjeta esta activa
+            if ($statusTarjeta == 0) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => false,
+                    'msg' => 'Tarjeta desactivada.'
+                ]);
+            }
+
+            //si la tarjeta es administrativa se le pemrite la entrada
+            if($tipoTarjeta == 'Administrativa'){
+                return response()->json([
+                    'status' => 200,
+                    'data' => true,
+                    'msg' => 'Un administrador ha entrado a la habitación.'
+                ]);
+            }
+
+            //consultar si la tarjeta tiene pemriso de ingresar o no
+            $consulta1 = DB::table('reservas as r')
+                ->join('habitaciones_reservas as hr', 'hr.reservaID', '=', 'r.id')
+                ->join('habitaciones as h', 'h.id', '=', 'hr.habitacionID')
+                ->join('tipo_habitacion as th', 'th.id', '=', 'h.tipoID')
+                ->join('tarjetas_reservas as tr', 'tr.reservaID', '=', 'r.id')
+                ->join('tarjetas as t', 't.id', '=', 'tr.tarjetaID')
+                ->join('tipo_tarjeta as tt', 'tt.id', '=', 't.tipoID')
+                ->select(
+                    'r.fecha_entrada',
+                    'r.fecha_salida',
+                    'hr.habitacionID',
+                    'h.numero',
+                    'th.tipo',
+                    'tr.tarjetaID',
+                    't.numero as UID',
+                    'tt.tipo'
+                )
+                ->whereRaw('? BETWEEN r.fecha_entrada AND r.fecha_salida', [$fechaActual])
+                ->where('r.status', 1)
+                ->where('t.numero', $numeroTarjeta)
+                ->where('h.id', $habitacionId)
+                ->where('t.status', 1);
+
+            $consulta2 = DB::table('reservas as r')
+                ->join('habitaciones_reservas as hr', 'hr.reservaID', '=', 'r.id')
+                ->join('habitaciones as h', 'h.id', '=', 'hr.habitacionID')
+                ->join('tipo_habitacion as th', 'th.id', '=', 'h.tipoID')
+                ->join('limpiezas as l', 'l.habitacion_reservaID', '=', 'hr.id')
+                ->join('tarjetas as t', 't.id', '=', 'l.tarjetaID')
+                ->join('tipo_tarjeta as tt', 'tt.id', '=', 't.tipoID')
+                ->select(
+                    'r.fecha_entrada',
+                    'r.fecha_salida',
+                    'hr.habitacionID',
+                    'h.numero',
+                    'th.tipo',
+                    'l.tarjetaID',
+                    't.numero as UID',
+                    'tt.tipo'
+                )
+                ->whereRaw('? BETWEEN r.fecha_entrada AND r.fecha_salida', [$fechaActual])
+                ->where('r.status', 1)
+                ->where('l.status', 1)
+                ->whereDate('l.fecha', $fechaActual)
+                ->where('t.numero', $numeroTarjeta)
+                ->where('h.id', $habitacionId);
+
+            $resultados = $consulta1->union($consulta2)->get();
+
+            // validar si hay resultados de la consulta
+            if($resultados->isNotEmpty()){
+                if($tipoTarjeta == 'Huesped'){
+                    //Si la tarjeta es huesped y hay resultados de la consulta, entonces se le permite la entrada
+                    return response()->json([
+                        'status' => 200,
+                        'data' => true,
+                        'msg' => 'Un huesped ha entrado a la habitación.'
+                    ]);
+                } else if($tipoTarjeta == 'Limpieza'){
+                    //Si la tarjeta es de limpieza y hay resultados de la consulta, entonces se le permite la entrada
+                    return response()->json([
+                        'status' => 200,
+                        'data' => true,
+                        'msg' => 'Un personal de limpieza ha entrado a la habitación.'
+                    ]);
+                }
+            } else{
+                //si no hay resultados entinces no se le permite la entrada
+                if($tipoTarjeta == 'Huesped'){
+                    return response()->json([
+                        'status' => 200,
+                        'data' => false,
+                        'msg' => 'Un huesped ha intentado entrar a la habitación.'
+                    ]);
+                } else if($tipoTarjeta == 'Limpieza'){
+                    return response()->json([
+                        'status' => 200,
+                        'data' => false,
+                        'msg' => 'Un personal de limpieza ha intentado entrar a la habitación.'
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception during validarTarjeta: ' . $e->getMessage());
+            return response()->json([
+                'status' => 500,
+                'data' => [],
+                'msg' => 'Hubo un error al validar la tarjeta.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
 
     }
 }
