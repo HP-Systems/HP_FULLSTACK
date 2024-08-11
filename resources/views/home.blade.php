@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title', 'Hotel Project')</title>
     <link rel="icon" href="{{ asset('images/logo.jpg') }}" type="image/jpg">
@@ -12,6 +13,7 @@
     @vite('resources/css/sidebar.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
     @vite('resources/css/custom.css')
+
 </head>
 <body id="body-pd" style="background-color: #EEEEEE">
     <header class="header" id="header">

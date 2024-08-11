@@ -4,7 +4,6 @@
 @section('title', 'Servicios - Hotel Project')
 
 @section('content')
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <div class="height-100 p-4" style="background-color: #EEEEEE !important; margin-top: 5%!important;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h4>Gestión de Servicios</h4>
