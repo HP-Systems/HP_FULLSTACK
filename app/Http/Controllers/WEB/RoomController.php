@@ -115,9 +115,10 @@ class RoomController extends Controller
                 'string' => 'El campo :attribute debe ser un texto',
                 'numeric' => 'El campo :attribute debe ser un número',
                 'numero.unique' => 'El número de habitación ya esta en uso',
+                'max' => 'El campo :attribute no debe superar los :max caracteres',
             ];
             $validator = Validator::make($request->all(), [
-                'numero' => 'required|numeric|unique:habitaciones,numero',
+                'numero' => 'required|numeric|unique:habitaciones,numero|max:5',
                 'tipoID' => 'required|numeric',
             ], $messages);
 
