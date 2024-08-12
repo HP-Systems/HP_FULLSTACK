@@ -179,7 +179,8 @@ class ServiciosController extends Controller
                     ->join('servicios as s', 'sr.servicioID', '=', 's.id')
                     ->join('tipo_servicio as ts', 's.tipoID', '=', 'ts.id')
                     ->where('sr.habitacionReservaID', $habitacionReserva->habitacionReservaID)
-                    ->select('s.nombre as servicioNombre', 'sr.cantidad', 'ts.tipo')
+                    ->where('sr.status', '!=', 0)
+                    ->select('s.nombre as servicioNombre', 'sr.cantidad', 'ts.tipo', 'sr.status')
                     ->get();
     
                 // Agregar la información de la habitación y sus servicios a la respuesta

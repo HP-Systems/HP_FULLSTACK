@@ -90,9 +90,10 @@ Route::prefix('desk')->group(function () {
     //Route::post('/editContra', [HuespedController::class, 'editarContra']);
 
     Route::put('/guestUpdate/{id}', [HuespedController::class, 'editar']);
-    Route::get('/reservas/{fecha1?}/{fecha2?}', [DesktopReservasController::class, 'traerReservas']);
-    Route::get('/servicios/solicitados', [DesktopServiciosController::class, 'serviciosSolicitados']);
+
     Route::get('/reservas', [DesktopReservasController::class, 'traerReservas']);
+    Route::get('/reservas/checkin/{id}', [DesktopReservasController::class, 'checkIn']);
+    Route::get('/reservas/checkout/{id}', [DesktopReservasController::class, 'checkOut']);
     Route::post('/reservas/create', [DesktopReservasController::class, 'createReserva']);
 
     Route::get('/personal/index', [PersonalController::class, 'obtenerPersonal']);
@@ -105,6 +106,12 @@ Route::prefix('desk')->group(function () {
     Route::put('/tarjetas/edit/{id}', [DesktopTarjetasController::class, 'editTarjeta']);
     Route::post('/tarjetas/status/{id}', [DesktopTarjetasController::class, 'cambiarStatus']);
     Route::get('/tarjetas/tipos', [DesktopTarjetasController::class, 'obtenerTiposTarjetas']);
+
+    
+    Route::get('/reservas/{fecha1?}/{fecha2?}', [DesktopReservasController::class, 'traerReservas']);
+    Route::get('/servicios/solicitados', [DesktopServiciosController::class, 'serviciosSolicitados']);
+    Route::get('/servicios/completar/{id}', [DesktopServiciosController::class, 'completarServicio']);
+
 });
 
 //WEB ROUTES

@@ -22,7 +22,7 @@ class ReservasController extends Controller
 {
     public function traerReservas($fecha1 = null, $fecha2 = null){
         try{
-            $fechaActual = Carbon::today()->toDateString();
+            $fechaActual = Carbon::now('America/Monterrey')->toDateString();
 
             if (is_null($fecha1) && is_null($fecha2)) {
                 $fecha1 = $fechaActual;
@@ -245,6 +245,86 @@ class ReservasController extends Controller
                 ], 200
             );
         } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor.',
+                    'error' => $e->getMessage(),
+                ], 500
+            );
+        }
+    }
+
+    public static function checkIn($id){
+        try{
+            $horaActualMonterrey = Carbon::now('America/Monterrey')->format('H:i:s');
+
+            $reserva = Reserva::find($id);
+            $reserva->hora_entrada = $horaActualMonterrey;
+
+            if($reserva->save()){
+                return response()->json(
+                    [
+                        'status' => 200,
+                        'data' => $reserva,
+                        'msg' => 'Check-in realizado con éxito.',
+                        'error' => []
+                    ], 200
+                );
+            } else{
+                return response()->json(
+                    [
+                        'status' => 400,
+                        'data' => [],
+                        'msg' => 'Error al realizar el check-in.',
+                        'error' => []
+                    ], 400
+                );
+
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception during check-in reserva: ' . $e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor.',
+                    'error' => $e->getMessage(),
+                ], 500
+            );
+        }
+    }
+
+    public static function checkOut($id){
+        try{
+            $horaActualMonterrey = Carbon::now('America/Monterrey')->format('H:i:s');
+
+            $reserva = Reserva::find($id);
+            $reserva->hora_salida = $horaActualMonterrey;
+
+            if($reserva->save()){
+                return response()->json(
+                    [
+                        'status' => 200,
+                        'data' => $reserva,
+                        'msg' => 'Check-in realizado con éxito.',
+                        'error' => []
+                    ], 200
+                );
+            } else{
+                return response()->json(
+                    [
+                        'status' => 400,
+                        'data' => [],
+                        'msg' => 'Error al realizar el check-in.',
+                        'error' => []
+                    ], 400
+                );
+
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception during check-in reserva: ' . $e->getMessage());
             return response()->json(
                 [
                     'status' => 500,

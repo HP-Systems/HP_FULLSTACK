@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon; 
+use App\Models\ServicioReserva;
 
 class ServiciosController extends Controller
 {    
-    public static function serviciosSolicitados(){
+    public function serviciosSolicitados(){
         try{
             $resultados = DB::table('servicios_reservas as sr')
                 ->join('servicios as s', 's.id', '=', 'sr.servicioID')
@@ -43,7 +44,40 @@ class ServiciosController extends Controller
                 'error' => []
             ], 200);
         } catch (\Exception $e) {
-            Log::error('Exception during service retrieval: ' . $e->getMessage());
+            Log::error('Exception during servicios solicitados: ' . $e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor',
+                    'error' => $e->getMessage(),
+                ], 500
+            );
+        }
+    }
+
+    public function completarServicio($id){
+        try{
+            $servicio = ServicioReserva::findOrFail($id);
+            $servicio->status = 2;
+            
+            if($servicio->save()){
+                return response()->json([
+                    'status' => 200,
+                    'data' => [],
+                    'msg' => 'Servicio completado correctamente',
+                    'error' => []
+                ], 200);
+            } else{
+                return response()->json([
+                    'status' => 400,
+                    'data' => [],
+                    'msg' => 'Error al completar el servicio',
+                    'error' => []
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception during servicios solicitados: ' . $e->getMessage());
             return response()->json(
                 [
                     'status' => 500,
