@@ -10,6 +10,7 @@ use App\Http\Controllers\DESKTOP\PersonalController;
 use App\Http\Controllers\DESKTOP\ReservasController as DesktopReservasController;
 use App\Http\Controllers\DESKTOP\ServiciosController as DesktopServiciosController;
 use App\Http\Controllers\DESKTOP\TarjetasController as DesktopTarjetasController;
+use App\Http\Controllers\DESKTOP\LimpiezasController;
 use App\Http\Controllers\MOVIL\HotelController;
 use App\Http\Controllers\MOVIL\MovilController;
 use App\Http\Controllers\MOVIL\ReservasController;
@@ -108,10 +109,11 @@ Route::prefix('desk')->group(function () {
     Route::get('/tarjetas/tipos', [DesktopTarjetasController::class, 'obtenerTiposTarjetas']);
     Route::post('/tarjetas/asignarReserva/{id}', [DesktopTarjetasController::class, 'asignarTarjetaReserva']);
 
-    
     Route::get('/reservas/{fecha1?}/{fecha2?}', [DesktopReservasController::class, 'traerReservas']);
     Route::get('/servicios/solicitados', [DesktopServiciosController::class, 'serviciosSolicitados']);
     Route::get('/servicios/completar/{id}', [DesktopServiciosController::class, 'completarServicio']);
+
+    Route::get('/limpiezas/habitaciones', [LimpiezasController::class, 'habitacionesLimpieza']);
 
 });
 
