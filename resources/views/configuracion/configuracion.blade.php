@@ -1,20 +1,19 @@
-
 @extends('../home')
 @section('title', 'Configuracion - Hotel Project')
 @section('content')
 <div class="height-100 p-5" style="background-color: #EEEEEE">
-    <!-- Contenido específico de la vista de usuarios -->
-    <h4>Configuracion del Sistema</h4>
+  <!-- Contenido específico de la vista de usuarios -->
+  <h4>Configuracion del Sistema</h4>
 
   <div class="bg-white rounded-lg shadow-md p-4">
-  @if(isset($hotel->id))
-  <form method="POST" action="{{ route('updateHotel', ['id' => $hotel->id]) }}">
-    @csrf
-    @method('PUT')
+    @if(isset($hotel->id))
+    <form method="POST" action="{{ route('updateHotel', ['id' => $hotel->id]) }}">
+      @csrf
+      @method('PUT')
 
       <div class="mb-4">
         <label for="nombre" class="block font-medium mb-1 ">
-          Nombre 
+          Nombre
         </label>
         <br>
         <input
@@ -23,13 +22,11 @@
           type="text"
           placeholder="Enter hotel name"
           required=""
-          value="{{ $hotel->nombre ?? '' }}"
-          
-        />
+          value="{{ $hotel->nombre ?? '' }}" />
       </div>
       <div class="mb-4">
         <label for="direccion" class="block font-medium mb-1">
-        Direccion
+          Direccion
         </label>
         <br>
         <input
@@ -38,8 +35,7 @@
           placeholder="Enter hotel address"
           required=""
           type="text"
-          value="{{ $hotel->direccion ?? '' }}"
-        />
+          value="{{ $hotel->direccion ?? '' }}" />
       </div>
       <div class="mb-4">
         <label for="email" class="block font-medium mb-1">
@@ -53,12 +49,11 @@
           autocomplete="email"
           placeholder="Enter hotel email"
           required=""
-          value="{{ $hotel->email ?? '' }}"
-        />
+          value="{{ $hotel->email ?? '' }}" />
       </div>
       <div class="mb-4">
         <label for="telefono" class="block font-medium mb-1">
-        Telefono
+          Telefono
         </label>
         <br>
         <input
@@ -68,7 +63,9 @@
           placeholder="Enter hotel phone number"
           required=""
           value="{{ $hotel->telefono ?? '' }}"
-        />
+          pattern="[0-9]{10}"
+          maxlength="10"
+          oninput="validateNumberInput(this)" />
       </div>
       <div class="mb-4 grid grid-cols-2 gap-4">
         <div>
@@ -81,9 +78,8 @@
             type="time"
             step="3600"
             required=" "
-            value="{{ isset($hotel->checkin) ? (new Carbon\Carbon($hotel->checkin))->format('H:i') : '' }}"
-          />
-        
+            value="{{ isset($hotel->checkin) ? (new Carbon\Carbon($hotel->checkin))->format('H:i') : '' }}" />
+
           <label for="checkout" class="block font-medium mb-1">
             Check-out
           </label>
@@ -93,13 +89,12 @@
             type="time"
             step="3600"
             required=""
-            value="{{ isset($hotel->checkout) ? (new Carbon\Carbon($hotel->checkout))->format('H:i') : '' }}"
-          />
+            value="{{ isset($hotel->checkout) ? (new Carbon\Carbon($hotel->checkout))->format('H:i') : '' }}" />
         </div>
       </div>
       <div class="mb-4">
         <label for="descripcion" class="block font-medium mb-1">
-        Descripcion
+          Descripcion
         </label>
         <br>
         <textarea
@@ -107,41 +102,54 @@
           name="descripcion"
           placeholder="Enter hotel description"
           required=""
-          rows="4"
-          
-        >{{ $hotel->descripcion ?? '' }}</textarea>
+          rows="4">{{ $hotel->descripcion ?? '' }}</textarea>
       </div>
-      <button type="submit" class="guardar">Guardar</button>
-      
+      <button type="submit" class="guardar" onclick="showLoadingAlert()">Guardar</button>
+
     </form>
     @else
     <p>Hotel no especificado.</p>
-   @endif
+    @endif
   </div>
-  
+
   @vite('resources/css/info.css')
   @vite('resources/js/app.js')
+  <script>
+    function showLoadingAlert() {
+      swal({
+        text: "Cargando...",
+        button: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+      });
+    }
+  </script>
   @if ($errors->any())
   <script>
-            swal({
-                title: "Error!",
-                text: "{{ $errors->first() }}",
-                icon: "error",
-            });
-        </script>
-    @endif
+    swal({
+      title: "Error!",
+      text: "{{ $errors->first() }}",
+      icon: "error",
+    });
+  </script>
+  @endif
 
-    @if(session('success'))
-        <script>
-           swal({
-                title: "¡Éxito!",
-                text: "{{ session('success') }}",
-                icon: "success",
-            });
-        </script>
-    @endif
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  @if(session('success'))
+  <script>
+    swal({
+      title: "¡Éxito!",
+      text: "{{ session('success') }}",
+      icon: "success",
+    });
+  </script>
+  @endif
+  <script>
+    function validateNumberInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, '');
+    }
+  </script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    
+
 </div>
 @endsection

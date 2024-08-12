@@ -33,11 +33,11 @@ class dashboardController extends Controller
 
             return response()->json($servicios);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error('Error al obtener los servicios: ' . $e->getMessage());
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
+            Log::error('Error al obtener los servicios: ' . $e->getMessage());
         } catch (\PDOException $e) {
-            Log::error($e->getMessage());
+            Log::error('Error al obtener los servicios: ' . $e->getMessage());
         }
     }
 
@@ -74,11 +74,11 @@ class dashboardController extends Controller
 
             return response()->json($resultados);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error('Error al obtener los servicios: ' . $e->getMessage());
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
+            Log::error('Error al obtener los servicios: ' . $e->getMessage());
         } catch (\PDOException $e) {
-            Log::error($e->getMessage());
+            Log::error('Error al obtener los servicios: ' . $e->getMessage());
         }
     }
 
@@ -114,11 +114,11 @@ class dashboardController extends Controller
 
             return response()->json($usuarios);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error('Error al obtener los servicios: ' . $e->getMessage());
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
+            Log::error('Error al obtener los servicios: ' . $e->getMessage());
         } catch (\PDOException $e) {
-            Log::error($e->getMessage());
+            Log::error('Error al obtener los servicios: ' . $e->getMessage());
         }
     }
 
@@ -143,11 +143,11 @@ class dashboardController extends Controller
         return response()->json($ingresos);
     }
     catch (\Exception $e) {
-        Log::error($e->getMessage());
+        Log::error('Error al obtener los servicios: ' . $e->getMessage());
     } catch (\Throwable $e) {
-        Log::error($e->getMessage());
+        Log::error('Error al obtener los servicios: ' . $e->getMessage());
     } catch (\PDOException $e) {
-        Log::error($e->getMessage());
+        Log::error('Error al obtener los servicios: ' . $e->getMessage());
     }
     }
 }

@@ -33,8 +33,10 @@ class ReportesController extends Controller
             return view('reportes.reporte1', $data);
         } catch (\Exception $e) {
             Log::error('Error al generar el reporte de ventas por mes: ' . $e->getMessage());
+            return back()->withErrors('Error al cargar el reporte de ventas por mes');
         } catch (PDOException $e) {
             Log::error('Error al generar el reporte de ventas por mes: ' . $e->getMessage());
+            return back()->withErrors('Error al cargar el reporte de ventas por mes');
         }
     }
     public function ventasPorMesFiltrar(Request $request)
@@ -64,8 +66,10 @@ class ReportesController extends Controller
             return view('reportes.reporte1', ['ventas' => $ventas, 'fecha_inicio' => $fechaInicio, 'fecha_fin' => $fechaFin]);
         } catch (\Exception $e) {
             Log::error('Error al generar el reporte de ventas por mes: ' . $e->getMessage());
+            return back()->withErrors('error', 'Error al filtrar el reporte de ventas por mes');
         } catch (PDOException $e) {
             Log::error('Error al generar el reporte de ventas por mes: ' . $e->getMessage());
+            return back()->withErrors('error', 'Error al filtrar el reporte de ventas por mes');
         }
     }
 
@@ -124,8 +128,10 @@ class ReportesController extends Controller
             return $pdf->download('reporte_ventas_por_mes.pdf');
         } catch (\Exception $e) {
             Log::error('Error al generar el reporte de ventas por mes: ' . $e->getMessage());
+            return back()->withErrors('error', 'Error al generar al generar pdf de ventas por mes');
         } catch (PDOException $e) {
             Log::error('Error al generar el reporte de ventas por mes: ' . $e->getMessage());
+            return back()->withErrors('error', 'Error al generar al generar pdf de ventas por mes');
         }
     }
     public function tipoHabitacion()
@@ -146,8 +152,10 @@ class ReportesController extends Controller
             return view('reportes.reporte2', ['tiposHabitaciones' => $agrupadoPorTipoArray, 'fecha_inicio' => $fechaInicio, 'fecha_fin' => $fechaFin]);
         } catch (\Exception $e) {
             Log::error('Error al generar el reporte de tipo de habitaciones: ' . $e->getMessage());
+            return back()->withErrors('error', 'Error al cargar el reporte de tipo de habitaciones');
         } catch (PDOException $e) {
             Log::error('Error al generar el reporte de tipo de habitaciones: ' . $e->getMessage());
+            return back()->withErrors('error', 'Error al cargar el reporte de tipo de habitaciones');
         }
     }
 
@@ -184,8 +192,10 @@ class ReportesController extends Controller
             return view('reportes.reporte2', ['tiposHabitaciones' => $agrupadoPorTipoArray, 'fecha_inicio' => $fechaInicio, 'fecha_fin' => $fechaFin]);
         } catch (\Exception $e) {
             Log::error('Error al generar el reporte de tipo de habitaciones: ' . $e->getMessage());
+            return back()->withErrors('error', 'Error al filtrar el reporte de tipo de habitaciones');
         } catch (PDOException $e) {
             Log::error('Error al generar el reporte de tipo de habitaciones: ' . $e->getMessage());
+            return back()->withErrors('error', 'Error al filtrar el reporte de tipo de habitaciones');
         }
     }
     public function pdfTipoHabitacion(Request $request)
@@ -254,8 +264,10 @@ class ReportesController extends Controller
             return $pdf->download('reporte_tipo_habitacion.pdf');
         } catch (\Exception $e) {
             Log::error('Error al generar el reporte de tipo de habitaciones: ' . $e->getMessage());
+            return back()->withErrors('error', 'Error al generar al generar pdf de tipo de habitaciones');
         } catch (PDOException $e) {
             Log::error('Error al generar el reporte de tipo de habitaciones: ' . $e->getMessage());
+            return back()->withErrors('error', 'Error al generar al generar pdf de tipo de habitaciones');
         }
     }
 }
