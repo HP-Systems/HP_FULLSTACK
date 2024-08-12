@@ -1,10 +1,6 @@
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 @extends('../home')
-
-
 @section('title', 'Configuracion - Hotel Project')
-
 @section('content')
 <div class="height-100 p-5" style="background-color: #EEEEEE">
     <!-- Contenido específico de la vista de usuarios -->
@@ -54,6 +50,7 @@
           id="email"
           name="email"
           type="email"
+          autocomplete="email"
           placeholder="Enter hotel email"
           required=""
           value="{{ $hotel->email ?? '' }}"
@@ -143,6 +140,7 @@
             });
         </script>
     @endif
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     
 </div>

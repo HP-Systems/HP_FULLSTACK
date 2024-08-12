@@ -87,7 +87,7 @@
                                     <input type="text" class="form-control precioNocheInput" name="precio_noche" readonly>
                                     <label for="descripcion" class="form-label">Descripción</label>
                                     <input type="text" class="form-control descripcionInput" name="descripcion" readonly>
-                                    <label for="imagen" class="form-label">Imagen</label>
+                                    <label class="form-label">Imagen</label>
                                     <div>
                                         <img  alt="Imagen actual" style="max-width: 200px;" name="imagen">
                                     </div>
