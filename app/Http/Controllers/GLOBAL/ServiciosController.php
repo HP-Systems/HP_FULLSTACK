@@ -211,5 +211,5 @@ class ServiciosController extends Controller
                 ], 500
             );
         }
-    }    
+    } 
 }

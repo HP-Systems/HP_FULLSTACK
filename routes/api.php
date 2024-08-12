@@ -91,7 +91,7 @@ Route::prefix('desk')->group(function () {
 
     Route::put('/guestUpdate/{id}', [HuespedController::class, 'editar']);
     Route::get('/reservas/{fecha1?}/{fecha2?}', [DesktopReservasController::class, 'traerReservas']);
-    Route::get('/servicios/{fecha1?}/{fecha2?}', [DesktopServiciosController::class, 'obtenerServiciosSolicitados']);
+    Route::get('/servicios/solicitados', [DesktopServiciosController::class, 'serviciosSolicitados']);
     Route::get('/reservas', [DesktopReservasController::class, 'traerReservas']);
     Route::post('/reservas/create', [DesktopReservasController::class, 'createReserva']);
 
