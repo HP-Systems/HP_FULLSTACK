@@ -106,7 +106,6 @@ class TarjetasController extends Controller
 
             //validar si la tarjeta esta activa
             if ($statusTarjeta == 0) {
-                 //si no hay resultados entinces no se le permite la entrada
                  if($tipoTarjeta == 'Huesped'){
                     return response()->json([
                         'status' => 200,
@@ -147,7 +146,7 @@ class TarjetasController extends Controller
                     'th.tipo',
                     'tr.tarjetaID',
                     't.numero as UID',
-                    'tt.tipo'
+                    'tt.tipo as tipo_tarjeta'
                 )
                 ->whereRaw('? BETWEEN r.fecha_entrada AND r.fecha_salida', [$fechaActual])
                 ->where('r.status', 1)
@@ -170,7 +169,7 @@ class TarjetasController extends Controller
                     'th.tipo',
                     'l.tarjetaID',
                     't.numero as UID',
-                    'tt.tipo'
+                    'tt.tipo as tipo_tarjeta'
                 )
                 ->whereRaw('? BETWEEN r.fecha_entrada AND r.fecha_salida', [$fechaActual])
                 ->where('r.status', 1)
@@ -184,14 +183,14 @@ class TarjetasController extends Controller
             // validar si hay resultados de la consulta
             if($resultados->isNotEmpty()){
                 if($tipoTarjeta == 'Huesped'){
-                    //Si la tarjeta es huesped y hay resultados de la consulta, entonces se le permite la entrada
+                    //Si la tarjeta es huesped entonces se le permite la entrada
                     return response()->json([
                         'status' => 200,
                         'data' => true,
                         'msg' => 'Un huesped ha entrado a la habitación.'
                     ]);
                 } else if($tipoTarjeta == 'Limpieza'){
-                    //Si la tarjeta es de limpieza y hay resultados de la consulta, entonces se le permite la entrada
+                    //Si la tarjeta es de limpieza entonces se le permite la entrada
                     return response()->json([
                         'status' => 200,
                         'data' => true,
@@ -199,7 +198,7 @@ class TarjetasController extends Controller
                     ]);
                 }
             } else{
-                //si no hay resultados entinces no se le permite la entrada
+                //si no hay resultados entonces no se le permite la entrada
                 if($tipoTarjeta == 'Huesped'){
                     return response()->json([
                         'status' => 200,
