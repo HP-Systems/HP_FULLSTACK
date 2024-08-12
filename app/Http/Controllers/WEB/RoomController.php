@@ -14,6 +14,8 @@ class RoomController extends Controller
 {
     public function index()
     {
+        try 
+        {
         $habitaciones = Habitacion::with('tipoHabitacion')->orderBy('numero', 'asc')->get();
         $habitaciones->map(function ($habitacion) {
             $habitacion->tipo = $habitacion->tipoHabitacion->tipo;
@@ -26,6 +28,11 @@ class RoomController extends Controller
         });
         $tipoHabitaciones = TipoHabitacion::all()->where('status', 1);
         return view('habitaciones.habitaciones', ['habitaciones' => $habitaciones, 'tipoHabitaciones' => $tipoHabitaciones]);
+    }
+    catch (\Exception $e) {
+        Log::error('Exception during RoomController@index: ' . $e->getMessage());
+        return back()->with(['error' => 'Error al cargar las habitaciones']);
+    }
     }
 
     public function storeTipo(Request $request)
@@ -58,6 +65,7 @@ class RoomController extends Controller
             return response()->json($tipo, 200);
         } catch (ValidationException $e) {
             Log::error($e->getMessage());
+            
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         } catch (\PDOException $e) {
@@ -100,10 +108,12 @@ class RoomController extends Controller
             return response()->json($tipo, 200);
         } catch (ValidationException $e) {
             Log::error($e->getMessage());
+            return back()->with('error', 'Error al actualizar el tipo de habitación');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         } catch (\PDOException $e) {
             Log::error($e->getMessage());
+            return back()->with('error', 'Error al actualizar el tipo de habitación');
         }
     }
     public function storeRoom(Request $request)
@@ -139,10 +149,13 @@ class RoomController extends Controller
            
         } catch (ValidationException $e) {
             Log::error($e->getMessage());
+            return back()->with('error', 'Error al crear la habitación');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+            return back()->with('error', 'Error al crear la habitación');
         } catch (\PDOException $e) {
             Log::error($e->getMessage());
+            return back()->with('error', 'Error al crear la habitación');
         }
     }
     public function updateRoom(Request $request, $id)
@@ -159,9 +172,10 @@ class RoomController extends Controller
                 'numeric' => 'El campo :attribute debe ser un número',
                 'status' => 'El campo :attribute debe ser un booleano',
                 'numero.unique' => 'El número de habitación ya esta en uso',
+                'max' => 'El campo :attribute no debe superar los :max caracteres',
             ];
             $validator = Validator::make($request->all(), [
-                'numero' => 'required|numeric|unique:habitaciones,numero,' . $id . ',id',
+                'numero' => 'required|numeric|unique:habitaciones,numero,' . $id . ',id|max:5',
                 'tipoID' => 'required|numeric',
                 'status' => 'required|boolean',
 
@@ -182,13 +196,14 @@ class RoomController extends Controller
             return back()->with('success', 'Habitación actualizada con éxito');
         } catch (ValidationException $e) {
             Log::error($e->getMessage());
-            return response()->json(['error' => $e->getMessage()], 500);
+            return back()->with('error', 'Error al actualizar la habitación');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json(['error' => $e->getMessage()], 500);
+            return back()->with('error', 'Error al actualizar la habitación');
         } catch (\PDOException $e) {
             Log::error($e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
+            return back()->with('error', 'Error al actualizar la habitación');
         }
     }
 
