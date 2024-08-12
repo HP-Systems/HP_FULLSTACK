@@ -106,11 +106,20 @@ class TarjetasController extends Controller
 
             //validar si la tarjeta esta activa
             if ($statusTarjeta == 0) {
-                return response()->json([
-                    'status' => 200,
-                    'data' => false,
-                    'msg' => 'Tarjeta desactivada.'
-                ]);
+                 //si no hay resultados entinces no se le permite la entrada
+                 if($tipoTarjeta == 'Huesped'){
+                    return response()->json([
+                        'status' => 200,
+                        'data' => false,
+                        'msg' => 'Un huesped ha intentado entrar a la habitación.'
+                    ]);
+                } else if($tipoTarjeta == 'Limpieza'){
+                    return response()->json([
+                        'status' => 200,
+                        'data' => false,
+                        'msg' => 'Un personal de limpieza ha intentado entrar a la habitación.'
+                    ]);
+                }
             }
 
             //si la tarjeta es administrativa se le pemrite la entrada
