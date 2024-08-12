@@ -51,7 +51,7 @@ class PersonalController extends Controller
                 ]
             );
 
-        } catch (\Illuminate\Validation\Validator $e) {
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
 
             return response()->json(
@@ -151,7 +151,7 @@ class PersonalController extends Controller
                     'msg' => 'Error al crear el personal',
                 ]
             );
-        } catch (\Illuminate\Validation\Validator $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error($e->getMessage());
 
             return response()->json(
@@ -242,7 +242,7 @@ class PersonalController extends Controller
                 ]
             );
 
-        } catch (\Illuminate\Validation\Validator $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error($e->getMessage());
 
             return response()->json(
@@ -306,7 +306,7 @@ class PersonalController extends Controller
                     'msg' => 'Error al desactivar el personal',
                 ]
             );
-        } catch (\Illuminate\Validation\Validator $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error($e->getMessage());
 
             return response()->json(

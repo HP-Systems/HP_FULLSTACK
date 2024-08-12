@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Tarjeta;
 use App\Models\TipoTarjeta;
+use Carbon\Carbon; 
 
 class TarjetasController extends Controller
 {
@@ -235,6 +236,7 @@ class TarjetasController extends Controller
                 ], 200
             );
         } catch (\Exception $e) {
+            Log::error('Exception during obtenerTiposTarjetas: ' . $e->getMessage());
             return response()->json(
                 [
                     'status' => 500,
@@ -270,6 +272,7 @@ class TarjetasController extends Controller
             }
 
             $UID = $request->tarjeta;
+            $hoy = Carbon::now('America/Monterrey')->toDateString();
 
             $tarjeta = DB::table(DB::raw('(
                 SELECT
@@ -281,21 +284,21 @@ class TarjetasController extends Controller
                         CASE 
                             WHEN r.status = 0 THEN 1
                             WHEN tr.status = 0 THEN 1
-                            WHEN CURDATE() BETWEEN r.fecha_entrada AND r.fecha_salida THEN 0
-                            WHEN CURDATE() = l.fecha THEN 0 
+                            WHEN ? BETWEEN r.fecha_entrada AND r.fecha_salida THEN 0
+                            WHEN ? = l.fecha THEN 0 
                             ELSE 1
                         END
                     ) as disponibilidadBool
                 FROM tarjetas t
                 LEFT JOIN tipo_tarjeta tt ON t.tipoID = tt.id
                 LEFT JOIN tarjetas_reservas tr ON tr.tarjetaID = t.id AND tr.status = 1
-                LEFT JOIN reservas r ON r.id = tr.reservaID AND CURDATE() BETWEEN r.fecha_entrada AND r.fecha_salida AND r.status = 1
+                LEFT JOIN reservas r ON r.id = tr.reservaID AND ? BETWEEN r.fecha_entrada AND r.fecha_salida AND r.status = 1
                 LEFT JOIN limpiezas l ON l.tarjetaID = t.id AND l.status = 1
-                LEFT JOIN habitaciones_reservas hr ON (hr.id = l.habitacion_reservaID AND CURDATE() = l.fecha) OR hr.reservaID = r.id
+                LEFT JOIN habitaciones_reservas hr ON (hr.id = l.habitacion_reservaID AND ? = l.fecha) OR hr.reservaID = r.id
                 GROUP BY t.id
                 HAVING UID = ?
             ) as tb'))
-            ->setBindings([$UID])
+            ->setBindings([$hoy, $hoy, $hoy, $hoy, $UID])
             ->first();
             
             if(!$tarjeta){
@@ -350,6 +353,7 @@ class TarjetasController extends Controller
                 'error' => []
             ]);
         } catch (\Exception $e) {
+            Log::error('Exception during asignarTarjetaReserva: ' . $e->getMessage());
             return response()->json(
                 [
                     'status' => 500,
