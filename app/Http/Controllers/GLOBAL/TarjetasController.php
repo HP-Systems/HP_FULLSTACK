@@ -220,7 +220,7 @@ class TarjetasController extends Controller
                     'th.tipo',
                     'tr.tarjetaID',
                     't.numero as UID',
-                    'tt.tipo'
+                    'tt.tipo as tipo_tarjeta'
                 )
                 ->whereRaw('? BETWEEN r.fecha_entrada AND r.fecha_salida', [$fechaActual])
                 ->where('r.status', 1)
@@ -244,7 +244,7 @@ class TarjetasController extends Controller
                     'th.tipo',
                     'l.tarjetaID',
                     't.numero as UID',
-                    'tt.tipo'
+                    'tt.tipo as tipo_tarjeta'
                 )
                 ->whereRaw('? BETWEEN r.fecha_entrada AND r.fecha_salida', [$fechaActual])
                 ->where('r.status', 1)
@@ -272,7 +272,7 @@ class TarjetasController extends Controller
                     ]);
                 } else if ($tipoTarjeta == 'Limpieza') {
                     nfcEvent::dispatch('Un personal de limpieza ha entrado a la habitación ' . $numeroHabitacion, $huespedID);
-                    //Si la tarjeta es de limpieza y hay resultados de la consulta, entonces se le permite la entrada
+                    //Si la tarjeta es de limpieza entonces se le permite la entrada
                     return response()->json([
                         'status' => 200,
                         'data' => true,
