@@ -72,7 +72,11 @@
                                     <label for="tipoID" class="form-label">Tipo de Habitación</label>
                                     <select name="tipoID" class="form-select tipoHabitacionSelect">
                                         @foreach ($tipoHabitaciones as $tipoHabitacion)
-                                        <option value="{{$tipoHabitacion->id}}" data-capacidad="{{$tipoHabitacion->capacidad}}" data-precio="{{$tipoHabitacion->precio_noche}}" data-descripcion="{{$tipoHabitacion->descripcion}}" data-image="{{$tipoHabitacion->imagen}}" @if($tipoHabitacion->id == $habitacion->tipoID) selected @endif>
+                                        <option value="{{$tipoHabitacion->id}}" 
+                                        data-capacidad="{{$tipoHabitacion->capacidad}}"
+                                         data-precio="{{$tipoHabitacion->precio_noche}}" 
+                                         data-descripcion="{{$tipoHabitacion->descripcion}}" 
+                                         data-image="{{$tipoHabitacion->imagen}}" @if($tipoHabitacion->id == $habitacion->tipoID) selected @endif>
                                             {{$tipoHabitacion->tipo}}
                                         </option>
                                         @endforeach
@@ -85,7 +89,7 @@
                                     <input type="text" class="form-control descripcionInput" name="descripcion" readonly>
                                     <label for="imagen" class="form-label">Imagen</label>
                                     <div>
-                                        <img src="{{ asset('default-image.jpg') }}" alt="Imagen actual" style="max-width: 200px;" name="imagen">
+                                        <img  alt="Imagen actual" style="max-width: 200px;" name="imagen">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -144,7 +148,7 @@
                                 <input type="text" class="form-control descripcionInput" name="descripcion" readonly>
                                 <label for="imagen" class="form-label">Imagen</label>
                                     <div>
-                                        <img src="{{ asset('default-image.jpg') }}" alt="Imagen actual" style="max-width: 200px;" name="imagen">
+                                        <img alt="Imagen actual" style="max-width: 200px;" name="imagen">
                                     </div>
                             </div>
                             <div class="modal-footer">

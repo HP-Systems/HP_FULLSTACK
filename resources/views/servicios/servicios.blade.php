@@ -1,3 +1,4 @@
+
 @extends('../home')
 
 @section('title', 'Servicios - Hotel Project')
