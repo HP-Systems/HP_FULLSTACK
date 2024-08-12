@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\Servicio;
+use Carbon\Carbon; 
 use App\Models\TipoServicio;
 
 class ServiciosController extends Controller
@@ -69,6 +70,7 @@ class ServiciosController extends Controller
     
             $reservaID = $request->reservaID;
             $servicios = $request->servicios;
+            $hoy = Carbon::now('America/Monterrey');
     
             foreach ($servicios as $servicio) {
                 // Obtener el ID de habitaciones_reservas
@@ -76,8 +78,6 @@ class ServiciosController extends Controller
                     ->where('habitacionID', $servicio['habitacionID'])
                     ->where('reservaID', $reservaID)
                     ->first();
-
-                
     
                 if ($habitacionReserva) {
                     // Insertar en servicios_reservas
@@ -85,7 +85,7 @@ class ServiciosController extends Controller
                         'servicioID' => $servicio['servicioID'],
                         'habitacionReservaID' => $habitacionReserva->id,
                         'cantidad' => $servicio['cantidad'],
-                        'fecha' => now()->toDateString(), // Fecha en formato YYYY-mm-dd
+                        'fecha' => $hoy->toDateString(), // Fecha en formato YYYY-mm-dd
                         'status' => 1, 
                         'created_at' => now(),
                         'updated_at' => now()

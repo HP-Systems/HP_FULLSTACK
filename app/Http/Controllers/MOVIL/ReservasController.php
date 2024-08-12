@@ -26,7 +26,7 @@ class ReservasController extends Controller
                 );
             }
 
-            $hoy = Carbon::today()->toDateString();
+            $hoy = Carbon::now('America/Monterrey')->toDateString();
 
             $reservas = Reserva::with('habitaciones')
                     ->where('huespedID', $idUser)
@@ -73,7 +73,7 @@ class ReservasController extends Controller
                 );
             }
 
-            $hoy = Carbon::today()->toDateString();
+            $hoy = Carbon::now('America/Monterrey')->toDateString();
 
             $reservas = Reserva::with('habitaciones')
                     ->where('huespedID', $idUser)
@@ -119,7 +119,7 @@ class ReservasController extends Controller
                 );
             }
 
-            $hoy = Carbon::today()->toDateString();
+            $hoy = Carbon::now('America/Monterrey')->toDateString();
 
             $reservas = Reserva::with('habitaciones')
                     ->where('huespedID', $idUser)

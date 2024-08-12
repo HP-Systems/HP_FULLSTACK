@@ -13,6 +13,8 @@ class ServiciosController extends Controller
 {    
     public function serviciosSolicitados(){
         try{
+            $fechaHoy = Carbon::now('America/Monterrey')->format('Y-m-d');
+
             $resultados = DB::table('servicios_reservas as sr')
                 ->join('servicios as s', 's.id', '=', 'sr.servicioID')
                 ->join('tipo_servicio as ts', 'ts.id', '=', 's.tipoID')
@@ -32,7 +34,7 @@ class ServiciosController extends Controller
                     'hr.habitacionID', 
                     'h.numero'
                 )
-                ->whereDate('sr.fecha', '=', DB::raw('CURDATE()'))
+                ->whereDate('sr.fecha', '=', $fechaHoy)
                 ->where('sr.status', '=', 1)
                 ->where('r.status', '=', 1)
                 ->get();

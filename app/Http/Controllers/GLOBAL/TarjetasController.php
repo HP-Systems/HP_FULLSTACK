@@ -85,7 +85,7 @@ class TarjetasController extends Controller
 
             $numeroTarjeta = $request->tarjeta;
             $habitacionId = $request->habitacionID;
-            $fechaActual = Carbon::today()->toDateString();
+            $fechaActual = Carbon::now('America/Monterrey')->toDateString();
 
             $infoTarjeta = DB::table('tarjetas as t')
                 ->join('tipo_tarjeta as tt', 'tt.id', '=', 't.tipoID')
