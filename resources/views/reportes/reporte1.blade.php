@@ -8,7 +8,7 @@
 <div style="display: flex; justify-content: space-between; align-items: center;">
     <h4>Ingresos generales</h4>
     <div style="display: flex; align-items: center;">
-    <a href="{{ route('reporte1.pdf') }}"id="download-button"><button type="button" class="btn btn-danger" style="margin-right: 10px;">
+    <a href="{{ route('reporte1.pdf') }}"id="download-button"><button type="button" class="btn btn-danger" style="margin-right: 10px;" >
             <i class="fa fa-cloud-download"></i>
         </button></a>
         <form action="{{ route('reporte1.filtar') }}" method="POST" style="display: flex; align-items: center;">
@@ -17,7 +17,7 @@
             <input type="date" id="fecha_inicio" name="fecha_inicio" class="date-input" style="margin-right: 10px;"value="{{ old('fecha_inicio', $fecha_inicio) }}">
             <label for="fecha-fin" style="margin-right: 5px;" ">Fecha fin:</label>
             <input type="date" id="fecha_fin" name="fecha_fin" class="date-input" style="margin-right: 10px;" value="{{ old('fecha_fin', $fecha_fin) }}">
-            <button type="submit" class="btn btnFiltro" id="filtrar">Filtrar</button>
+            <button type="submit" class="btn btnFiltro" id="filtrar" onclick="showLoadingAlert()">Filtrar</button>
         </form>
     </div>
 </div>
@@ -55,7 +55,19 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script>
+function showLoadingAlert() {
+    swal({
+        text: "Cargando...",
+        button: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+    });
+}
+</script>
 <script>
     $(document).ready(function() {
         var rowsPerPage = 10;

@@ -19,9 +19,12 @@ class InfoHotelController extends Controller
             
         }catch(\Exception $e){
             Log::error($e->getMessage());
+            return back()->withErrors('error', 'Error al cargar la información del hotel');
         }
         catch (\PDOException $e) {
             Log::error($e->getMessage());
+            return back()->withErrors('error', 'Error al cargar la información del hotel');
+
         }
 
        
@@ -77,12 +80,15 @@ class InfoHotelController extends Controller
 
         } catch (ValidationException $e) {
             Log::error($e->getMessage());
+            return back()->withErrors('Error al actualizar la información del hotel');
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+            return back()->withErrors('Error al actualizar la información del hotel');
         }
         catch (\PDOException $e) {
             Log::error($e->getMessage());
+            return back()->withErrors('Error al actualizar la información del hotel');
         }
 
     }

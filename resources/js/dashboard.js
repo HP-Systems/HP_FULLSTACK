@@ -8,13 +8,13 @@ async function obtenerDatosServicios() {
         return data;
     } catch (error) {
         console.error('Error al obtener los datos');
+
         return [];
     }
 }
 async function GraficoServicios() {
     try{
     const datos = await obtenerDatosServicios();
-
     const labels = datos.map(item => item.nombre);
     const cantidad = datos.map(item => item.cantidad);
 
@@ -66,7 +66,8 @@ async function GraficoServicios() {
     );
 } catch (error) {
     console.error('Error al obtener los datos');
-    return [];
+    document.getElementById('myChart').innerHTML = "<p>No hay datos disponibles para los servicios.</p>";
+    return;
 }
 }
 
@@ -89,7 +90,6 @@ async function DatosVentasMes() {
 async function GraficoVentasMes() {
     try {
         const datos = await DatosVentasMes();
-
         const labels = datos.map(item => item.mes);
         const totales = datos.map(item => item.total);
 
@@ -151,7 +151,9 @@ async function GraficoVentasMes() {
         });
 
     } catch (error) {
-        console.error('Error al obtener los datos de ventas:', error);
+        console.error('Error al obtener los datos de ventas');
+        document.getElementById('myChart').innerHTML = "<p>No hay datos disponibles para los servicios.</p>";
+
     }
 }
 
@@ -172,6 +174,7 @@ async function ObtenerDatosUsuarios() {
 async function GraficoUsuarios() {
     try{
     const datos = await ObtenerDatosUsuarios();
+
     const labels = datos.map(item => item.mes);
     const totales = datos.map(item => item.total);
     const data = {
@@ -213,7 +216,9 @@ async function GraficoUsuarios() {
 }
 catch (error) {
     console.error('Error al obtener los datos');
-    return [];
+    document.getElementById('myChart3').innerHTML = "<p>No hay datos disponibles para los usuarios.</p>";
+
+    return;
 }
 }
 //Ingresos Por Tipo de Habitacion al Año 
@@ -234,6 +239,11 @@ let myChart4; // Variable para almacenar la instancia del gráfico
 async function GraficoIngresosTipoHabitacion() {
     try {
         const datos = await DatosIngresosTipoHabitacion();
+
+        if (datos.length === 0) {
+            document.getElementById('myChart4').innerHTML = "<p>No hay datos disponibles para los ingresos por tipo de habitación.</p>";
+            return;
+        }
         const labels = datos.map(item => item.nombre);
         const totales = datos.map(item => item.total);
         const data = {
@@ -296,7 +306,8 @@ async function GraficoIngresosTipoHabitacion() {
 
     } catch (error) {
         console.error('Error al obtener los datos');
-        return [];
+        document.getElementById('myChart4').innerHTML = "<p>No hay datos disponibles para los ingresos por tipo de habitación.</p>";
+        return;
     }
 }
 

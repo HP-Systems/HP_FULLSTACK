@@ -59,7 +59,7 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="numero" class="form-label">Numero</label>
-                                    <input type="text" class="form-control" id="numero" name='numero' value="{{$habitacion->numero}}">
+                                    <input oninput="validateNumberInput(this)" type="text" class="form-control" id="numero" name='numero' value="{{$habitacion->numero}}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="status{{$habitacion->id}}" class="form-label">Estado</label>
@@ -72,11 +72,11 @@
                                     <label for="tipoID" class="form-label">Tipo de Habitación</label>
                                     <select name="tipoID" class="form-select tipoHabitacionSelect">
                                         @foreach ($tipoHabitaciones as $tipoHabitacion)
-                                        <option value="{{$tipoHabitacion->id}}" 
-                                        data-capacidad="{{$tipoHabitacion->capacidad}}"
-                                         data-precio="{{$tipoHabitacion->precio_noche}}" 
-                                         data-descripcion="{{$tipoHabitacion->descripcion}}" 
-                                         data-image="{{$tipoHabitacion->imagen}}" @if($tipoHabitacion->id == $habitacion->tipoID) selected @endif>
+                                        <option value="{{$tipoHabitacion->id}}"
+                                            data-capacidad="{{$tipoHabitacion->capacidad}}"
+                                            data-precio="{{$tipoHabitacion->precio_noche}}"
+                                            data-descripcion="{{$tipoHabitacion->descripcion}}"
+                                            data-image="{{$tipoHabitacion->imagen}}" @if($tipoHabitacion->id == $habitacion->tipoID) selected @endif>
                                             {{$tipoHabitacion->tipo}}
                                         </option>
                                         @endforeach
@@ -89,11 +89,11 @@
                                     <input type="text" class="form-control descripcionInput" name="descripcion" readonly>
                                     <label class="form-label">Imagen</label>
                                     <div>
-                                        <img  alt="Imagen actual" style="max-width: 200px;" name="imagen">
+                                        <img alt="Imagen actual" style="max-width: 200px;" name="imagen">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-custom">Guardar</button>
+                                    <button type="submit" class="btn btn-custom" >Guardar</button>
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                                 </div>
 
@@ -122,7 +122,7 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="numero" class="form-label">Numero</label>
-                                <input type="text" class="form-control" id="numero" name='numero' ">
+                                <input oninput="validateNumberInput(this)" type="text" class="form-control" id="numero" name='numero' ">
                             </div>
                             <div class=" mb-3">
                                 <label for="status" class="form-label">Estado</label>
@@ -136,8 +136,8 @@
                                 <select name="tipoID" class="form-select tipoHabitacionSelect">
                                     @foreach ($tipoHabitaciones as $tipoHabitacion)
                                     <option value="{{$tipoHabitacion->id}}" data-capacidad="{{$tipoHabitacion->capacidad}}" data-precio="{{$tipoHabitacion->precio_noche}}" data-descripcion="{{$tipoHabitacion->descripcion}}" data-image="{{$tipoHabitacion->imagen}}" @if($tipoHabitacion->id == $habitacion->tipoID) selected @endif>
-                                            {{$tipoHabitacion->tipo}}
-                                        </option>
+                                        {{$tipoHabitacion->tipo}}
+                                    </option>
                                     @endforeach
                                 </select>
                                 <label for="capacidad" class="form-label">Capacidad</label>
@@ -147,9 +147,9 @@
                                 <label for="descripcion" class="form-label">Descripción</label>
                                 <input type="text" class="form-control descripcionInput" name="descripcion" readonly>
                                 <label for="imagen" class="form-label">Imagen</label>
-                                    <div>
-                                        <img alt="Imagen actual" style="max-width: 200px;" name="imagen">
-                                    </div>
+                                <div>
+                                    <img alt="Imagen actual" style="max-width: 200px;" name="imagen">
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-custom">Guardar</button>
@@ -228,6 +228,11 @@
             attachEvents();
         });
     </script>
+      <script>
+    function validateNumberInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, '');
+    }
+  </script>
     @vite('resources/js/app.js')
 
     @if ($errors->any())
@@ -249,5 +254,6 @@
         });
     </script>
     @endif
+
 
     @endsection

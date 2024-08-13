@@ -6,7 +6,7 @@ use App\Models\Rol;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class RolesSeeder extends Seeder
+class tipos_personal extends Seeder
 {
     /**
      * Run the database seeds.
@@ -22,6 +22,5 @@ class RolesSeeder extends Seeder
         Rol::firstOrCreate([
             'nombre' => 'Limpieza',
         ]);
-
     }
 }
