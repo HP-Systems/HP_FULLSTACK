@@ -307,7 +307,7 @@ class TarjetasController extends Controller
                     'data' => [],
                     'msg' => 'Tarjeta no encontrada.',
                     'error' => []
-                ]);
+                ], 400);
             }
 
             if($tarjeta->disponibilidadBool == 0){
@@ -316,7 +316,8 @@ class TarjetasController extends Controller
                     'data' => [],
                     'msg' => 'La tarjeta ya se encuentra asignada en otra reserva.',
                     'error' => []
-                ]);
+                ], 400
+             );
             }
 
             if($tarjeta->status == 0){
@@ -325,7 +326,7 @@ class TarjetasController extends Controller
                     'data' => [],
                     'msg' => 'La tarjeta no se encuentra activa.',
                     'error' => []
-                ]);
+                ] , 400);
             }
 
             if($tarjeta->tipo == 'Limpieza'){
@@ -334,7 +335,7 @@ class TarjetasController extends Controller
                     'data' => [],
                     'msg' => 'El tipo de tarjeta debe ser de Huesped para poder asignar a la reserva.',
                     'error' => []
-                ]);
+                ], 400);
             }
 
             $tarjetaID = $tarjeta->id;
@@ -351,7 +352,7 @@ class TarjetasController extends Controller
                 'data' => $tarjeta_reserva,
                 'msg' => 'Tarjeta asignada con éxito.',
                 'error' => []
-            ]);
+            ], 200);
         } catch (\Exception $e) {
             Log::error('Exception during asignarTarjetaReserva: ' . $e->getMessage());
             return response()->json(
