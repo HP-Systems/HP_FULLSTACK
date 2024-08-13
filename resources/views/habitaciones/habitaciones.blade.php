@@ -59,7 +59,7 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="numero" class="form-label">Numero</label>
-                                    <input type="text" class="form-control" id="numero" name='numero' value="{{$habitacion->numero}}">
+                                    <input oninput="validateNumberInput(this)" type="text" class="form-control" id="numero" name='numero' value="{{$habitacion->numero}}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="status{{$habitacion->id}}" class="form-label">Estado</label>
@@ -93,7 +93,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-custom" onclick="showLoadingAlert()">Guardar</button>
+                                    <button type="submit" class="btn btn-custom" >Guardar</button>
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                                 </div>
 
@@ -122,7 +122,7 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="numero" class="form-label">Numero</label>
-                                <input type="text" class="form-control" id="numero" name='numero' ">
+                                <input oninput="validateNumberInput(this)" type="text" class="form-control" id="numero" name='numero' ">
                             </div>
                             <div class=" mb-3">
                                 <label for="status" class="form-label">Estado</label>
@@ -152,7 +152,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-custom" onclick="showLoadingAlert()">Guardar</button>
+                                <button type="submit" class="btn btn-custom">Guardar</button>
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                             </div>
                         </form>
@@ -168,16 +168,6 @@
     </nav>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     @vite ('resources/js/paginacionR1.js')
-    <script>
-        function showLoadingAlert() {
-            swal({
-                text: "Cargando...",
-                button: false,
-                closeOnClickOutside: false,
-                closeOnEsc: false,
-            });
-        }
-    </script>
 
     <script>
         $(document).ready(function() {
@@ -238,6 +228,11 @@
             attachEvents();
         });
     </script>
+      <script>
+    function validateNumberInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, '');
+    }
+  </script>
     @vite('resources/js/app.js')
 
     @if ($errors->any())

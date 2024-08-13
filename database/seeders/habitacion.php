@@ -28,21 +28,5 @@ class habitacion extends Seeder
             'tipoID' => '3',
             'imagen' => 'imagen.jpg'
         ]);
-        ModelsHabitacion::firstOrCreate([
-            'numero' => '104',
-            'tipoID' => '4',
-            'imagen' => 'imagen.jpg'
-        ]);
-        ModelsHabitacion::firstOrCreate([
-            'numero' => '105',
-            'tipoID' => '5',
-            'imagen' => 'imagen.jpg'
-        ]);
-        ModelsHabitacion::firstOrCreate([
-            'numero' => '106',
-            'tipoID' => '6',
-            'imagen' => 'imagen.jpg'
-        ]);
-
     }
 }

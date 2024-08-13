@@ -15,11 +15,6 @@ async function obtenerDatosServicios() {
 async function GraficoServicios() {
     try{
     const datos = await obtenerDatosServicios();
-    if (datos.length === 0) {
-        document.getElementById('myChart').innerHTML = "<p>No hay datos disponibles para los servicios.</p>";
-        return;
-    }
-
     const labels = datos.map(item => item.nombre);
     const cantidad = datos.map(item => item.cantidad);
 
@@ -95,12 +90,6 @@ async function DatosVentasMes() {
 async function GraficoVentasMes() {
     try {
         const datos = await DatosVentasMes();
-
-        if (datos.length === 0) {
-            document.getElementById('myChart2').innerHTML = "<p>No hay datos disponibles para los ingresos.</p>";
-            return;
-        }
-
         const labels = datos.map(item => item.mes);
         const totales = datos.map(item => item.total);
 
@@ -186,10 +175,6 @@ async function GraficoUsuarios() {
     try{
     const datos = await ObtenerDatosUsuarios();
 
-    if (datos.length === 0) {
-        document.getElementById('myChart3').innerHTML = "<p>No hay datos disponibles para los usuarios.</p>";
-        return;
-    }
     const labels = datos.map(item => item.mes);
     const totales = datos.map(item => item.total);
     const data = {

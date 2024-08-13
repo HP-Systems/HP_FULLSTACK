@@ -104,7 +104,7 @@
           required=""
           rows="4">{{ $hotel->descripcion ?? '' }}</textarea>
       </div>
-      <button type="submit" class="guardar" onclick="showLoadingAlert()">Guardar</button>
+      <button type="submit" class="guardar">Guardar</button>
 
     </form>
     @else
@@ -114,16 +114,6 @@
 
   @vite('resources/css/info.css')
   @vite('resources/js/app.js')
-  <script>
-    function showLoadingAlert() {
-      swal({
-        text: "Cargando...",
-        button: false,
-        closeOnClickOutside: false,
-        closeOnEsc: false,
-      });
-    }
-  </script>
   @if ($errors->any())
   <script>
     swal({

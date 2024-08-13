@@ -125,10 +125,10 @@ class RoomController extends Controller
                 'string' => 'El campo :attribute debe ser un texto',
                 'numeric' => 'El campo :attribute debe ser un número',
                 'numero.unique' => 'El número de habitación ya esta en uso',
-                'max' => 'El campo :attribute no debe superar los :max caracteres',
+                'digits_between' => 'El campo :attribute debe tener entre :min y :max dígitos',
             ];
             $validator = Validator::make($request->all(), [
-                'numero' => 'required|numeric|unique:habitaciones,numero|max:5',
+                'numero' => 'required|numeric|unique:habitaciones,numero|digits_between:1,5',
                 'tipoID' => 'required|numeric',
             ], $messages);
 
@@ -172,10 +172,10 @@ class RoomController extends Controller
                 'numeric' => 'El campo :attribute debe ser un número',
                 'status' => 'El campo :attribute debe ser un booleano',
                 'numero.unique' => 'El número de habitación ya esta en uso',
-                'max' => 'El campo :attribute no debe superar los :max caracteres',
+                'digits_between' => 'El campo :attribute debe tener entre :min y :max dígitos',
             ];
             $validator = Validator::make($request->all(), [
-                'numero' => 'required|numeric|unique:habitaciones,numero,' . $id . ',id|max:5',
+                'numero' => 'required|numeric|unique:habitaciones,numero,' . $id . ',id|digits_between:1,5',
                 'tipoID' => 'required|numeric',
                 'status' => 'required|boolean',
 
