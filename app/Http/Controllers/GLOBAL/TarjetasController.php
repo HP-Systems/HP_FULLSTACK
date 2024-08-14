@@ -139,9 +139,9 @@ class TarjetasController extends Controller
                     ->first();
                 
                 if ($huesped) {
-                    $id=$huesped->huespedID;
+                   
                     if ($tipoTarjeta == 'Huesped') {
-                        
+                        $id=$huesped->huespedID;
                         nfcEvent::dispatch('Un huesped ha intentado entrar a la habitación ' . $numeroHabitacion, $id);
                         return response()->json([
                             'status' => 200,
@@ -149,6 +149,7 @@ class TarjetasController extends Controller
                             'msg' => 'Un huesped ha intentado entrar a la habitación'
                         ]);
                     } else if ($tipoTarjeta == 'Limpieza') {
+                        $id=$huesped->huespedID;
                         nfcEvent::dispatch('Un personal de limpieza ha intentado entrar a la habitación ' . $numeroHabitacion, $id);
                         return response()->json([
                             'status' => 200,
@@ -292,6 +293,7 @@ class TarjetasController extends Controller
             if($huesped)
             {
                 if ($tipoTarjeta == 'Huesped') {
+                    $id=$huesped->huespedID;
 
                     nfcEvent::dispatch('Un huesped ha intentado entrar a la habitación ' . $numeroHabitacion, $id);
                     return response()->json([
@@ -300,6 +302,7 @@ class TarjetasController extends Controller
                         'msg' => 'Un huesped ha intentado entrar a la habitación'
                     ]);
                 } else if ($tipoTarjeta == 'Limpieza') {
+                    $id=$huesped->huespedID;
                     nfcEvent::dispatch('Un personal de limpieza ha intentado entrar a la habitación ' . $numeroHabitacion, $id);
                     return response()->json([
                         'status' => 200,
@@ -308,10 +311,11 @@ class TarjetasController extends Controller
                     ]);
                 }
                 else if ($tipoTarjeta == 'Administrativa') {
+                    $id=$huesped->huespedID;
                     nfcEvent::dispatch('Un administrador ha intentado entrar a la habitación ' . $numeroHabitacion, $id);
                     return response()->json([
                         'status' => 200,
-                        'data' => false,
+                        'data' => true,
                         'msg' => 'Un administrador ha intentado entrar a la habitación'
                     ]);
                 }
