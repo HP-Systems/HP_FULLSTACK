@@ -37,7 +37,8 @@ class ReservasController extends Controller
             }])
             ->where(function($query) use ($fechaInicio, $fechaFin) {
             $query->where('fecha_entrada', '<=', $fechaFin)
-                    ->where('fecha_salida', '>=', $fechaInicio);
+                    ->where('fecha_salida', '>=', $fechaInicio)
+                    ->where('status', 1);
             })
             ->get();
 
