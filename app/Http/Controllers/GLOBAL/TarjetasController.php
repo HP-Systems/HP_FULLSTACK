@@ -232,7 +232,7 @@ class TarjetasController extends Controller
                 ->join('habitaciones_reservas as hr', 'hr.reservaID', '=', 'r.id')
                 ->join('habitaciones as h', 'h.id', '=', 'hr.habitacionID')
                 ->join('tipo_habitacion as th', 'th.id', '=', 'h.tipoID')
-                ->join('limpiezas as l', 'l.habitacion_reservaID', '=', 'hr.reservaID')
+                ->join('limpiezas as l', 'l.habitacion_reservaID', '=', 'hr.id')
                 ->join('tarjetas as t', 't.id', '=', 'l.tarjetaID')
                 ->join('tipo_tarjeta as tt', 'tt.id', '=', 't.tipoID')
                 ->select(
@@ -280,6 +280,7 @@ class TarjetasController extends Controller
                     ]);
                 }
             }
+
             $huesped = DB::table('reservas')
                 ->join('habitaciones_reservas', 'reservas.id', '=', 'habitaciones_reservas.reservaID')
                 ->join('huespedes', 'reservas.huespedID', '=', 'huespedes.id')
@@ -289,8 +290,7 @@ class TarjetasController extends Controller
                 ->whereRaw('? BETWEEN reservas.fecha_entrada AND reservas.fecha_salida', [$fechaActual])
                 ->first();
             
-            if($huesped)
-            {
+            if($huesped){
                 if ($tipoTarjeta == 'Huesped') {
                     $id=$huesped->huespedID;
 
