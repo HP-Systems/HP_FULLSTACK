@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('tipoID');
             $table->integer('status');
+            $table->string('numero', 10);
             // 0 ocupada, 1 disponible, 3 deshabilitada
 
             $table->foreign('tipoID')->references('id')->on('tipo_tarjeta');
