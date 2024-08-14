@@ -5,6 +5,7 @@ namespace App\Http\Controllers\DESKTOP;
 use App\Http\Controllers\Controller;
 use App\Mail\passwPersonalMail;
 use App\Models\Personal;
+use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -58,6 +59,37 @@ class PersonalController extends Controller
                 [
                     'status' => 500,
                     'msg' => 'Error al obtener el personal',
+                ]
+            );
+        }
+    }
+    public function tipo_personal()
+    {
+        try{
+            $tipo_personal=Rol::where('id','!=',1)->where('status',1)->get();
+            return response()->json(
+                [
+                    'status' => 200,
+                    'msg' => 'Tipos de personal obtenidos correctamente',
+                    'data' => $tipo_personal
+                ]
+            );
+        }
+        catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'msg' => 'Error al obtener los tipos de personal',
+                ]
+            );
+        }
+        catch (\PDOException $e) {
+            Log::error($e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'msg' => 'Error al obtener los tipos de personal',
                 ]
             );
         }

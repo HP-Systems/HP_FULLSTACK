@@ -97,6 +97,7 @@ Route::prefix('desk')->group(function () {
     Route::get('/reservas/checkout/{id}', [DesktopReservasController::class, 'checkOut']);
     Route::post('/reservas/create', [DesktopReservasController::class, 'createReserva']);
 
+    Route::get('/tipoPersonal', [PersonalController::class, 'tipo_personal']);
     Route::get('/personal/index', [PersonalController::class, 'obtenerPersonal']);
     Route::post('/personal/create', [PersonalController::class, 'crearPersonal']);
     Route::put('/personal/edit/{id}', [PersonalController::class, 'editarPersonal']);
