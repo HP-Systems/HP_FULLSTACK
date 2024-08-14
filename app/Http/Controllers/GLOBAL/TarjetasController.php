@@ -92,7 +92,9 @@ class TarjetasController extends Controller
 
             $numeroTarjeta = $request->tarjeta;
             $habitacionId = $request->habitacionID;
-            $fechaActual = Carbon::now('America/Monterrey')->toDateString();
+            $fechaHoraActual = Carbon::now('America/Monterrey');
+            $fechaActual = $fechaHoraActual->toDateString(); 
+            $horaActual = $fechaHoraActual->toTimeString(); 
             $numeroHabitacion = Habitacion::where('id', $habitacionId)->first();
 
 
@@ -111,8 +113,8 @@ class TarjetasController extends Controller
                     'msg' => 'Tarjeta no encontrada.'
                 ]);
             }
-            if(!$numeroHabitacion)
-            {
+
+            if(!$numeroHabitacion){
                 return response()->json([
                     'status' => 200,
                     'data' => false,
@@ -124,7 +126,6 @@ class TarjetasController extends Controller
 
             $statusTarjeta = $infoTarjeta->status;
             $tipoTarjeta = $infoTarjeta->tipo;
-            
 
             //validar si la tarjeta esta activa
             if ($statusTarjeta == 0) {
@@ -136,15 +137,22 @@ class TarjetasController extends Controller
                     ->where('reservas.status', 1)
                     ->whereRaw('? BETWEEN reservas.fecha_entrada AND reservas.fecha_salida', [$fechaActual])
                     ->first();
+
                 
                 if ($huesped) {
-                   
                     if ($tipoTarjeta == 'Huesped') {
                         $id=$huesped->huespedID;
                         nfcEvent::dispatch('Un huesped ha intentado entrar a la habitación ' . $numeroHabitacion, $id);
                         return response()->json([
                             'status' => 200,
-                            'data' => false,
+                            'data' => [
+                                "acceso" => false,
+                                "UID" => $numeroTarjeta,
+                                "tipo_tarjeta" => $tipoTarjeta,
+                                "habitacion" => $numeroHabitacion,
+                                "fecha" => $fechaActual,
+                                "hora" => $horaActual
+                            ],
                             'msg' => 'Un huesped ha intentado entrar a la habitación'
                         ]);
                     } else if ($tipoTarjeta == 'Limpieza') {
@@ -152,7 +160,14 @@ class TarjetasController extends Controller
                         nfcEvent::dispatch('Un personal de limpieza ha intentado entrar a la habitación ' . $numeroHabitacion, $id);
                         return response()->json([
                             'status' => 200,
-                            'data' => false,
+                            'data' => [
+                                "acceso" => false,
+                                "UID" => $numeroTarjeta,
+                                "tipo_tarjeta" => $tipoTarjeta,
+                                "habitacion" => $numeroHabitacion,
+                                "fecha" => $fechaActual,
+                                "hora" => $horaActual
+                            ],
                             'msg' => 'Un personal de limpieza ha intentado entrar a la habitación'
                         ]);
                     }
@@ -161,14 +176,28 @@ class TarjetasController extends Controller
                         accessEvent::dispatch('Un tarjeta de huesped desactivada a intentado abrir la habitación ' . $numeroHabitacion);
                         return response()->json([
                             'status' => 200,
-                            'data' => false,
+                            'data' => [
+                                "acceso" => false,
+                                "UID" => $numeroTarjeta,
+                                "tipo_tarjeta" => $tipoTarjeta,
+                                "habitacion" => $numeroHabitacion,
+                                "fecha" => $fechaActual,
+                                "hora" => $horaActual
+                            ],
                             'msg' => 'Un huesped ha intentado entrar a la habitación'
                         ]);
                     } else if ($tipoTarjeta == 'Limpieza') {
                         accessEvent::dispatch('Un tarjeta del personal de limpieza  desactivada a intentado abrir la habitación ' . $numeroHabitacion);
                         return response()->json([
                             'status' => 200,
-                            'data' => false,
+                            'data' => [
+                                "acceso" => false,
+                                "UID" => $numeroTarjeta,
+                                "tipo_tarjeta" => $tipoTarjeta,
+                                "habitacion" => $numeroHabitacion,
+                                "fecha" => $fechaActual,
+                                "hora" => $horaActual
+                            ],
                             'msg' => 'Un personal de limpieza ha intentado entrar a la habitación'
                         ]);
                     }
@@ -191,13 +220,27 @@ class TarjetasController extends Controller
                     nfcEvent::dispatch('Un administrador ha entrado a la habitación ' . $numeroHabitacion, $id);
                     return response()->json([
                         'status' => 200,
-                        'data' => true,
+                        'data' => [
+                            "acceso" => true,
+                            "UID" => $numeroTarjeta,
+                            "tipo_tarjeta" => $tipoTarjeta,
+                            "habitacion" => $numeroHabitacion,
+                            "fecha" => $fechaActual,
+                            "hora" => $horaActual
+                        ],
                         'msg' => 'Un administrador ha entrado a la habitación'
                     ]);
                 } else {
                     return response()->json([
                         'status' => 200,
-                        'data' => true,
+                        'data' => [
+                            "acceso" => true,
+                            "UID" => $numeroTarjeta,
+                            "tipo_tarjeta" => $tipoTarjeta,
+                            "habitacion" => $numeroHabitacion,
+                            "fecha" => $fechaActual,
+                            "hora" => $horaActual
+                        ],
                         'msg' => 'Un administrador ha entrado a la habitación'
                     ]);
                 }
@@ -267,7 +310,14 @@ class TarjetasController extends Controller
                     //Si la tarjeta es huesped y hay resultados de la consulta, entonces se le permite la entrada
                     return response()->json([
                         'status' => 200,
-                        'data' => true,
+                        'data' => [
+                            "acceso" => true,
+                            "UID" => $numeroTarjeta,
+                            "tipo_tarjeta" => $tipoTarjeta,
+                            "habitacion" => $numeroHabitacion,
+                            "fecha" => $fechaActual,
+                            "hora" => $horaActual
+                        ],
                         'msg' => 'Un huesped ha entrado a la habitación.'
                     ]);
                 } else if ($tipoTarjeta == 'Limpieza') {
@@ -275,7 +325,14 @@ class TarjetasController extends Controller
                     //Si la tarjeta es de limpieza entonces se le permite la entrada
                     return response()->json([
                         'status' => 200,
-                        'data' => true,
+                        'data' => [
+                            "acceso" => true,
+                            "UID" => $numeroTarjeta,
+                            "tipo_tarjeta" => $tipoTarjeta,
+                            "habitacion" => $numeroHabitacion,
+                            "fecha" => $fechaActual,
+                            "hora" => $horaActual
+                        ],
                         'msg' => 'Un personal de limpieza ha entrado a la habitación.'
                     ]);
                 }
@@ -297,7 +354,14 @@ class TarjetasController extends Controller
                     nfcEvent::dispatch('Un huesped ha intentado entrar a la habitación ' . $numeroHabitacion, $id);
                     return response()->json([
                         'status' => 200,
-                        'data' => false,
+                        'data' => [
+                            "acceso" => false,
+                            "UID" => $numeroTarjeta,
+                            "tipo_tarjeta" => $tipoTarjeta,
+                            "habitacion" => $numeroHabitacion,
+                            "fecha" => $fechaActual,
+                            "hora" => $horaActual
+                        ],
                         'msg' => 'Un huesped ha intentado entrar a la habitación'
                     ]);
                 } else if ($tipoTarjeta == 'Limpieza') {
@@ -305,46 +369,79 @@ class TarjetasController extends Controller
                     nfcEvent::dispatch('Un personal de limpieza ha intentado entrar a la habitación ' . $numeroHabitacion, $id);
                     return response()->json([
                         'status' => 200,
-                        'data' => false,
+                        'data' => [
+                            "acceso" => false,
+                            "UID" => $numeroTarjeta,
+                            "tipo_tarjeta" => $tipoTarjeta,
+                            "habitacion" => $numeroHabitacion,
+                            "fecha" => $fechaActual,
+                            "hora" => $horaActual
+                        ],
                         'msg' => 'Un personal de limpieza ha intentado entrar a la habitación'
                     ]);
                 }
                 else if ($tipoTarjeta == 'Administrativa') {
                     $id=$huesped->huespedID;
-                    nfcEvent::dispatch('Un administrador ha intentado entrar a la habitación ' . $numeroHabitacion, $id);
+                    nfcEvent::dispatch('Un administrador ha entrado a la habitación ' . $numeroHabitacion, $id);
                     return response()->json([
                         'status' => 200,
-                        'data' => true,
-                        'msg' => 'Un administrador ha intentado entrar a la habitación'
+                        'data' => [
+                            "acceso" => true,
+                            "UID" => $numeroTarjeta,
+                            "tipo_tarjeta" => $tipoTarjeta,
+                            "habitacion" => $numeroHabitacion,
+                            "fecha" => $fechaActual,
+                            "hora" => $horaActual
+                        ],
+                        'msg' => 'Un administrador ha entrado a la habitación'
                     ]);
                 }
             }
-            if($tipoTarjeta == 'Huesped')
-            {
+
+            if($tipoTarjeta == 'Huesped'){
                 accessEvent::dispatch('Un huesped ha intentado entrar a la habitación' . $numeroHabitacion);
                 return response()->json([
                     'status' => 200,
-                    'data' => false,
+                    'data' => [
+                        "acceso" => false,
+                        "UID" => $numeroTarjeta,
+                        "tipo_tarjeta" => $tipoTarjeta,
+                        "habitacion" => $numeroHabitacion,
+                        "fecha" => $fechaActual,
+                        "hora" => $horaActual
+                    ],
                     'msg' => 'Un huesped ha intentado entrar a la habitación'
                 ]);
-            }
-            else if($tipoTarjeta == 'Limpieza')
-            {
+            } else if($tipoTarjeta == 'Limpieza'){
                 accessEvent::dispatch('Un personal de limpieza ha intentado entrar a la habitación' . $numeroHabitacion);
                 return response()->json([
                     'status' => 200,
-                    'data' => false,
+                    'data' => [
+                        "acceso" => false,
+                        "UID" => $numeroTarjeta,
+                        "tipo_tarjeta" => $tipoTarjeta,
+                        "habitacion" => $numeroHabitacion,
+                        "fecha" => $fechaActual,
+                        "hora" => $horaActual
+                    ],
                     'msg' => 'Un personal de limpieza ha intentado entrar a la habitación'
                 ]);
-            }else if($tipoTarjeta == 'Administrativa')
-            {
-                accessEvent::dispatch('Un administrador ha intentado entrar a la habitación' . $numeroHabitacion);
+            } else if($tipoTarjeta == 'Administrativa'){
+                accessEvent::dispatch('Un administrador ha entrado a la habitación' . $numeroHabitacion);
                 return response()->json([
                     'status' => 200,
-                    'data' => false,
-                    'msg' => 'Un administrador ha intentado entrar a la habitación'
+                    'data' => [
+                        "acceso" => true,
+                        "UID" => $numeroTarjeta,
+                        "tipo_tarjeta" => $tipoTarjeta,
+                        "habitacion" => $numeroHabitacion,
+                        "fecha" => $fechaActual,
+                        "hora" => $horaActual
+                    ],
+                    'msg' => 'Un administrador ha entrado a la habitación'
                 ]);
             }
+            
             return response()->json([
                 'status' => 200,
                 'data' => false,
