@@ -109,6 +109,7 @@ Route::prefix('desk')->group(function () {
     Route::post('/tarjetas/status/{id}', [DesktopTarjetasController::class, 'cambiarStatus']);
     Route::get('/tarjetas/tipos', [DesktopTarjetasController::class, 'obtenerTiposTarjetas']);
     Route::post('/tarjetas/asignarReserva/{id}', [DesktopTarjetasController::class, 'asignarTarjetaReserva']);
+    Route::post('/tarjetas/asignarLimpiezas', [LimpiezasController::class, 'asignarLimpiezas']);
 
     Route::get('/reservas/{fecha1?}/{fecha2?}', [DesktopReservasController::class, 'traerReservas']);
     Route::get('/servicios/solicitados', [DesktopServiciosController::class, 'serviciosSolicitados']);

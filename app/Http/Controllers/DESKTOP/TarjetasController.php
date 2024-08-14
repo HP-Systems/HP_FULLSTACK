@@ -329,11 +329,11 @@ class TarjetasController extends Controller
                 ] , 400);
             }
 
-            if($tarjeta->tipo == 'Limpieza'){
+            if($tarjeta->tipo != 'Huesped'){
                 return response()->json([
                     'status' => 400,
                     'data' => [],
-                    'msg' => 'El tipo de tarjeta debe ser de Huesped para poder asignar a la reserva.',
+                    'msg' => 'La tarjeta debe ser de tipo Huesped para poder asignarla a la reserva.',
                     'error' => []
                 ], 400);
             }
