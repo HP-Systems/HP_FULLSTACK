@@ -14,17 +14,17 @@ class habitacion extends Seeder
     public function run(): void
     {
         ModelsHabitacion::firstOrCreate([
-            'numero' => '101',
+            'numero' => '1',
             'tipoID' => '1',
             'imagen' => 'imagen.jpg',
         ]);
         ModelsHabitacion::firstOrCreate([
-            'numero' => '102',
+            'numero' => '2',
             'tipoID' => '2',
             'imagen' => 'imagen.jpg'
         ]);
         ModelsHabitacion::firstOrCreate([
-            'numero' => '103',
+            'numero' => '3',
             'tipoID' => '3',
             'imagen' => 'imagen.jpg'
         ]);
