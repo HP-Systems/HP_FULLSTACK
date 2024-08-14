@@ -93,7 +93,6 @@ class TarjetasController extends Controller
             $numeroTarjeta = $request->tarjeta;
             $habitacionId = $request->habitacionID;
             $fechaActual = Carbon::now('America/Monterrey')->toDateString();
-            $fecha = '2024-08-16';
             $numeroHabitacion = Habitacion::where('id', $habitacionId)->first();
 
 
@@ -135,7 +134,7 @@ class TarjetasController extends Controller
                     ->select('huespedes.id as huespedID')
                     ->where('habitaciones_reservas.habitacionID', $habitacionId)
                     ->where('reservas.status', 1)
-                    ->whereRaw('? BETWEEN reservas.fecha_entrada AND reservas.fecha_salida', [$fecha])
+                    ->whereRaw('? BETWEEN reservas.fecha_entrada AND reservas.fecha_salida', [$fechaActual])
                     ->first();
                 
                 if ($huesped) {
@@ -184,7 +183,7 @@ class TarjetasController extends Controller
                     ->select('huespedes.id as huespedID')
                     ->where('habitaciones_reservas.habitacionID', $habitacionId)
                     ->where('reservas.status', 1)
-                    ->whereRaw('? BETWEEN reservas.fecha_entrada AND reservas.fecha_salida', [$fecha])
+                    ->whereRaw('? BETWEEN reservas.fecha_entrada AND reservas.fecha_salida', [$fechaActual])
                     ->first();
                 
                 if ($huesped) {
@@ -287,7 +286,7 @@ class TarjetasController extends Controller
                 ->select('huespedes.id as huespedID')
                 ->where('habitaciones_reservas.habitacionID', $habitacionId)
                 ->where('reservas.status', 1)
-                ->whereRaw('? BETWEEN reservas.fecha_entrada AND reservas.fecha_salida', [$fecha])
+                ->whereRaw('? BETWEEN reservas.fecha_entrada AND reservas.fecha_salida', [$fechaActual])
                 ->first();
             
             if($huesped)
