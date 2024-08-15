@@ -65,12 +65,12 @@
                         <div class="mb-3">
                             <label for="telefono" class="form-label" style="font-weight: 500">Teléfono</label>
                             <input type="tel" maxlength="10"  autocomplete="telefono"  class="form-control border-thick" id="telefono" name="telefono"
-                             required>
+                            required="">
                             <div id="telefono-error" class="text-danger"></div>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label" style="font-weight: 500">Correo</label>
-                            <input type="email"  autocomplete="email" class="form-control border-thick" id="email" name="email"  require>
+                            <input type="email"  autocomplete="email" class="form-control border-thick" id="email" name="email"  required="">
                             <div id="email-error" class="text-danger"></div>
                         </div>
                         <div class="mb-3">
