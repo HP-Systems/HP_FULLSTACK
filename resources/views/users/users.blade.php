@@ -43,7 +43,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addUserForm" action="{{ route('personal.crear') }}" method="POST">
+                    <form id="addUserForm" action="{{ route('personal.crear') }}" method="POST" autocomplete="off">
                         @csrf
                         <input type="hidden" id="personalId" name="id">
                         <div class="row">
