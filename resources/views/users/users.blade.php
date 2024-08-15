@@ -64,8 +64,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="telefono" class="form-label" style="font-weight: 500">Teléfono</label>
-                            <input type="tel" maxlength="10" class="form-control border-thick" id="telefono" name="telefono" required
-                            autocomplete="telefono">
+                            <input type="tel" maxlength="10" class="form-control border-thick" id="telefono" name="telefono"
+                            autocomplete="telefono"  required>
                             <div id="telefono-error" class="text-danger"></div>
                         </div>
                         <div class="mb-3">
