@@ -80,7 +80,7 @@ class ReservasController extends Controller
                     ->where('status', '!=', 0)
                     // Reservas futuras
                     ->where(function($query) use ($hoy) {
-                        $query->where('fecha_entrada', '>=', $hoy);
+                        $query->where('fecha_entrada', '>', $hoy);
                     })
                     ->orderBy('fecha_entrada', 'asc')
                     ->get();
