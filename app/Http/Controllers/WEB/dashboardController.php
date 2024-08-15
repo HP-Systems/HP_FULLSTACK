@@ -135,7 +135,7 @@ class dashboardController extends Controller
                 $join->on('hr.reservaID', '=', 'r.id')
                     ->whereDate('r.fecha_entrada', '>=', $fechaInicio)->whereDate('r.fecha_entrada', '<=', $fechaFin)->where('r.status', '=', '1');
             })
-            ->select('th.tipo as nombre', DB::raw('COALESCE(SUM((DATEDIFF(r.fecha_salida, r.fecha_entrada) - 1) * th.precio_noche), 0) as total'))
+            ->select('th.tipo as nombre', DB::raw('COALESCE(SUM(DATEDIFF(r.fecha_salida, r.fecha_entrada) * th.precio_noche), 0) as total'))
             ->groupBy('th.id', 'th.tipo')
             ->orderBy('th.tipo')
             ->get();

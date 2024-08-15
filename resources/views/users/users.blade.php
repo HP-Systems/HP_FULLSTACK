@@ -43,33 +43,34 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addUserForm" action="{{ route('personal.crear') }}" method="POST">
+                    <form id="addUserForm" action="{{ route('personal.crear') }}" method="POST" autocomplete="off">
                         @csrf
                         <input type="hidden" id="personalId" name="id">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="nombre" class="form-label" style="font-weight: 500">Nombre</label>
-                                    <input type="text" class="form-control border-thick" id="nombre" name="nombre" required>
+                                    <input type="text" autocomplete="nombre" class="form-control border-thick" id="nombre" name="nombre" required>
                                     <div id="nombre-error" class="text-danger"></div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="apellido" class="form-label" style="font-weight: 500">Apellido(s)</label>
-                                    <input type="text" class="form-control border-thick" id="apellido" name="apellido" required>
+                                    <input type="text" autocomplete="apellido" class="form-control border-thick" id="apellido" name="apellido" required>
                                     <div id="apellido-error" class="text-danger"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="telefono" class="form-label" style="font-weight: 500">Teléfono</label>
-                            <input type="tel" maxlength="10" class="form-control border-thick" id="telefono" name="telefono" required>
+                            <input type="tel" maxlength="10"  autocomplete="telefono"  class="form-control border-thick" id="telefono" name="telefono"
+                            required="">
                             <div id="telefono-error" class="text-danger"></div>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label" style="font-weight: 500">Correo</label>
-                            <input type="email" class="form-control border-thick" id="email" name="email" required>
+                            <input type="email" autocomplete="email" class="form-control border-thick" id="email" name="email" required>
                             <div id="email-error" class="text-danger"></div>
                         </div>
                         <div class="mb-3">

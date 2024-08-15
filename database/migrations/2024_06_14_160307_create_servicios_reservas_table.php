@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('habitacionReservaID');
             $table->integer('cantidad')->default(1);
             $table->integer('status');
+            $table->date('fecha');
             // 0 cancelado, 1 entregado, 2 en proceso de entrega
             
 
