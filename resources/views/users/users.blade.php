@@ -57,14 +57,14 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="apellido" class="form-label" style="font-weight: 500">Apellido(s)</label>
-                                    <input type="text" autocomplete="family-name" class="form-control border-thick" id="apellido" name="apellido" required>
+                                    <input type="text" autocomplete="apellido" class="form-control border-thick" id="apellido" name="apellido" required>
                                     <div id="apellido-error" class="text-danger"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="telefono" class="form-label" style="font-weight: 500">Teléfono</label>
-                            <input type="tel" maxlength="10"  autocomplete="tel" class="form-control border-thick" id="telefono" name="telefono"
+                            <input type="tel" maxlength="10"  autocomplete="telefono"  class="form-control border-thick" id="telefono" name="telefono"
                              required>
                             <div id="telefono-error" class="text-danger"></div>
                         </div>
