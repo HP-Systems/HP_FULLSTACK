@@ -18,7 +18,6 @@ return new class extends Migration
             $table->decimal('precio', 10, 2);
             $table->unsignedBigInteger('tipoID');
             $table->integer('status')->default(1);
-
             $table->foreign('tipoID')->references('id')->on('tipo_servicio');
 
             $table->timestamps();

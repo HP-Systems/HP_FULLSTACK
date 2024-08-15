@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('huespedID');
             $table->date('fecha_entrada');
             $table->date('fecha_salida');
-            $table->time('hora_entrada')->nulleable();
-            $table->time('hora_salida')->nulleable();
+            $table->time('hora_entrada')->nullable();
+            $table->time('hora_salida')->nullable();
             $table->boolean('status')->default(1);
 
             $table->foreign('huespedID')->references('id')->on('huespedes');
