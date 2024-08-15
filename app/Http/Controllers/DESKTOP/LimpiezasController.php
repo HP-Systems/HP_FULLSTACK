@@ -28,7 +28,7 @@ class LimpiezasController extends Controller
                 JOIN reservas r ON r.id = hr.reservaID AND r.status = 1
                 LEFT JOIN limpiezas l ON l.habitacion_reservaID = hr.id AND l.fecha = ? AND l.status != 0
                 LEFT JOIN personal p ON p.id = l.personalID
-                WHERE ? BETWEEN r.fecha_entrada AND r.fecha_salida
+                WHERE ? BETWEEN r.fecha_entrada AND r.fecha_salida AND l.id IS NULL
             ", [$hoy, $hoy]);
 
             return response()->json([
