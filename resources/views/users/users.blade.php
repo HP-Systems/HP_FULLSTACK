@@ -57,20 +57,20 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="apellido" class="form-label" style="font-weight: 500">Apellido(s)</label>
-                                    <input type="text" autocomplete="apellido" class="form-control border-thick" id="apellido" name="apellido" required>
+                                    <input type="text" autocomplete="family-name" class="form-control border-thick" id="apellido" name="apellido" required>
                                     <div id="apellido-error" class="text-danger"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="telefono" class="form-label" style="font-weight: 500">Teléfono</label>
-                            <input type="tel" maxlength="10" class="form-control border-thick" id="telefono" name="telefono"
-                            autocomplete="telefono"  required>
+                            <input type="tel" maxlength="10"  autocomplete="tel" class="form-control border-thick" id="telefono" name="telefono"
+                             required>
                             <div id="telefono-error" class="text-danger"></div>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label" style="font-weight: 500">Correo</label>
-                            <input type="email" class="form-control border-thick" id="email" name="email" autocomplete="email" require>
+                            <input type="email"  autocomplete="email" class="form-control border-thick" id="email" name="email"  require>
                             <div id="email-error" class="text-danger"></div>
                         </div>
                         <div class="mb-3">
