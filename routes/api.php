@@ -102,6 +102,7 @@ Route::prefix('desk')->group(function () {
     Route::post('/personal/create', [PersonalController::class, 'crearPersonal']);
     Route::put('/personal/edit/{id}', [PersonalController::class, 'editarPersonal']);
     Route::delete('/personal/delete/{id}', [PersonalController::class, 'desactivarPersonal']);
+    Route::get('/personal/limpieza', [PersonalController::class, 'obtenerPersonalLimpieza']);
 
     Route::get('/tarjetas', [DesktopTarjetasController::class, 'traerTarjetas']);
     Route::post('/tarjetas/create', [DesktopTarjetasController::class, 'crearTarjeta']);

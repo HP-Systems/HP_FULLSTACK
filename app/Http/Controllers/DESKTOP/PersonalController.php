@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class PersonalController extends Controller
 {
@@ -346,6 +347,40 @@ class PersonalController extends Controller
                     'status' => 500,
                     'msg' => 'Error al desactivar el personal',
                 ]
+            );
+        }
+    }
+
+    public function obtenerPersonalLimpieza(){
+        try{
+            $empleados = DB::table('personal as p')
+            ->leftJoin('users as u', function($join) {
+                $join->on('u.userable_id', '=', 'p.id')
+                    ->where('u.userable_type', '=', 1);
+            })
+            ->leftJoin('roles as r', 'r.id', '=', 'p.rolID')
+            ->where('r.nombre', '=', 'Limpieza')
+            ->where('u.status', '=', 1)
+            ->select('p.id', DB::raw('concat(p.nombre, " ", p.apellido) as empleado'))
+            ->get();
+
+            return response()->json(
+                [
+                    'status' => 200,
+                    'data' => $empleados,
+                    'msg' => 'Empleados de limpieza obtenidos correctamente',
+                    'error' => []
+                ], 200
+            );
+        } catch (\Exception $e) {
+            Log::error('Exception during obtenerPersonalLimpieza: ' . $e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor',
+                    'error' => $e->getMessage(),
+                ], 500
             );
         }
     }
