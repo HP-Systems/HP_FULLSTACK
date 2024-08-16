@@ -104,8 +104,6 @@ class TarjetasController extends Controller
                 ->where('t.numero', $numeroTarjeta)
                 ->first();
 
-
-
             if (!$infoTarjeta) {
                 return response()->json([
                     'status' => 200,
@@ -170,6 +168,20 @@ class TarjetasController extends Controller
                             ],
                             'msg' => 'Un personal de limpieza ha intentado entrar a la habitación'
                         ]);
+                    }else {
+                        $id=$huesped->huespedID;
+                        return response()->json([
+                            'status' => 200,
+                            'data' => [
+                                "acceso" => false,
+                                "UID" => $numeroTarjeta,
+                                "tipo_tarjeta" => $tipoTarjeta,
+                                "habitacion" => $numeroHabitacion,
+                                "fecha" => $fechaActual,
+                                "hora" => $horaActual
+                            ],
+                            'msg' => 'Un administrador ha intentado entrar a la habitación'
+                        ]);
                     }
                 } else {
                     if ($tipoTarjeta == 'Huesped') {
@@ -198,9 +210,22 @@ class TarjetasController extends Controller
                                 "fecha" => $fechaActual,
                                 "hora" => $horaActual
                             ],
+                            'msg' => 'Un administrador ha intentado entrar a la habitación'
+                        ]);
+                    } else  {
+                        return response()->json([
+                            'status' => 200,
+                            'data' => [
+                                "acceso" => false,
+                                "UID" => $numeroTarjeta,
+                                "tipo_tarjeta" => $tipoTarjeta,
+                                "habitacion" => $numeroHabitacion,
+                                "fecha" => $fechaActual,
+                                "hora" => $horaActual
+                            ],
                             'msg' => 'Un personal de limpieza ha intentado entrar a la habitación'
                         ]);
-                    }
+                    } 
                 }
             }
 
